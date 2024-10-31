@@ -1,4 +1,4 @@
-# [TITULO DEL PROYECTO]
+# HUELLAS A CASA
 
 ## Introducción
 
@@ -6,7 +6,15 @@ Este proyecto es un trabajo práctico para la materia Introducción al Desarroll
 
 ## Descripción del Proyecto
 
-[FALTA DECIDIR]
+Sitio web que permita publicar información sobre mascotas perdidas, utilizando google maps.
+El sitio web debe permitir cargar mascotas que se perdieron, como así también tener un
+buscador de mascotas por características, raza, color, condición, zona, barrio, etc. Las
+publicaciones deben permitir cargar foto y geolocalizar en un mapa las mismas.
+El sitio web debe informar si la mascota está en una casa de tránsito o dar alguna información
+útil que se considere de importancia.
+Por otra parte se deberá desarrollar una aplicación mobile que corra en android que cargue, la
+información del animal, junto con una foto y geolocalización de la misma. Toda esta información
+deberá aparecer una vez cargada en el sitio web.
 
 ## Requerimientos del Proyecto
 
