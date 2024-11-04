@@ -1,0 +1,266 @@
+
+@font-face {
+    font-family: 'Corporative Sans';
+    src: url('path/to/CoporativeSansRd-Book.woff2') format('woff2'),
+         url('path/to/CoporativeSansRd-Book.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: 'Corporative Sans', sans-serif;
+}
+
+/* Colores personalizados del encabezado */
+.bg-custom-header {
+    background-color: #D2763A;
+}
+
+/* Logo en el encabezado */
+.logo-img {
+    height: 160px;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #D2763A;
+    padding: 10px 20px;
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand img {
+    height: 50px;
+    margin-right: 10px;
+}
+
+.navbar-toggler {
+    border: none;
+}
+
+.navbar-nav .nav-link {
+    color: #FFFFFF !important;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #81B29A !important; /* Color de hover */
+}
+
+
+
+/* Layout general y sticky footer */
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+    padding: 20px 15px;
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+/* Estilos personalizados generales */
+.text-custom-green {
+    color: #499F68;
+    font-size: 1.2em;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.mascota-icon {
+    height: 60px;
+    width: 60px;
+}
+
+/* Botones de selección de mascota y género */
+.btn-outline-secondary {
+    color: #333 !important;
+    border-color: #499F68 !important;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #499F68 !important;
+    color: #FFFFFF !important;
+}
+
+/* Iconos de género */
+.gender-icon {
+    font-size: 24px;
+    color: #499F68;
+}
+
+/* Contenedor de mapa */
+.map-container {
+    height: 200px;
+    max-width: 100%;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Botones de navegación circulares */
+.nav-btn {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+    background-color: #499F68;
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: none;
+    margin-top: 20px;
+}
+
+.nav-btn:hover {
+    background-color: #357A4C;
+}
+.btn-custom {
+    background-color: #81B29A; /* Color de fondo del botón */
+    color: #FFFFFF;
+    font-weight: bold;
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 2px solid #000000; /* Borde negro */
+}
+.btn-custom:hover {
+    background-color: #6e9b85; /* Verde un poco más oscuro */
+    color: #FFFFFF;
+    border: 2px solid #000000; /* Borde negro */
+}
+
+/* Campos de formulario */
+.form-label {
+    font-weight: bold;
+    color: #333;
+}
+
+.form-control {
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+    header .container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar-nav {
+        flex-direction: column;
+    }
+
+    .btn-custom {
+        margin-top: 10px;
+        width: 100%;
+    }
+
+    .mascota-icon, .gender-icon {
+        height: 40px;
+        width: 40px;
+    }
+
+    .form-section .d-flex {
+        flex-direction: column;
+        align-items: center;
+        max-width: 300px;
+        margin: 0 auto;
+    }
+
+    .btn-outline-secondary {
+        width: 100%;
+        max-width: 250px;
+        margin-bottom: 10px;
+    }
+
+    .nav-btn {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
+    }
+
+    .d-flex.gap-3 {
+        gap: 15px;
+    }
+}
+
+/* Botón seleccionado */
+.selected {
+    background-color: #81B29A !important;
+    color: white !important;
+    border-color: #81B29A !important;
+}
+
+/* Botón de guardar en el último paso */
+.btn-save {
+    width: auto;
+    padding: 10px 20px;
+    font-size: 18px;
+    border-radius: 20px;
+    background-color: #499F68;
+    color: #FFFFFF;
+    font-weight: bold;
+}
+
+.btn-save:hover {
+    background-color: #357A4C;
+}
+
+/* Colores personalizados del encabezado */
+.bg-custom-header {
+    background-color: #D2763A;
+}
+
+.bg-custom-footer {
+    background-color: #D2763A;
+}
+
+.bg-logo-footer {
+    background-color: #F6E8DC;
+}
+
+/* Logo en el footer */
+.footer-logo {
+    width: 100%; /* Ocupa el ancho de la columna */
+    height: 100%; /* Ocupa el alto de la columna */
+    object-fit: cover; /* Ajusta la imagen sin distorsión */
+}
+
+/* Imagen de animales */
+.footer-icons img {
+    max-height: 80px;
+}
+
+/* Iconos de redes sociales */
+.social-links .social-icon {
+    font-size: 1.5em;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.social-links .social-icon:hover {
+    color: #81B29A;
+}
+/* Ajustes de responsividad */
+@media (max-width: 768px) {
+    .footer-logo {
+        max-height: 50px;
+    }
+    .footer-icons, .social-links {
+        justify-content: center;
+    }
+    .bg-logo-footer {
+        text-align: center; /* Centra el contenido del logo solo en pantallas pequeñas */
+    }
+}
