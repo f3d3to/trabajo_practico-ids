@@ -1,0 +1,77 @@
+/* Banner */
+
+.banner-container {
+    padding-top: 5px;
+    width: 100%;
+    max-height: auto;
+    overflow: hidden;
+
+}
+
+.img-banner {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+
+/* Seção de FAQ */
+.faq {
+    width: 80%;
+    margin: 0 auto;
+    margin-top: 20px;
+    background-color: #fff;
+    padding: 10px 0 30px 0;
+}
+
+.faq h2 {
+    background-color: #F47340;
+    color: #fff;
+    padding: 15px;
+    text-align: justify;
+    border-radius: 5px 5px 0 0;
+}
+
+.question {
+    border: 1px solid #ddd;
+    margin-top: 10px;
+}
+
+.question-header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    cursor: pointer;
+    background-color: #f4f4f4;
+}
+
+.question-header h3 {
+    flex-grow: 1;
+    color: #914D2D;
+    font-size: 16px;
+    margin: 0;
+}
+
+.question-header .icon {
+    font-weight: bold;
+    color: #F47340;
+    margin-right: 10px;
+    transition: transform 0.3s;
+}
+
+.answer {
+    display: none;
+    padding: 15px;
+    background-color: #fff;
+    color: #666;
+    border-top: 1px solid #ddd;
+}
+
+/*  Estilo para cuando la respuesta está visible  */
+.question.active .answer {
+    display: block;
+}
+
+/*  Cambia el icon «+» para «-» cuando activa la pregunta  */
+.question.active .icon {
+    transform: rotate(45deg); 
+}
