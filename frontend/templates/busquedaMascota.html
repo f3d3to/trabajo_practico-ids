@@ -3,9 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{url_for('static', filename = 'css/busqueda.css') }}">
     <title>Document</title>
 </head>
 <body>
-    
+        <div class="especie">
+            <label for="especie" class="elegir_especie">seleccione la especie</label>
+            <select name="especie" id="especie" class = caja_especie>
+              <option value="perro">perro</option>
+              <option value="gato">gato</option>
+              <option value="otro">otro</option>
+            </select>
+        </div>
+        <div class="nombre">
+        <form>
+           <label for="nombre">escriba el nombre</label>
+            <input name="nombre" id="nombre">
+        </form>
+        </div>
+        <div class="raza">
+         <form>
+            <label for="raza">escriba la raza</label>
+             <input name="raza" id="raza">
+         </form>
+        </div>
+        <div class="genero">
+            <label for="sexo" class="elegir_genero">seleccione el sexo:</label>
+            <select name="sexo" id="sexo" class="caja_genero">
+                <option value="macho">macho</option>
+                <option value="hembra">hembra</option>
+            </select>
+        </div>
+        <div class="ubicacion">
+            <form>
+                <label for="ubicaciom">donde se perdio su mascota</label>
+                <input name="ubicacion" id="ubicaciom">
+            </form>
+        </div>
+        <button class = "buscar" type="submit">buscar</button>
+        <div class="map">
+                <iframe  src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Buenos%20Aires+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+        </div>
 </body>
 </html>

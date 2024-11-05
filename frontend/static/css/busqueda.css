@@ -1,0 +1,65 @@
+
+.elegir_especie{
+    text-align: center;
+    width: 10px;
+    display: inline;
+    top: 18%;
+    margin-left: 1%;
+    white-space: nowrap;
+
+}
+
+.especie{
+    text-align: center;
+    margin-left: 10%;
+    width: 130px;
+    position: absolute;
+    box-sizing: border-box;
+    top: 19%;
+    display: inline-block;
+}
+
+.caja_especie{
+    width: 130px;
+    display: inline-block;
+}
+
+
+.elegir_genero{
+    white-space: nowrap;
+    text-align: center;
+    margin-left: 1%;
+}
+.genero{
+    margin-left: 10%;
+    top:24%;
+    width: 120px;
+    text-align: justify;
+    position: absolute;
+    box-sizing: border-box;
+}
+
+.caja_genero {
+    width: 130px;
+    display: inline-block;
+}
+.nombre{
+    top:18%;
+    width: 130px;
+    position: absolute;
+    right: 45%;
+}
+.raza {
+    top: 24%;
+    width: 130px;
+    position: absolute;
+    right: 45%;
+}
+
+
+.map {
+    width:520px;
+    height:400px;
+    position: absolute;
+    bottom: 20%;
+}
