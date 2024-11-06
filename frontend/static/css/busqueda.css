@@ -1,65 +1,134 @@
+#busqueda{
+    border: 150px solid #e4e4e4;
+    margin-top: 7%;
+    margin-left: 14%;
+    margin-right: 14%;
 
+}
 .elegir_especie{
-    text-align: center;
-    width: 10px;
+    font-size: x-large ;
+    text-align: justify;
     display: inline;
-    top: 18%;
+    top: 14%;
     margin-left: 1%;
     white-space: nowrap;
-
 }
 
 .especie{
-    text-align: center;
-    margin-left: 10%;
-    width: 130px;
+    width: 500px;
+    height: 10px;
     position: absolute;
     box-sizing: border-box;
-    top: 19%;
+    top: 15%;
+    left: 15% ;
     display: inline-block;
 }
+
 
 .caja_especie{
-    width: 130px;
-    display: inline-block;
+    font-size: 15px;
+    width: 100%;
+    padding: 12px;
+    margin: 4px ;
+    box-sizing: border-box;
+    border: solid #e4e4e4;
 }
 
 
-.elegir_genero{
-    white-space: nowrap;
-    text-align: center;
+.seleccionar_genero{
+    font-size: x-large;
+    text-align: justify;
+    display: inline;
     margin-left: 1%;
+    white-space: nowrap;
 }
 .genero{
-    margin-left: 10%;
     top:24%;
-    width: 120px;
-    text-align: justify;
+    width: 500px;
+    height: 10px;
     position: absolute;
+    display: inline-block;
     box-sizing: border-box;
+    left: 15% ;
+
 }
 
 .caja_genero {
-    width: 130px;
-    display: inline-block;
+    width: 100%;
+    padding: 12px;
+    margin: 4px ;
+    box-sizing: border-box;
+
 }
 .nombre{
-    top:18%;
-    width: 130px;
+    top:16%;
+    width: 500px;
+    height: 10px;
     position: absolute;
-    right: 45%;
+    right: 15%;
+}
+.escribir_nombre{
+    font-size: x-large;
+    margin-left: 1%;
+}
+.caja_nombre{
+    width: 100%;
+    padding: 12px;
+    margin: 4px ;
+    box-sizing: border-box;
+    font-size: 15px;
+
 }
 .raza {
     top: 24%;
-    width: 130px;
+    width: 500px;
+    height: 10px;
     position: absolute;
-    right: 45%;
+    right: 15%;
+}
+.escribir_raza{
+    font-size: x-large;
+    margin-left: 1%;
 }
 
-
-.map {
-    width:520px;
-    height:400px;
+.caja_raza{
+    width: 100%;
+    padding: 12px;
+    margin: 4px ;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+.ubicacion{
     position: absolute;
-    bottom: 20%;
+    width: 1345px;
+    top: 33%;
+    left: 15%;
+}
+.escribir_ubicacion{
+    font-size: x-large;
+    margin-left: 1px;
+}
+.ubicacion_caja{
+    width: 100%;
+    padding: 12px;
+    margin: 4px ;
+    box-sizing: border-box;
+    font-size: 15px;
+}
+#buscar{
+    position: absolute;
+    top: 43%;
+    left: 43%;
+}
+.mapa_ubicacion{
+    position: absolute;
+    bottom: 18%;
+}
+
+#mapa{
+    width: 1900px;
+    height: 320px;
+    position: absolute;
+    bottom: 15%;
+    left: 0;
 }
