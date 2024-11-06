@@ -1,11 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inicio | Huellas a casa</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+<div id="banner-index"></div>
     
-</body>
-</html>
+
+<div class="container-imagenes d-flex flex-wrap justify-content-around p-2"></div>
+    <img src="../static/images/lydia.png" alt="..." class="container-index">
+    <img src="../static/images/bailey.png" alt="..." class="container-index">
+    <img src="../static/images/terry.png" alt="..." class="container-index">
+    <img src="../static/images/teddy.png" alt="..." class="container-index">
+</div>
+{% endblock %}
