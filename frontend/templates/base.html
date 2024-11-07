@@ -28,13 +28,13 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a href="#" class="nav-link">Inicio</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Contacto</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Preguntas Frecuentes</a></li>
-                        <li class="nav-item"><a href="#" class="nav-link">Mapa de Búsquedas</a></li>
+                        <li class="nav-item"><a href="{{ url_for('index') }}" class="nav-link">Inicio</a></li>
+                        <li class="nav-item"><a href="{{ url_for('contacto') }}" class="nav-link">Contacto</a></li>
+                        <li class="nav-item"><a href="{{ url_for('preguntasFrecuentes') }}" class="nav-link">Preguntas Frecuentes</a></li>
+                        <li class="nav-item"><a href="{{ url_for('busquedaMascota') }}" class="nav-link">Mapa de Búsquedas</a></li>
                     </ul>
                 </div>
-                <a href="#" class="btn btn-custom d-none d-lg-block ms-lg-3">Iniciá tu Búsqueda! <i class="bi bi-arrow-right"></i></a>
+                <a href="{{ url_for('cargar_mascota') }}" class="btn btn-custom d-none d-lg-block ms-lg-3">Iniciá tu Búsqueda! <i class="bi bi-arrow-right"></i></a>
             </nav>
         </div>
     </header>
