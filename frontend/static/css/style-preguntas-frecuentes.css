@@ -24,7 +24,7 @@
 }
 
 .faq h2 {
-    background-color: #F47340;
+    background-color: #D2763A;
     color: #fff;
     padding: 15px;
     text-align: justify;
@@ -46,14 +46,14 @@
 
 .question-header h3 {
     flex-grow: 1;
-    color: #914D2D;
+    color: #ab602d;
     font-size: 16px;
     margin: 0;
 }
 
 .question-header .icon {
     font-weight: bold;
-    color: #F47340;
+    color: #D2763A;
     margin-right: 10px;
     transition: transform 0.3s;
 }
@@ -73,5 +73,5 @@
 
 /*  Cambia el icon «+» para «-» cuando activa la pregunta  */
 .question.active .icon {
-    transform: rotate(45deg); 
+    transform: rotate(45deg);
 }
