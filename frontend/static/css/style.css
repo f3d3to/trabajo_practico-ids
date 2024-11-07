@@ -99,15 +99,6 @@ main {
     color: #499F68;
 }
 
-/* Contenedor de mapa */
-.map-container {
-    height: 200px;
-    max-width: 100%;
-    margin: 0 auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
 /* Botones de navegación circulares */
 .nav-btn {
     width: 50px;
@@ -287,3 +278,8 @@ main {
     text-align: center; /* Centra el contenido del logo solo en pantallas pequeñas */
 }
 
+.mapa{
+    width: 1325px;
+    height: 330px;
+    bottom: 14%;
+}
