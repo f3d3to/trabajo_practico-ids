@@ -1,0 +1,188 @@
+/* Contenido total */
+.contenido {
+
+    margin-left: auto; /* Centrado horizontal */
+    margin-right: auto; /* Centrado horizontal */
+    padding: 1.5em; /* Espaciado interior */
+    color: #6b431f; /* Color del texto interior */
+}
+
+
+
+/* Espaciado para todos los elementos dentro de .contact-contenido */
+.contact-contenido > * {
+    padding: 1em;
+}
+
+/* Encabezado del formulario */
+.contact-form h3 {
+    text-align: left;
+    margin-left: 3px;
+}
+
+/* Formulario de contacto  */
+.contact-form form {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Se divide en 2 columnas iguales  */
+
+}
+
+
+/* Espacioado a cada parrafo del form*/
+.contact-form form p {
+
+    padding: 1em;
+
+}
+
+/* Formulario que ocupa toda la columna */
+.contact-form form .block {
+    grid-column: 1/3; /* Toma dos columnas */
+}
+
+/* Estilo para los botones, textarea e inputs del formulario */
+.contact-form form button,
+.contact-form form textarea,
+.contact-form form input {
+    width: 100%; /* Ocupa todo el ancho del form */
+    padding: .7em;
+    border: none;
+    background: none;
+    color: #6b431f;
+    outline: none;
+    border-bottom: 1px solid #6b431f;
+}
+
+/* Boton de envio */
+.contact-form form .contact-button {
+    color: #faf0dc;
+    border: 0;
+    background-color: #c57a45;
+    padding: 1em;
+    text-transform: uppercase;
+    border-radius: 15px;
+}
+
+/* Hover  del boton */
+.contact-form form .contact-button:hover,
+.contact-form form .contact-button:focus {
+    background: #9e480a;
+    color: #faf0dc;
+    transition: background-color 1s ease-out;
+    outline: none;
+}
+
+/* Elementos de informacion de contacto*/
+.contact-info h3,
+.contact-info h4,
+.contact-info ul,
+.contact-info p {
+    font-size: 1em;
+    padding: 0em;
+    text-align: left;
+
+}
+
+/* Estilo lista de informaicon de contacto*/
+.contact-info ul {
+    list-style: none;
+    padding: 0;
+}
+
+ /* Elementos de contacto */
+.icon-elem-contacto {
+    padding-top: 5em;
+    display: flex;
+    align-items: center;
+}
+
+
+
+/* Responsividad (mayores a 800px) */
+@media (min-width: 800px) {
+    /* Contenido de contacto*/
+    .contact-contenido {
+        display: grid;
+        grid-template-columns: 1fr 3fr; /* Columna pequeña para la info y más grande para el formulario */
+        padding: 1em;
+    }
+
+    /* Estilo de la información de contacto */
+    .contact-info {
+        padding: 1em;
+        margin-top: 5em;
+        margin-right: 1em;
+    }
+
+
+
+    /* iconos*/
+    .icon-elem-contacto ion-icon {
+        margin-right: 0.5em; /* Espacio entre el icono y el texto */
+        font-size: 2em;
+    }
+
+
+    /* encabezados de contacto */
+    .contact-info h3,
+    .contact-info h4 {
+        margin-bottom: 5px; /* Espacio inferior */
+    }
+
+    /* se ocultan de contacto mobile*/
+    .contact-mobile {
+        display: none;
+    }
+
+
+}
+
+/* Responsividad (menores a 768px) */
+@media (max-width: 768px) {
+    /* se ocultan las imágenes en pantallas pequeñas */
+    .imagenes-contacto {
+        display: none;
+    }
+
+    /* se ocultan la información de contacto en pantallas pequeñas */
+    .contact-info {
+        display: none;
+    }
+
+    /* Formulario*/
+    .contact-form form {
+        display: flex;
+        flex-direction: column; /* Cambio a dirección de columna */
+    }
+
+    /* Informacion de contacto (version mobile) */
+    .contact-mobile {
+        padding: 0;
+        margin-left: 1.9em;
+    }
+
+    /* Estilo para los elementos de contacto */
+    .contact-mobile h3,
+    .contact-mobile h4,
+    .contact-mobile ul,
+    .contact-mobile p {
+        padding: 0em;
+        text-align: left;
+
+    }
+
+    /*  Elementos de contacto */
+    .icon-elem-contacto {
+        padding-top: 2em;
+    }
+
+    /* iconos*/
+    .icon-elem-contacto ion-icon {
+        margin-right: 0.5em;
+        font-size: 2em; /* Tamaño de los iconos */
+    }
+
+
+
+
+}
