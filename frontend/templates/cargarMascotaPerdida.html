@@ -1,11 +1,84 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="text-custom-green">Completá los datos de tu mascota</h2>
+
+    <form class="mt-4" enctype="multipart/form-data">
+        <!-- Paso 1: Selección del tipo de mascota -->
+        <div class="form-section">
+            <p class="mb-2 fw-bold">Mi mascota es</p>
+            <div class="d-flex justify-content-center gap-4">
+                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="perro">
+                    <img src="{{ url_for('static', filename='images/perro.png') }}" alt="Perro" class="mascota-icon">
+                    <p class="mt-2">Perro</p>
+                </button>
+                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="gato">
+                    <img src="{{ url_for('static', filename='images/gato.png') }}" alt="Gato" class="mascota-icon">
+                    <p class="mt-2">Gato</p>
+                </button>
+                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="otro">
+                    <img src="{{ url_for('static', filename='images/bird.png') }}" alt="Otro" class="mascota-icon">
+                    <p class="mt-2">Otro</p>
+                </button>
+            </div>
+        </div>
+
+        <!-- Paso 2: Selección de género -->
+        <div class="form-section" style="display: none;">
+            <p class="mb-2 fw-bold">Selecciona el sexo</p>
+            <div class="d-flex justify-content-center gap-4">
+                <button type="button" class="btn btn-outline-secondary gender-button" data-gender="macho">
+                    <span class="gender-icon">♂</span>
+                    <p class="mt-2">Macho</p>
+                </button>
+                <button type="button" class="btn btn-outline-secondary gender-button" data-gender="hembra">
+                    <span class="gender-icon">♀</span>
+                    <p class="mt-2">Hembra</p>
+                </button>
+            </div>
+        </div>
+
+
+        <!-- Paso 3: Campos de texto para datos adicionales -->
+        <div class="form-section" style="display: none;">
+            <label for="nombreMascota" class="form-label">Nombre Mascota</label>
+            <input type="text" class="form-control" id="nombreMascota" placeholder="Ej: Moro" required>
+            <label for="razaMascota" class="form-label">Raza Mascota</label>
+            <input type="text" class="form-control" id="razaMascota" placeholder="Ej: Ovejero Alemán" required>
+        </div>
+
+        <!-- Paso 4: Cargar foto de la mascota -->
+        <div class="form-section" style="display: none;">
+            <p class="mb-2 fw-bold">Subí la mejor foto de tu mascota</p>
+            <input type="file" class="form-control" required>
+        </div>
+
+        <!-- Paso 5: Ubicación en el mapa -->
+        <div class="form-section" style="display: none;">
+            <p class="mb-2 fw-bold">¿Dónde se perdió?</p>
+            <div id="map" class="map-container"></div>
+            <small class="text-muted">Ingresa la dirección donde se perdió tu mascota.</small>
+        </div>
+
+        <!-- Paso 6: Fecha de pérdida e información adicional -->
+        <div class="form-section" style="display: none;">
+            <label for="fechaPerdida" class="form-label">Fecha en que se perdió</label>
+            <input type="date" class="form-control" id="fechaPerdida" required>
+            <label for="infoAdicional" class="form-label">Información adicional</label>
+            <textarea class="form-control" id="infoAdicional" rows="3" placeholder="Ej: Tenía un collar negro. Se ofrece recompensa"></textarea>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mt-4">
+            <button type="button" class="btn btn-primary rounded-circle nav-btn btn-prev" style="display: none;">
+                <i class="bi bi-arrow-left"></i>
+            </button>
+            <button type="button" class="btn btn-primary rounded-circle nav-btn btn-next">
+                <i class="bi bi-arrow-right"></i>
+            </button>
+        </div>
+    </form>
+</div>
+
+<script src="{{ url_for('static', filename='js/cargarMascota.js') }}"></script>
+{% endblock %}

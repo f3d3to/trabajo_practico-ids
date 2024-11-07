@@ -1,5 +1,5 @@
 Flask
-kivy
+# kivy
 requests
 flask_sqlalchemy
 mysql-connector-python
