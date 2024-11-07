@@ -1,4 +1,3 @@
-
 @font-face {
     font-family: 'Corporative Sans';
     src: url('path/to/CoporativeSansRd-Book.woff2') format('woff2'),
@@ -98,15 +97,6 @@ main {
 .gender-icon {
     font-size: 24px;
     color: #499F68;
-}
-
-/* Contenedor de mapa */
-.map-container {
-    height: 200px;
-    max-width: 100%;
-    margin: 0 auto;
-    border: 1px solid #ddd;
-    border-radius: 8px;
 }
 
 /* Botones de navegación circulares */
@@ -281,3 +271,15 @@ main {
   .container-index:hover{
     transform : rotate(10);
   }
+.social-links {
+        justify-content: center;
+    }
+.bg-logo-footer {
+    text-align: center; /* Centra el contenido del logo solo en pantallas pequeñas */
+}
+
+.mapa{
+    width: 1325px;
+    height: 330px;
+    bottom: 14%;
+}

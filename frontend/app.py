@@ -14,5 +14,9 @@ def index():
 def preguntasFrecuentes():
     return render_template("preguntasFrecuentes.html")
 
+@app.route("/busquedaMascota")
+def busquedaMascota():
+    return render_template("busquedaMascota.html")
+
 if __name__ == '__main__':
     app.run(debug=True)

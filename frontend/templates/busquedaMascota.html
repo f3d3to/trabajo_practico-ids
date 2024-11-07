@@ -1,11 +1,64 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    
-</body>
-</html>
+{% extends "base.html" %}
+{% block content %}
+
+<div class="container my-5">
+    <!-- Título -->
+    <div class="text-center mb-4 text-custom-green">
+        <h1 class="display-4">Búsqueda</h1>
+    </div>
+
+    <!-- Formulario de búsqueda -->
+    <form>
+        <div class="row">
+            <!-- Selección de especie -->
+            <div class="col-md-4 mb-3">
+                <label for="especie" class="text-custom-green form-label">Especie:</label>
+                <select name="especie" id="especie" class="form-select" required>
+                    <option value="perro">Perro</option>
+                    <option value="gato">Gato</option>
+                    <option value="otro">Otro</option>
+                </select>
+            </div>
+
+            <!-- Nombre -->
+            <div class="col-md-4 mb-3">
+                <label for="nombre" class="text-custom-green form-label">Nombre:</label>
+                <input type="text" name="nombre" id="nombre" class="form-control" required>
+            </div>
+
+            <!-- Raza -->
+            <div class="col-md-4 mb-3">
+                <label for="raza" class="text-custom-green form-label">Raza:</label>
+                <input type="text" name="raza" id="raza" class="form-control" required>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Selección de género -->
+            <div class="col-md-6 mb-3">
+                <label for="sexo" class="text-custom-green form-label">Sexo:</label>
+                <select name="sexo" id="sexo" class="form-select" required>
+                    <option value="macho">Macho</option>
+                    <option value="hembra">Hembra</option>
+                </select>
+            </div>
+
+            <!-- Ubicación -->
+            <div class="col-md-6 mb-3">
+                <label for="ubicacion" class="text-custom-green form-label">Ubicación donde se perdió:</label>
+                <input type="text" name="ubicacion" id="ubicacion" class="form-control">
+            </div>
+        </div>
+
+        <!-- Botón de búsqueda -->
+        <div class="text-center my-3">
+            <button class="btn-custom" id="buscar" type="submit" class="btn btn-primary btn-lg">Buscar</button>
+        </div>
+    </form>
+
+    <!-- Mapa de ubicación -->
+    <div class="mapa_ubicacion">
+        <iframe class="mapa" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Buenos%20Aires+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+    </div>
+</div>
+{% endblock %}
