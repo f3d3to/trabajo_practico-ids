@@ -1,6 +1,6 @@
 {%extends "base.html" %}
-{% block css%} <link rel="stylesheet" href="{{ url_for('static', filename='css/busqueda.css') }}">{% endblock css%}
 {% block content %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/busqueda.css') }}">
     <div class = "busqueda">
       <div class="titulo">
         <h1>busqueda</h1>
@@ -36,4 +36,4 @@
          <iframe id="mapa" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Buenos%20Aires+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
      </div>
     </div>
-{% endblock %}
+{%endblock %}
