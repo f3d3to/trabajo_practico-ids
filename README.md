@@ -16,6 +16,95 @@ Por otra parte se deberá desarrollar una aplicación mobile que corra en androi
 información del animal, junto con una foto y geolocalización de la misma. Toda esta información
 deberá aparecer una vez cargada en el sitio web.
 
+### Listado de Endpoints de Servicios (API)
+
+   - *POST /api/mascotas*
+     - *Descripción:* Publicar una nueva mascota perdida.
+     - *Datos de Entrada:* JSON con los datos de la mascota, incluyendo:
+       - nombre: Nombre de la mascota.
+       - especie: Especie de la mascota (perro, gato, otro).
+       - raza: Raza de la mascota.
+       - color: Color de la mascota.
+       - condicion: Condición física (lastimada, sana).
+       - zona y barrio: Zona y barrio específicos.
+       - ubicacion: Ubicación geográfica (latitud y longitud).
+       - foto: Archivo de imagen de la mascota.
+       - estado: Estado (perdida, en tránsito, en adopción).
+     - *Respuesta:* Confirmación de creación y id de la mascota.
+     - *Método:* POST
+
+   - *GET /api/mascotas/{id}*
+     - *Descripción:* Obtener detalles de una mascota específica.
+     - *Parámetros de Ruta:* id (ID de la mascota).
+     - *Respuesta:* JSON con información detallada de la mascota.
+     - *Método:* GET
+
+   - *PUT /api/mascotas/{id}*
+     - *Descripción:* Actualizar los datos de una mascota.
+     - *Parámetros de Ruta:* id (ID de la mascota).
+     - *Datos de Entrada:* JSON con los datos actualizados (estado, ubicación, etc.).
+     - *Respuesta:* Confirmación de actualización.
+     - *Método:* PUT
+
+   - *DELETE /api/mascotas/{id}*
+     - *Descripción:* Eliminar una publicación de mascota.
+     - *Parámetros de Ruta:* id (ID de la mascota).
+     - *Respuesta:* Confirmación de eliminación.
+     - *Método:* DELETE
+
+   - *GET /api/mascotas*
+     - *Descripción:* Obtener todas las mascotas perdidas con filtros opcionales.
+     - *Parámetros de Consulta:*
+       - especie, raza, color, condicion, zona, barrio, estado.
+     - *Respuesta:* JSON con la lista de mascotas que cumplen con los criterios de búsqueda.
+     - *Método:* GET
+
+   - *GET /api/mascotas/buscar*
+     - *Descripción:* Búsqueda avanzada de mascotas según múltiples características.
+     - *Parámetros de Consulta:*
+       - Los mismos que el endpoint anterior para búsqueda específica.
+     - *Respuesta:* JSON con la lista de mascotas encontradas.
+     - *Método:* GET
+
+   - *GET /api/mapa/mascotas*
+     - *Descripción:* Obtener la ubicación de todas las mascotas para visualización en mapa.
+     - *Parámetros de Consulta:*
+       - zona: Filtro opcional por zona geográfica.
+     - *Respuesta:* JSON con latitud y longitud de cada mascota perdida.
+     - *Método:* GET
+
+   - *POST /api/transito*
+     - *Descripción:* Marcar una mascota como "en tránsito" en una casa temporal.
+     - *Datos de Entrada:* JSON con:
+       - id de la mascota, ubicacion_transito y informacion_contacto.
+     - *Respuesta:* Confirmación de actualización.
+     - *Método:* POST
+
+   - *GET /api/transito*
+     - *Descripción:* Obtener lista de mascotas en casas de tránsito.
+     - *Parámetros de Consulta:* Opcional zona para filtro geográfico.
+     - *Respuesta:* JSON con la lista de mascotas en estado de tránsito.
+     - *Método:* GET
+
+   - *POST /api/reportar-encontrado*
+     - *Descripción:* Reportar que una mascota perdida fue encontrada.
+     - *Datos de Entrada:* JSON con:
+       - id de la mascota, ubicacion_encontrado, y informacion_contacto.
+     - *Respuesta:* Confirmación del reporte.
+     - *Método:* POST
+
+   - *GET /api/preguntas*
+     - *Descripción:* Obtener preguntas frecuentes y sus respuestas.
+     - *Datos de Entrada:* N/A
+     - *Respuesta:* JSON con preguntas frecuentes.
+     - *Método:* GET
+
+   - *POST /api/contacto*
+     - *Descripción:* Enviar mensaje de contacto para soporte o consultas.
+     - *Datos de Entrada:* JSON con nombre, email, y mensaje.
+     - *Respuesta:* Confirmación de recepción.
+     - *Método:* POST
+
 ## Requerimientos del Proyecto
 
     Uso de Github
@@ -29,8 +118,8 @@ deberá aparecer una vez cargada en el sitio web.
 
 ## Hitos del Proyecto
 
-- [ ] Jueves 31/10: Entrega del Backlog de producto y mockup del sitio web
-- [ ] Jueves 7/11: Creación del repositorio y vistas del proyecto
+- [X] Jueves 31/10: Entrega del Backlog de producto y mockup del sitio web
+- [X] Jueves 7/11: Creación del repositorio y vistas del proyecto
 - [ ] Jueves 14/11: Avances de la API y comunicación con el front
 - [ ] Jueves 21/11: Integración de app mobile, front con API
 - [ ] Jueves 28/11: 1er entrega del TP Integrador
