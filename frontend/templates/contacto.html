@@ -1,11 +1,99 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="contenido">
+    <h1 class="titulo">Contactar</h1>
     
-</body>
-</html>
+    <div class="contact-contenido">
+        <!-- Información de contacto -->
+        <div class="contact-info">
+            
+            <ul>
+                <li class="icon-elem-contacto">
+                    <ion-icon id="mail-icono" name="mail-open-outline"></ion-icon>
+                    <div class="contact-texto">
+                    <h3 class="correo-texto">Correo electrónico:</h3>
+                    <h4>huellas@fi.uba.ar</h4>
+                    </div>
+                </li>    
+                <li class="icon-elem-contacto">
+                    <ion-icon name="logo-whatsapp"></ion-icon> 
+                    <div class="contact-texto">
+                    <h3>Whatsapp:</h3>
+                    <h4>222111333</h4>
+                    </div>
+                </li>
+            </ul>
+
+        </div> 
+        <!-- Formulario de contacto -->
+        <div class="contact-form">
+            <h3>Contáctenos para más información</h3>
+            <form action="">
+                <p class="input-contact">
+                    <label for="nombre">Su nombre</label>
+                    <input type="text" name="fullname" id="nombre">
+                </p>
+                <p class="input-contact">
+                    <label>Su correo</label>
+                    <input type="email" name="email">
+                </p>
+                <p class="input-contact">
+                    <label>Teléfono</label>
+                    <input type="tel" name="email">
+                </p>
+                <p class="input-contact">
+                    <label>Asunto</label>
+                    <input type="text" name="asunto">
+                </p>
+                <p class="block">
+                    <label>Mensaje</label>
+                    <textarea class="contact-textarea" name="mensaje" rows="3"></textarea>
+                </p>
+                <p class="block">
+                    <button class="contact-button" type="submit">Enviar mensaje</button>
+                </p>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Información de contacto en dispositivos móviles -->
+    <div class="contact-mobile">
+            
+        <ul>
+            <li class="icon-elem-contacto">
+                <ion-icon id="mail-icono" name="mail-open-outline"></ion-icon>
+                <div class="contact-texto">
+                <h3 class="correo-texto">Correo electrónico:</h3>
+                <h4>huellas@fi.uba.ar</h4>
+                </div>
+            </li>    
+            <li class="icon-elem-contacto">
+                <ion-icon name="logo-whatsapp"></ion-icon> 
+                <div class="contact-texto">
+                <h3>Whatsapp:</h3>
+                <h4>222111333</h4>
+                </div>
+            </li>
+        </ul>
+
+    </div> 
+
+    <!-- imagenes de la parte inferior -->
+    <div class="imagenes-contacto d-flex flex-row">
+        <div class="w33">
+            <img class="img-fluid flex-fill d-none d-md-block" src="{{ url_for('static', filename='images/contacto1.png') }}" alt="Imagen campaña">
+        </div>
+        <div class="w33">
+            <img class="img-fluid flex-fill d-none d-md-block" src="{{ url_for('static', filename='images/contacto2.png') }}" alt="Imagen campaña">
+        </div>
+        <div class="w33">
+            <img class="img-fluid flex-fill d-none d-md-block" src="{{ url_for('static', filename='images/contacto3.png') }}" alt="Imagen campaña">
+        </div>
+    </div>
+</div>
+
+
+
+{% endblock %}
