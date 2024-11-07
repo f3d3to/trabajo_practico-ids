@@ -10,5 +10,9 @@ def cargar_mascota():
 def index():
     return render_template('home.html')
 
+@app.route("/preguntasFrecuentes")
+def preguntasFrecuentes():
+    return render_template("preguntasFrecuentes.html")
+
 if __name__ == '__main__':
     app.run(debug=True)
