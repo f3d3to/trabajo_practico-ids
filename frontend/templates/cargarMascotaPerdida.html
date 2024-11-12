@@ -4,20 +4,20 @@
 <div class="container text-center mt-5">
     <h2 class="text-custom-green">Completá los datos de tu mascota</h2>
 
-    <form class="mt-4" enctype="multipart/form-data">
+    <form class="mt-4" enctype="multipart/form-data" action="{{ url_for('cargar_mascota') }}" method="POST">
         <!-- Paso 1: Selección del tipo de mascota -->
         <div class="form-section">
             <p class="mb-2 fw-bold">Mi mascota es</p>
             <div class="d-flex justify-content-center gap-4">
-                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="perro">
+                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="perro">
                     <img src="{{ url_for('static', filename='images/perro.png') }}" alt="Perro" class="mascota-icon">
                     <p class="mt-2">Perro</p>
                 </button>
-                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="gato">
+                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="gato">
                     <img src="{{ url_for('static', filename='images/gato.png') }}" alt="Gato" class="mascota-icon">
                     <p class="mt-2">Gato</p>
                 </button>
-                <button type="button" class="btn btn-outline-secondary pet-type-button" data-type="otro">
+                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="otro">
                     <img src="{{ url_for('static', filename='images/bird.png') }}" alt="Otro" class="mascota-icon">
                     <p class="mt-2">Otro</p>
                 </button>
@@ -39,7 +39,6 @@
             </div>
         </div>
 
-
         <!-- Paso 3: Campos de texto para datos adicionales -->
         <div class="form-section" style="display: none;">
             <label for="nombreMascota" class="form-label">Nombre Mascota</label>
@@ -51,14 +50,15 @@
         <!-- Paso 4: Cargar foto de la mascota -->
         <div class="form-section" style="display: none;">
             <p class="mb-2 fw-bold">Subí la mejor foto de tu mascota</p>
-            <input type="file" class="form-control" required>
+            <input type="file" class="form-control" id="foto_url" required>
         </div>
 
         <!-- Paso 5: Ubicación en el mapa -->
         <div class="form-section" style="display: none;">
             <p class="mb-2 fw-bold">¿Dónde se perdió?</p>
-            <div id="map" class="map-container"></div>
-            <small class="text-muted">Ingresa la dirección donde se perdió tu mascota.</small>
+            <input type="text" class="form-control" id="latitud" placeholder="Latitud">
+            <input type="text" class="form-control" id="longitud" placeholder="Longitud">
+            <small class="text-muted">Ingresa la ubicación de pérdida.</small>
         </div>
 
         <!-- Paso 6: Fecha de pérdida e información adicional -->
@@ -73,7 +73,7 @@
             <button type="button" class="btn btn-primary rounded-circle nav-btn btn-prev" style="display: none;">
                 <i class="bi bi-arrow-left"></i>
             </button>
-            <button type="button" class="btn btn-primary rounded-circle nav-btn btn-next">
+            <button type="submit" class="btn btn-primary rounded-circle nav-btn btn-next">
                 <i class="bi bi-arrow-right"></i>
             </button>
         </div>
