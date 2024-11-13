@@ -1,6 +1,3 @@
-# docker-compose.yml
-version: '3.8'
-
 services:
   backend:
     build:
@@ -15,6 +12,9 @@ services:
       - DB_NAME=${DB_NAME}
     ports:
       - "5000:5000"
+    volumes:
+      - ../backend:/app
+    command: flask --app app_back.py --debug run --host=0.0.0.0 --port=5000
     depends_on:
       - db
 
@@ -25,6 +25,9 @@ services:
     container_name: frontend
     ports:
       - "5001:5001"
+    volumes:
+      - ../frontend:/app
+    command: flask --app app_front.py --debug run --host=0.0.0.0 --port=5001
     depends_on:
       - backend
 
@@ -36,11 +39,10 @@ services:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
       - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_HOST=172.18.0.1
     volumes:
       - mysql_data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "3306:3306"
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql # actua como script inicial de mysql.
 
 volumes:
   mysql_data:

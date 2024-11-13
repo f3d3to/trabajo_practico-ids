@@ -1,6 +1,6 @@
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
-from backend.config import engine
+from .config import engine
 
 class BaseDAO:
     """
