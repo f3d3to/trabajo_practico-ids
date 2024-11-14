@@ -83,22 +83,15 @@
 
         <!-- Paso 4: Ubicación - Latitud, Longitud, Zona, Barrio -->
         <div class="form-section mb-4">
-            <div class="mb-4">
-                <label for="latitud" class="form-label fw-bold">Latitud:</label>
-                <input type="number" class="form-control" id="latitud" name="latitud" step="0.000001" placeholder="Ej: -34.603722" required>
-            </div>
-            <div class="mb-4">
-                <label for="longitud" class="form-label fw-bold">Longitud:</label>
-                <input type="number" class="form-control" id="longitud" name="longitud" step="0.000001" placeholder="Ej: -58.381592" required>
-            </div>
-            <div class="mb-4">
-                <label for="zonaMascota" class="form-label fw-bold">Zona:</label>
-                <input type="text" class="form-control" id="zonaMascota" name="zona" placeholder="Ej: En el parque" required>
-            </div>
-            <div class="mb-4">
-                <label for="barrioMascota" class="form-label fw-bold">Barrio:</label>
-                <input type="text" class="form-control" id="barrioMascota" name="barrio" placeholder="Ej: Recoleta" required>
-            </div>
+        <!-- Mapa para la Selección de Ubicación -->
+            <label for="map" class="form-label fw-bold">Selecciona la Ubicación en el Mapa:</label>
+            <div id="map" style="height: 400px; width: 100%;"></div>
+            <small class="form-text text-muted">Haz clic en el mapa para seleccionar la ubicación.</small>
+            <!-- Campos ocultos para latitud, longitud, zona, y barrio -->
+            <input type="hidden" id="latitud" name="latitud" required>
+            <input type="hidden" id="longitud" name="longitud" required>
+            <input type="hidden" id="zonaMascota" name="zona" required>
+            <input type="hidden" id="barrioMascota" name="barrio" required>
         </div>
 
         <!-- Paso 5: Información de Contacto -->
@@ -117,4 +110,8 @@
 </div>
 
 <script src="{{ url_for('static', filename='js/cargarMascota.js') }}"></script>
+
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/ubicacion.js') }}"></script>
 {% endblock %}
