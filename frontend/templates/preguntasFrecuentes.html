@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<!--Header de Preguntas Frecuentes-->
+<!--Header-->
 <section class="banner-container">
     <img src="{{ url_for('static', filename='images/headerPreguntasFrecuentes.png') }}" class="img-banner">
 </section>
@@ -10,44 +10,48 @@
 <!--Faq-->
 <section class="faq">
     <h2>Preguntas Frecuentes</h2>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>¿Se perdió mi mascota, cómo la agrego a la página?</h3>
-        </div>
-        <div class="answer">
-            <p>Para agregar una mascota perdida, simplemente tienes que completar el formulario en [agregar mascota].</p>
-            <p><strong>—No te olvides de completar todos los datos!—</strong></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>Encontré mi mascota, ¿cómo borro la publicación?</h3>
-        </div>
-        <div class="answer">
-            <p>Para eliminar la publicación, sigue estos pasos...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>¿Cómo doy aviso en la página de una mascota que encontré?</h3>
-        </div>
-        <div class="answer">
-            <p>Para dar aviso de una mascota encontrada, dirígete a...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>Me equivoqué en la creación de mi aviso, ¿cómo lo edito?</h3>
-        </div>
-        <div class="answer">
-            <p>Para editar tu aviso, ve a la sección de edición...</p>
-        </div>
+    <div id="faq-container">
+        <!--Donde se cargaran las preguntas-->
     </div>
 </section>
+
 <script src="{{ url_for('static', filename='js/script-preguntas-frecuentes.js') }}"></script>
+
+<script>
+    // Solicita las preguntas frecuentes desde el servidor
+    fetch('/preguntasFrecuentesJSON')
+        .then(response => response.json())
+        .then(data => {
+            const faqContainer = document.getElementById('faq-container');
+            data.forEach(item => {
+                const questionDiv = document.createElement('div');
+                questionDiv.classList.add('question');
+                questionDiv.onclick = function() { toggleAnswer(this) };
+
+                const questionHeader = document.createElement('div');
+                questionHeader.classList.add('question-header');
+
+                const iconSpan = document.createElement('span');
+                iconSpan.classList.add('icon');
+                iconSpan.textContent = '+';
+
+                const questionTitle = document.createElement('h3');
+                questionTitle.textContent = item.pregunta;
+
+                questionHeader.appendChild(iconSpan);
+                questionHeader.appendChild(questionTitle);
+
+                const answerDiv = document.createElement('div');
+                answerDiv.classList.add('answer');
+                answerDiv.innerHTML = `<p>${item.respuesta}</p>`;
+
+                questionDiv.appendChild(questionHeader);
+                questionDiv.appendChild(answerDiv);
+
+                faqContainer.appendChild(questionDiv);
+            });
+        })
+        .catch(error => console.error('Error al cargar las preguntas frecuentes:', error));
+</script>
+
 {% endblock %}
