@@ -2,52 +2,31 @@
 
 {% block content %}
 
-<!--Header de Preguntas Frecuentes-->
+<!--Header-->
 <section class="banner-container">
     <img src="{{ url_for('static', filename='images/headerPreguntasFrecuentes.png') }}" class="img-banner">
 </section>
 
-<!--Faq-->
+<!-- FAQ Section -->
 <section class="faq">
     <h2>Preguntas Frecuentes</h2>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>¿Se perdió mi mascota, cómo la agrego a la página?</h3>
-        </div>
-        <div class="answer">
-            <p>Para agregar una mascota perdida, simplemente tienes que completar el formulario en [agregar mascota].</p>
-            <p><strong>—No te olvides de completar todos los datos!—</strong></p>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>Encontré mi mascota, ¿cómo borro la publicación?</h3>
-        </div>
-        <div class="answer">
-            <p>Para eliminar la publicación, sigue estos pasos...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>¿Cómo doy aviso en la página de una mascota que encontré?</h3>
-        </div>
-        <div class="answer">
-            <p>Para dar aviso de una mascota encontrada, dirígete a...</p>
-        </div>
-    </div>
-    <div class="question" onclick="toggleAnswer(this)">
-        <div class="question-header">
-            <span class="icon">+</span>
-            <h3>Me equivoqué en la creación de mi aviso, ¿cómo lo edito?</h3>
-        </div>
-        <div class="answer">
-            <p>Para editar tu aviso, ve a la sección de edición...</p>
-        </div>
-    </div>
+
+    {% if preguntas %}
+        {% for pregunta in preguntas %}
+            <div class="question" onclick="toggleAnswer(this)">
+                <div class="question-header">
+                    <span class="icon">+</span>
+                    <h3>{{ pregunta["pregunta"] }}</h3>
+                </div>
+                <div class="answer">
+                    <p>{{ pregunta["respuesta"] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay preguntas frecuentes disponibles en este momento.</p>
+    {% endif %}
 </section>
+
 <script src="{{ url_for('static', filename='js/script-preguntas-frecuentes.js') }}"></script>
 {% endblock %}
