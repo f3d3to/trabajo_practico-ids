@@ -2,9 +2,9 @@ document.addEventListener('DOMContentLoaded', function () {
     const sections = document.querySelectorAll('.form-section');
     const btnNext = document.querySelector('.btn-next');
     const btnPrev = document.querySelector('.btn-prev');
+    const btnSubmit = document.querySelector('button[type="submit"]');
     let currentStep = 0;
 
-    // Variables para almacenar las selecciones
     let selectedPetType = null;
     let selectedGender = null;
 
@@ -12,65 +12,40 @@ document.addEventListener('DOMContentLoaded', function () {
         sections.forEach((section, index) => {
             section.style.display = (index === step) ? 'block' : 'none';
         });
+
         btnPrev.style.display = (step === 0) ? 'none' : 'inline-block';
-
-        if (step === sections.length - 1) {
-            if (!document.querySelector('.btn-save')) {
-                const saveButton = document.createElement('button');
-                saveButton.type = 'button';
-                saveButton.className = 'btn btn-success btn-save';
-                saveButton.innerText = "Guardar";
-                saveButton.addEventListener('click', handleSave);
-                btnNext.replaceWith(saveButton);
-            }
-        } else {
-            let nextButton = document.querySelector('.btn-next');
-            if (!nextButton) {
-                nextButton = document.createElement('button');
-                nextButton.type = 'button';
-                nextButton.className = 'btn btn-primary rounded-circle nav-btn btn-next';
-                nextButton.innerHTML = '<i class="bi bi-arrow-right"></i>';
-                nextButton.addEventListener('click', nextStep);
-
-                const saveButton = document.querySelector('.btn-save');
-                if (saveButton) saveButton.replaceWith(nextButton);
-            }
-        }
+        btnNext.style.display = (step === sections.length - 1) ? 'none' : 'inline-block';
+        btnSubmit.style.display = (step === sections.length - 1) ? 'inline-block' : 'none';
     }
 
     function validateCurrentStep() {
-        const inputs = sections[currentStep].querySelectorAll('input, textarea, select');
+        const inputs = sections[currentStep].querySelectorAll('input, select');
+        let isValid = true;
 
-        // Validar campos de texto, textarea y select
-        for (let input of inputs) {
+        inputs.forEach(input => {
             if (input.hasAttribute('required') && !input.value) {
                 input.classList.add('is-invalid');
-                return false;
+                isValid = false;
             } else {
                 input.classList.remove('is-invalid');
             }
-        }
+        });
 
-        // Validar que el tipo de mascota esté seleccionado en el paso correspondiente
         if (currentStep === 0 && !selectedPetType) {
             showError('Por favor, selecciona un tipo de mascota.');
-            return false;
+            isValid = false;
         }
 
-        // Validar que el género esté seleccionado en el paso correspondiente
         if (currentStep === 1 && !selectedGender) {
             showError('Por favor, selecciona el género de la mascota.');
-            return false;
+            isValid = false;
         }
 
-        return true;
+        return isValid;
     }
 
     function nextStep() {
-        if (!validateCurrentStep()) {
-            return;
-        }
-        if (currentStep < sections.length - 1) {
+        if (validateCurrentStep()) {
             currentStep++;
             showStep(currentStep);
         }
@@ -91,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => errorAlert.remove(), 3000);
     }
 
-    function alertSuccess(message) {
+    function showSuccess(message) {
         const successAlert = document.createElement('div');
         successAlert.className = 'alert alert-success mt-3';
         successAlert.innerText = message;
@@ -99,60 +74,42 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => successAlert.remove(), 3000);
     }
 
-    function handleSave() {
-        if (!validateCurrentStep()) {
-            showError('Por favor, completa todos los campos requeridos.');
-            return;
-        }
-
-        alertSuccess('Datos de la mascota guardados con éxito!');
-
-        resetForm();
-
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000); // 2 segundos de retraso
-    }
-
-    function resetForm() {
-        const inputs = document.querySelectorAll('input, textarea, select');
-        inputs.forEach(input => {
-            if (input.type === 'checkbox' || input.type === 'radio') {
-                input.checked = false;
-            } else {
-                input.value = '';
-            }
-        });
-
-        document.querySelectorAll('.pet-type-button, .gender-button').forEach(button => {
-            button.classList.remove('selected');
-        });
-
-        selectedPetType = null;
-        selectedGender = null;
-    }
-
-    btnNext.addEventListener('click', nextStep);
-    btnPrev.addEventListener('click', prevStep);
-
-    document.querySelectorAll('.pet-type-button').forEach(button => {
-        button.addEventListener('click', () => selectPetType(button, button.dataset.type));
-    });
-    document.querySelectorAll('.gender-button').forEach(button => {
-        button.addEventListener('click', () => selectGender(button, button.dataset.gender));
-    });
-
     function selectPetType(button, type) {
         selectedPetType = type;
-        document.querySelectorAll('.pet-type-button').forEach(btn => btn.classList.remove('selected'));
+        document.querySelector('input[name="especie"]').value = type;
+        document.querySelectorAll('.form-section:nth-child(1) .btn-outline-secondary').forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
     }
 
     function selectGender(button, gender) {
         selectedGender = gender;
-        document.querySelectorAll('.gender-button').forEach(btn => btn.classList.remove('selected'));
+        document.querySelector('input[name="genero"]').value = gender;
+        document.querySelectorAll('.form-section:nth-child(2) .btn-outline-secondary').forEach(btn => btn.classList.remove('selected'));
         button.classList.add('selected');
     }
 
+    btnNext.addEventListener('click', nextStep);
+    btnPrev.addEventListener('click', prevStep);
+
+    document.querySelectorAll('.form-section:nth-child(1) .btn-outline-secondary').forEach(button => {
+        const type = button.querySelector('input[name="especie"]').value;
+        button.addEventListener('click', () => selectPetType(button, type));
+    });
+
+    document.querySelectorAll('.form-section:nth-child(2) .btn-outline-secondary').forEach(button => {
+        const gender = button.querySelector('input[name="genero"]').value;
+        button.addEventListener('click', () => selectGender(button, gender));
+    });
+
     showStep(currentStep);
+
+    btnSubmit.addEventListener('click', (event) => {
+        event.preventDefault();
+        if (validateCurrentStep()) {
+            showSuccess('Datos guardados con éxito!');
+            setTimeout(() => {
+                document.querySelector('form').submit();
+            }, 2000);
+        }
+    });
 });

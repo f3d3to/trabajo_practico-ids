@@ -4,6 +4,7 @@
 <div class="container text-center mt-5">
     <h2 class="text-custom-green">Completá los datos de tu mascota</h2>
 
+<<<<<<< Updated upstream
     <form class="mt-4" enctype="multipart/form-data" action="{{ url_for('cargar_mascota') }}" method="POST">
         <!-- Paso 1: Selección del tipo de mascota -->
         <div class="form-section">
@@ -18,27 +19,50 @@
                     <p class="mt-2">Gato</p>
                 </button>
                 <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="otro">
+=======
+    <form method="POST" action="{{ url_for('cargar_mascota') }}" enctype="multipart/form-data" class="mt-4">
+
+        <!-- Paso 1: Especie -->
+        <div class="form-section mb-4">
+            <label for="especieMascota" class="form-label fw-bold">Especie:</label>
+            <div class="d-flex justify-content-center gap-3">
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="especie" value="perro" class="d-none">
+                    <img src="{{ url_for('static', filename='images/perro.png') }}" alt="Perro" class="mascota-icon">
+                    <p class="mt-2">Perro</p>
+                </label>
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="especie" value="gato" class="d-none">
+                    <img src="{{ url_for('static', filename='images/gato.png') }}" alt="Gato" class="mascota-icon">
+                    <p class="mt-2">Gato</p>
+                </label>
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="especie" value="otro" class="d-none">
+>>>>>>> Stashed changes
                     <img src="{{ url_for('static', filename='images/bird.png') }}" alt="Otro" class="mascota-icon">
                     <p class="mt-2">Otro</p>
-                </button>
+                </label>
             </div>
         </div>
 
-        <!-- Paso 2: Selección de género -->
-        <div class="form-section" style="display: none;">
+        <!-- Paso 2: Género -->
+        <div class="form-section mb-4">
             <p class="mb-2 fw-bold">Selecciona el sexo</p>
             <div class="d-flex justify-content-center gap-4">
-                <button type="button" class="btn btn-outline-secondary gender-button" data-gender="macho">
-                    <span class="gender-icon">♂</span>
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="genero" value="macho" class="d-none">
+                    <img src="{{ url_for('static', filename='images/macho.png') }}" alt="Macho" class="mascota-icon">
                     <p class="mt-2">Macho</p>
-                </button>
-                <button type="button" class="btn btn-outline-secondary gender-button" data-gender="hembra">
-                    <span class="gender-icon">♀</span>
+                </label>
+                <label class="btn btn-outline-secondary">
+                    <input type="radio" name="genero" value="hembra" class="d-none">
+                    <img src="{{ url_for('static', filename='images/hembra.png') }}" alt="Hembra" class="mascota-icon">
                     <p class="mt-2">Hembra</p>
-                </button>
+                </label>
             </div>
         </div>
 
+<<<<<<< Updated upstream
         <!-- Paso 3: Campos de texto para datos adicionales -->
         <div class="form-section" style="display: none;">
             <label for="nombreMascota" class="form-label">Nombre Mascota</label>
@@ -67,15 +91,84 @@
             <input type="date" class="form-control" id="fechaPerdida" required>
             <label for="infoAdicional" class="form-label">Información adicional</label>
             <textarea class="form-control" id="infoAdicional" rows="3" placeholder="Ej: Tenía un collar negro. Se ofrece recompensa"></textarea>
+=======
+        <!-- Paso 3: Nombre, Raza, Color, Estado, Condición, Foto URL -->
+        <div class="form-section mb-4">
+            <div class="mb-4">
+                <label for="nombre" class="form-label fw-bold">Nombre Mascota:</label>
+                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Ej: Max" required>
+            </div>
+            <div class="mb-4">
+                <label for="razaMascota" class="form-label fw-bold">Raza:</label>
+                <input type="text" class="form-control" id="razaMascota" name="raza" placeholder="Ej: Labrador" required>
+            </div>
+            <div class="mb-4">
+                <label for="colorMascota" class="form-label fw-bold">Color:</label>
+                <input type="text" class="form-control" id="colorMascota" name="color" placeholder="Ej: Negro y blanco" required>
+            </div>
+            <div class="mb-4">
+                <label for="condicionMascota" class="form-label fw-bold">Condición:</label>
+                <select id="condicionMascota" class="form-select" name="condicion">
+                    <option value="">Seleccione</option>
+                    <option value="sana">Sana</option>
+                    <option value="lastimada">Lastimada</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="estadoMascota" class="form-label fw-bold">Estado:</label>
+                <select id="estadoMascota" class="form-select" name="estado" required>
+                    <option value="perdida">Perdida</option>
+                    <option value="en transito">En tránsito</option>
+                    <option value="en adopcion">En adopción</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label for="fotoMascota" class="form-label fw-bold">Foto URL:</label>
+                <input type="text" class="form-control" id="fotoMascota" name="foto_url" placeholder="Ej: https://ejemplo.com/foto.jpg" required>
+            </div>
         </div>
 
+        <!-- Paso 4: Ubicación - Latitud, Longitud, Zona, Barrio -->
+        <div class="form-section mb-4">
+            <div class="mb-4">
+                <label for="latitud" class="form-label fw-bold">Latitud:</label>
+                <input type="number" class="form-control" id="latitud" name="latitud" step="0.000001" placeholder="Ej: -34.603722" required>
+            </div>
+            <div class="mb-4">
+                <label for="longitud" class="form-label fw-bold">Longitud:</label>
+                <input type="number" class="form-control" id="longitud" name="longitud" step="0.000001" placeholder="Ej: -58.381592" required>
+            </div>
+            <div class="mb-4">
+                <label for="zonaMascota" class="form-label fw-bold">Zona:</label>
+                <input type="text" class="form-control" id="zonaMascota" name="zona" placeholder="Ej: En el parque" required>
+            </div>
+            <div class="mb-4">
+                <label for="barrioMascota" class="form-label fw-bold">Barrio:</label>
+                <input type="text" class="form-control" id="barrioMascota" name="barrio" placeholder="Ej: Recoleta" required>
+            </div>
+        </div>
+
+        <!-- Paso 5: Información de Contacto -->
+        <div class="form-section mb-4">
+            <label for="informacion_contacto" class="form-label fw-bold">Información de Contacto:</label>
+            <input type="text" class="form-control" id="informacion_contacto" name="informacion_contacto" placeholder="Ej: 1120405533 o email@ejemplo.com" required>
+>>>>>>> Stashed changes
+        </div>
+
+        <!-- Botones de Navegación -->
         <div class="d-flex justify-content-center gap-3 mt-4">
+<<<<<<< Updated upstream
             <button type="button" class="btn btn-primary rounded-circle nav-btn btn-prev" style="display: none;">
                 <i class="bi bi-arrow-left"></i>
             </button>
             <button type="submit" class="btn btn-primary rounded-circle nav-btn btn-next">
                 <i class="bi bi-arrow-right"></i>
             </button>
+=======
+            <button type="button" class="btn btn-success btn-prev rounded-circle"><i class="bi bi-arrow-left"></i></button>
+            <button type="button" class="btn btn-success btn-next rounded-circle"><i class="bi bi-arrow-right"></i></button>
+            <button type="submit" class="btn btn-success">Guardar</button>
+>>>>>>> Stashed changes
         </div>
     </form>
 </div>

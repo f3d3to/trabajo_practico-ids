@@ -1,11 +1,3 @@
-@font-face {
-    font-family: 'Corporative Sans';
-    src: url('path/to/CoporativeSansRd-Book.woff2') format('woff2'),
-         url('path/to/CoporativeSansRd-Book.woff') format('woff');
-    font-weight: normal;
-    font-style: normal;
-}
-
 body {
     font-family: 'Corporative Sans', sans-serif;
 }
