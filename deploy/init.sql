@@ -47,6 +47,8 @@ CREATE TABLE IF NOT EXISTS contactos (
     nombre VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     mensaje TEXT NOT NULL,
+    telefono VARCHAR(50) NOT NULL,
+    asunto VARCHAR(255) NOT NULL,
     fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -70,7 +72,7 @@ VALUES
     ('¿Puedo editar los datos de mi publicación?', 'Sí, puedes editar los datos desde la sección de edición de publicaciones.');
 
 -- Insertar datos de prueba en la tabla de contactos
-INSERT INTO contactos (nombre, email, mensaje)
+INSERT INTO contactos (nombre, email, mensaje, telefono, asunto)
 VALUES
-    ('Juan Pérez', 'juanperez@example.com', 'Hola, quisiera saber cómo puedo publicar una mascota que encontré.'),
-    ('Maria Garcia', 'maria@example.com', '¿Es posible actualizar la ubicación de una mascota que publiqué?');
+    ('Juan Pérez', 'juanperez@example.com', 'Hola, quisiera saber cómo puedo publicar una mascota que encontré.', '22334455', 'Publicar mascota'),
+    ('Maria Garcia', 'maria@example.com', '¿Es posible actualizar la ubicación de una mascota que publiqué?', '33445533', 'Actualizar mascota');

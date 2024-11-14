@@ -30,32 +30,33 @@
         <!-- Formulario de contacto -->
         <div class="contact-form">
             <h3>Contáctenos para más información</h3>
-            <form action="">
+            <form action="{{ url_for('contacto') }}" method="POST">
                 <p class="input-contact">
                     <label for="nombre">Su nombre</label>
-                    <input type="text" name="fullname" id="nombre">
+                    <input type="text" name="nombre" id="name" required>
                 </p>
                 <p class="input-contact">
                     <label>Su correo</label>
-                    <input type="email" name="email">
+                    <input type="email" name="email" required>
                 </p>
                 <p class="input-contact">
                     <label>Teléfono</label>
-                    <input type="tel" name="email">
+                    <input type="tel" name="telefono" required>
                 </p>
                 <p class="input-contact">
                     <label>Asunto</label>
-                    <input type="text" name="asunto">
+                    <input type="text" name="asunto" required>
                 </p>
                 <p class="block">
                     <label>Mensaje</label>
-                    <textarea class="contact-textarea" name="mensaje" rows="3"></textarea>
+                    <textarea class="contact-textarea" name="mensaje" rows="3" required></textarea>
                 </p>
                 <p class="block">
                     <button class="contact-button" type="submit">Enviar mensaje</button>
                 </p>
             </form>
         </div>
+        
     </div>
 
     <!-- Información de contacto en dispositivos móviles -->
@@ -94,6 +95,8 @@
     </div>
 </div>
 
+
+<script src="{{ url_for('static', filename='js/contacto.js') }}"></script>
 
 
 {% endblock %}
