@@ -7,17 +7,18 @@ DROP TABLE IF EXISTS mascotas;
 -- Crear la tabla de mascotas
 CREATE TABLE IF NOT EXISTS mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
     especie ENUM('perro', 'gato', 'otro') NOT NULL,
+    genero ENUM('macho', 'hembra') NOT NULL,
+    nombre VARCHAR(255) NOT NULL,
     raza VARCHAR(255),
     color VARCHAR(255),
-    condicion ENUM('lastimada', 'sana') NOT NULL,
+    condicion ENUM('lastimada', 'sana'),
+    estado ENUM('perdida', 'en transito', 'en adopcion') NOT NULL,
+    foto_url VARCHAR(255),
     zona VARCHAR(255),
     barrio VARCHAR(255),
-    latitud FLOAT,   -- Coordenada de latitud como FLOAT
-    longitud FLOAT,  -- Coordenada de longitud como FLOAT
-    foto_url VARCHAR(255),
-    estado ENUM('perdida', 'en transito', 'en adopcion') NOT NULL,
+    latitud FLOAT,
+    longitud FLOAT,
     informacion_contacto VARCHAR(255),
     fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
