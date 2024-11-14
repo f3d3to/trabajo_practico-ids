@@ -13,7 +13,7 @@ def castear_valores(data, esquema):
     }
     return valores_cast
 
-@app.route('/cargarMascota', methods=['POST'])
+@app.route('/cargarMascota', methods=['GET', 'POST'])
 def cargar_mascota():
     if request.method == 'POST':
         esquema_response = requests.post(BACKEND_URL+"/obtener_esquema", json={"tabla": "mascotas"})
