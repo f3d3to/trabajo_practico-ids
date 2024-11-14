@@ -2,10 +2,9 @@
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
-from sqlalchemy.exc import OperationalError
 # Proyecto
 from .config import DATABASE_URI, verificar_conexion
-from .queries import MascotaDAO
+from .queries import MascotaDAO, PreguntasFrecuentesDAO
 # Python
 import os
 
@@ -17,14 +16,13 @@ db = SQLAlchemy(app)
 # Ejemplo de cómo instanciar un DAO para cualquier tabla en la base de datos
 # dao = <Tabla>DAO()  # La idea es reemplazar "<Tabla>" con el nombre de la clase DAO
 mascota_dao = MascotaDAO()
-
+preguntas_frecuentes_dao = PreguntasFrecuentesDAO()
 
 app = Flask(__name__)
 
 # Configuración de la base de datos
-DATABASE_URI = f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+DATABASE_URI = f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset=utf8mb4"
 engine = create_engine(DATABASE_URI)
-
 
 @app.route('/obtener_esquema', methods=['POST'])
 def obtener_esquema():
@@ -68,14 +66,14 @@ def obtener_mascota(id):
     try:
         # Usar el DAO para obtener la mascota por ID
         mascota = mascota_dao.obtener_por_id(id)
-        
+
         if mascota:
             return jsonify({"success": True, "mascota": mascota}), 200
         else:
             return jsonify({"success": False, "error": "Mascota no encontrada"}), 404
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
-    
+
 
 @app.route('/api/mascotas/<int:id>', methods=['PUT'])
 def actualizar_mascota(id):
@@ -108,6 +106,15 @@ def obtener_mascotas():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+
+# Preguntas Frecuentes
+@app.route('/api/preguntas_frecuentes', methods=['GET'])
+def obtener_preguntas_frecuentes():
+    try:
+        preguntas = preguntas_frecuentes_dao.obtener_todos()
+        return jsonify({"success": True, "preguntas_frecuentes": preguntas}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 if __name__ == '__main__':

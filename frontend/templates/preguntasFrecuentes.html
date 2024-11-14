@@ -7,51 +7,26 @@
     <img src="{{ url_for('static', filename='images/headerPreguntasFrecuentes.png') }}" class="img-banner">
 </section>
 
-<!--Faq-->
+<!-- FAQ Section -->
 <section class="faq">
     <h2>Preguntas Frecuentes</h2>
-    <div id="faq-container">
-        <!--Donde se cargaran las preguntas-->
-    </div>
+
+    {% if preguntas %}
+        {% for pregunta in preguntas %}
+            <div class="question" onclick="toggleAnswer(this)">
+                <div class="question-header">
+                    <span class="icon">+</span>
+                    <h3>{{ pregunta["pregunta"] }}</h3>
+                </div>
+                <div class="answer">
+                    <p>{{ pregunta["respuesta"] }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No hay preguntas frecuentes disponibles en este momento.</p>
+    {% endif %}
 </section>
 
 <script src="{{ url_for('static', filename='js/script-preguntas-frecuentes.js') }}"></script>
-
-<script>
-    // Solicita las preguntas frecuentes desde el servidor
-    fetch('/preguntasFrecuentesJSON')
-        .then(response => response.json())
-        .then(data => {
-            const faqContainer = document.getElementById('faq-container');
-            data.forEach(item => {
-                const questionDiv = document.createElement('div');
-                questionDiv.classList.add('question');
-                questionDiv.onclick = function() { toggleAnswer(this) };
-
-                const questionHeader = document.createElement('div');
-                questionHeader.classList.add('question-header');
-
-                const iconSpan = document.createElement('span');
-                iconSpan.classList.add('icon');
-                iconSpan.textContent = '+';
-
-                const questionTitle = document.createElement('h3');
-                questionTitle.textContent = item.pregunta;
-
-                questionHeader.appendChild(iconSpan);
-                questionHeader.appendChild(questionTitle);
-
-                const answerDiv = document.createElement('div');
-                answerDiv.classList.add('answer');
-                answerDiv.innerHTML = `<p>${item.respuesta}</p>`;
-
-                questionDiv.appendChild(questionHeader);
-                questionDiv.appendChild(answerDiv);
-
-                faqContainer.appendChild(questionDiv);
-            });
-        })
-        .catch(error => console.error('Error al cargar las preguntas frecuentes:', error));
-</script>
-
 {% endblock %}
