@@ -35,16 +35,20 @@ class BaseDAO:
         - fetch (str): 'all' para todos los resultados, 'one' para un solo resultado.
 
         Retorna:
-        - El resultado de la consulta.
+        - El resultado de la consulta, si lo hay.
         """
         try:
             with engine.connect() as conn:
                 result = conn.execute(text(query), parameters or {})
                 conn.commit()
-                if fetch == "one":
-                    return result.fetchone()
-                elif fetch == "all":
-                    return result.fetchall()
+
+                if result.returns_rows:
+                    if fetch == "one":
+                        row = result.fetchone()
+                        return dict(row._mapping) if row else None
+                    elif fetch == "all":
+                        return [dict(row._mapping) for row in result.fetchall()]
+
                 return None
         except SQLAlchemyError as e:
             print(f"Error de base de datos en {self.table_name}:", e)
@@ -105,9 +109,11 @@ class BaseDAO:
         validated_data = self._flatten_data(validated_data)
         columns = ", ".join(validated_data.keys())
         placeholders = ", ".join([f":{key}" for key in validated_data.keys()])
-        query = f"INSERT INTO {self.table_name} ({columns}) VALUES ({placeholders}) RETURNING id"
-        result = self._run_query(query, validated_data, fetch="one")
-        return result[0] if result else None
+        insert_query = f"INSERT INTO {self.table_name} ({columns}) VALUES ({placeholders})"
+        self._run_query(insert_query, validated_data)
+        last_id_query = "SELECT LAST_INSERT_ID() AS id"
+        result = self._run_query(last_id_query, fetch="one")
+        return result["id"] if result else None
 
     def actualizar(self, id, data):
         """
@@ -200,19 +206,19 @@ class MascotaDAO(BaseDAO):
     """
     def __init__(self):
         schema = {
-            "nombre": str,
             "especie": str,
+            "genero":str,
+            "nombre": str,
             "raza": str,
             "color": str,
             "condicion": str,
+            "estado": str,
+            "foto_url": str,
             "zona": str,
             "barrio": str,
-            "foto_url": str,
-            "estado": str,
-            "ubicacion": {
-                "latitud": float,
-                "longitud": float
-            }
+            "latitud": float,
+            "longitud": float,
+            "informacion_contacto": str,
         }
         super().__init__("mascotas", schema)
 

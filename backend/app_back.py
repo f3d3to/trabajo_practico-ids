@@ -1,7 +1,14 @@
-from flask import Flask, request, render_template
+# Third Party
+from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.exc import OperationalError
+# Proyecto
 from .config import DATABASE_URI, verificar_conexion
 from .queries import MascotaDAO
+# Python
+import os
+
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
@@ -12,12 +19,6 @@ db = SQLAlchemy(app)
 mascota_dao = MascotaDAO()
 
 
-# app_back.py
-from flask import Flask, jsonify
-from sqlalchemy import create_engine, text
-from sqlalchemy.exc import OperationalError
-import os
-
 app = Flask(__name__)
 
 # Configuración de la base de datos
@@ -25,45 +26,32 @@ DATABASE_URI = f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PA
 engine = create_engine(DATABASE_URI)
 
 
+@app.route('/obtener_esquema', methods=['POST'])
+def obtener_esquema():
+    data = request.json
+    entidad = data.get("tabla")
 
-@app.route('/test_db_connection')
-def test_db_connection():
-    try:
-        # Intenta conectar a la base de datos y ejecuta una consulta de prueba
-        with engine.connect() as connection:
-            result = connection.execute(text("SELECT 1"))
-            return jsonify({"connected": True, "result": [row[0] for row in result]})
-    except OperationalError:
-        return jsonify({"connected": False, "error": "No se pudo conectar a la base de datos"}), 500
+    if entidad == mascota_dao.table_name:
+        schema = mascota_dao.schema
+    else:
+        return jsonify(success=False, errors=["Entidad no especificada o no válida."]), 400
 
-@app.route('/')
-def get_mascota():
+    esquema_descripcion = {campo: tipo.__name__ for campo, tipo in schema.items()}
+    return jsonify(success=True, entidad=entidad, esquema=esquema_descripcion), 200
+
+@app.route('/agregar_mascota', methods=['POST'])
+def agregar_mascota():
+    data = request.json
     try:
-        with engine.connect() as connection:
-            result = connection.execute(text("SELECT * FROM mascotas LIMIT 1"))
-            mascota = result.fetchone()
-            if mascota:
-                mascota_data = {
-                    "id": mascota[0],
-                    "nombre": mascota[1],
-                    "especie": mascota[2],
-                    "raza": mascota[3],
-                    "color": mascota[4],
-                    "condicion": mascota[5],
-                    "zona": mascota[6],
-                    "barrio": mascota[7],
-                    "latitud": mascota[8],
-                    "longitud": mascota[9],
-                    "foto_url": mascota[10],
-                    "estado": mascota[11],
-                    "informacion_contacto": mascota[12],
-                    "fecha_publicacion": mascota[13]
-                }
-                return jsonify({"mascota": mascota_data})
-            else:
-                return jsonify({"error": "No se encontraron mascotas"}), 404
-    except OperationalError as e:
-        return jsonify({"connected": False, "error": str(e)}), 500
+        id_nueva_mascota = mascota_dao.insertar(data)
+        if id_nueva_mascota:
+            return jsonify({"success": True, "id": id_nueva_mascota}), 201
+        else:
+            print("Error al insertar la mascota.")
+            return jsonify({"success": False, "error": "No se pudo insertar la mascota"}), 500
+    except Exception as e:
+        print("Excepción al intentar insertar en la base de datos:", e)
+        return jsonify({"success": False, "error": str(e)}), 500
 
 
 # Ejemplo de endpoint para actualizar un registro de la tabla <Tabla> utilizando el DAO.
