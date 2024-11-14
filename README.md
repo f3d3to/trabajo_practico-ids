@@ -59,13 +59,6 @@ deberá aparecer una vez cargada en el sitio web.
      - *Respuesta:* JSON con la lista de mascotas que cumplen con los criterios de búsqueda.
      - *Método:* GET
 
-   - *GET /api/mascotas/buscar*
-     - *Descripción:* Búsqueda avanzada de mascotas según múltiples características.
-     - *Parámetros de Consulta:*
-       - Los mismos que el endpoint anterior para búsqueda específica.
-     - *Respuesta:* JSON con la lista de mascotas encontradas.
-     - *Método:* GET
-
    - *GET /api/mapa/mascotas*
      - *Descripción:* Obtener la ubicación de todas las mascotas para visualización en mapa.
      - *Parámetros de Consulta:*
