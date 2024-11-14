@@ -222,6 +222,21 @@ class MascotaDAO(BaseDAO):
         }
         super().__init__("mascotas", schema)
 
+class PreguntasFrecuentesDAO(BaseDAO):
+    """
+    DAO para la tabla de 'preguntas_frecuentes' con un esquema específico.
+
+    Ejemplo de ejecución del DAO:
+        preguntas_frecuentes_dao = PreguntasFrecuentesDAO()
+        preguntas_frecuentes_dao.insertar({"pregunta": "¿Cómo puedo registrar mi mascota?", "respuesta": "Puedes registrarla a través de la app..."})
+    """
+    def __init__(self):
+        schema = {
+            "pregunta": str,
+            "respuesta": str
+        }
+        super().__init__("preguntas_frecuentes", schema)
+
 class ContactoDAO(BaseDAO):
     def __init__(self):
         schema = {
