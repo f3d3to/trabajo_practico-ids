@@ -234,7 +234,7 @@ class ContactoDAO(BaseDAO):
         super().__init__("contactos", schema)
 
 
-        
+
 # Ejemplo para implementar un <Tabla>DAO.
 # class <Tabla>DAO(BaseDAO):
 #     """
