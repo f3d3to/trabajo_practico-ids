@@ -63,6 +63,53 @@ def agregar_mascota():
 #     # dao.actualizar(id, data)  # Llama al método del modelo <Tabla>Dao `actualizar` del DAO.
 #     # return jsonify({"message": "Registro actualizado correctamente"}), 200
 
+@app.route('/api/mascotas/<int:id>', methods=['GET'])
+def obtener_mascota(id):
+    try:
+        # Usar el DAO para obtener la mascota por ID
+        mascota = mascota_dao.obtener_por_id(id)
+        
+        if mascota:
+            return jsonify({"success": True, "mascota": mascota}), 200
+        else:
+            return jsonify({"success": False, "error": "Mascota no encontrada"}), 404
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+    
+
+@app.route('/api/mascotas/<int:id>', methods=['PUT'])
+def actualizar_mascota(id):
+    data = request.json
+
+    try:
+        mascota_dao.actualizar(id, data)
+
+        return jsonify({"success": True, "message": "Mascota actualizada correctamente"}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+@app.route('/api/mascotas', methods=['GET'])
+def obtener_mascotas():
+    # DAtos del form
+    filtros = {
+        'nombre': request.args.get('nombre'),
+        'especie': request.args.get('especie'),
+        'raza': request.args.get('raza'),
+        'sexo': request.args.get('sexo'),
+        'ubicacion': request.args.get('ubicacion')
+    }
+
+    filtros = {key: value for key, value in filtros.items() if value}
+
+    try:
+        mascotas = mascota_dao.obtener_todos(filtros)
+        return jsonify(mascotas), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)
     verificar_conexion()

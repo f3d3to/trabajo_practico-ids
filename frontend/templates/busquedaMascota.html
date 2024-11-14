@@ -46,7 +46,14 @@
             <!-- Ubicación -->
             <div class="col-md-6 mb-3">
                 <label for="ubicacion" class="text-custom-green form-label">Ubicación donde se perdió:</label>
-                <input type="text" name="ubicacion" id="ubicacion" class="form-control">
+                <select name="ubicacion" id="ubicacion" class="form-select">
+                    <option value="" selected>Seleccionar ubicación</option>
+                    <option value="zona_norte">Zona Norte</option>
+                    <option value="zona_sur">Zona Sur</option>
+                    <option value="zona_este">Zona Este</option>
+                    <option value="zona_oeste">Zona Oeste</option>
+                    <option value="otro">Otra ubicación</option>
+                </select>
             </div>
         </div>
 
@@ -61,4 +68,5 @@
         <iframe class="mapa" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Buenos%20Aires+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
     </div>
 </div>
+<script src="{{ url_for('static', filename='js/busquedaMascota.js') }}"></script>
 {% endblock %}
