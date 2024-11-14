@@ -33,8 +33,22 @@ def cargar_mascota():
         return redirect(url_for('cargar_mascota'))
     return render_template('cargarMascotaPerdida.html')
 
-@app.route('/contacto')
+
+@app.route('/contacto', methods=['GET', 'POST'])
 def contacto():
+    if request.method == 'POST':
+        print(request.form)
+        esquema_response = requests.post(BACKEND_URL+"/obtener_esquema_contacto", json={"tabla": "contactos"})
+        if esquema_response.status_code == 200 and esquema_response.json().get("success"):
+            print(request.form)
+            esquema = esquema_response.json().get("esquema")
+            contacto_data = castear_valores(request.form, esquema)
+            try:
+                print(contacto_data)
+                requests.post(BACKEND_URL+"/agregar_contacto", json=contacto_data)
+            except requests.exceptions.RequestException:
+                print("Error de conexión con el backend.")
+        return redirect(url_for('contacto'))
     return render_template('contacto.html')
 
 @app.route('/')

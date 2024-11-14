@@ -4,7 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 # Proyecto
 from .config import DATABASE_URI, verificar_conexion
-from .queries import MascotaDAO, PreguntasFrecuentesDAO
+from .queries import MascotaDAO, PreguntasFrecuentesDAO, ContactoDAO
 # Python
 import os
 
@@ -17,6 +17,7 @@ db = SQLAlchemy(app)
 # dao = <Tabla>DAO()  # La idea es reemplazar "<Tabla>" con el nombre de la clase DAO
 mascota_dao = MascotaDAO()
 preguntas_frecuentes_dao = PreguntasFrecuentesDAO()
+contacto_dao = ContactoDAO()
 
 app = Flask(__name__)
 
@@ -36,6 +37,23 @@ def obtener_esquema():
 
     esquema_descripcion = {campo: tipo.__name__ for campo, tipo in schema.items()}
     return jsonify(success=True, entidad=entidad, esquema=esquema_descripcion), 200
+
+
+@app.route('/obtener_esquema_contacto', methods=['POST'])
+def obtener_esquema_contacto():
+    data = request.json
+    entidad = data.get("tabla")
+
+    if entidad == contacto_dao.table_name:
+        schema = contacto_dao.schema
+    else:
+        return jsonify(success=False, errors=["Entidad no especificada o no válida."]), 400
+
+
+    esquema_descripcion = {campo: tipo.__name__ for campo, tipo in schema.items()}
+    return jsonify(success=True, entidad=entidad, esquema=esquema_descripcion), 200
+
+
 
 @app.route('/agregar_mascota', methods=['POST'])
 def agregar_mascota():
@@ -106,6 +124,20 @@ def obtener_mascotas():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/agregar_contacto', methods=['POST'])
+def agregar_contacto():
+    data = request.json
+    print("Datos recibidos para inserción:", data)
+    try:
+        id_contacto_nuevo = contacto_dao.insertar(data)
+        if id_contacto_nuevo:
+            return jsonify({"success": True, "id": id_contacto_nuevo}), 201
+        else:
+            print("Error al enviar el mensaje.")
+            return jsonify({"success": False, "error": "No se pudo enviar el mensaje"}), 500
+    except Exception as e:
+        print("Excepción al intentar insertar en la base de datos:", e)
+        return jsonify({"success": False, "error": str(e)}), 500
 
 # Preguntas Frecuentes
 @app.route('/api/preguntas_frecuentes', methods=['GET'])

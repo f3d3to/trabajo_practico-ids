@@ -222,7 +222,19 @@ class MascotaDAO(BaseDAO):
         }
         super().__init__("mascotas", schema)
 
+class ContactoDAO(BaseDAO):
+    def __init__(self):
+        schema = {
+            "nombre": str,
+            "email":str,
+            "mensaje": str,
+            "telefono": str,
+            "asunto": str,
+        }
+        super().__init__("contactos", schema)
 
+
+        
 # Ejemplo para implementar un <Tabla>DAO.
 # class <Tabla>DAO(BaseDAO):
 #     """
