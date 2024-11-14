@@ -4,22 +4,6 @@
 <div class="container text-center mt-5">
     <h2 class="text-custom-green">Completá los datos de tu mascota</h2>
 
-<<<<<<< Updated upstream
-    <form class="mt-4" enctype="multipart/form-data" action="{{ url_for('cargar_mascota') }}" method="POST">
-        <!-- Paso 1: Selección del tipo de mascota -->
-        <div class="form-section">
-            <p class="mb-2 fw-bold">Mi mascota es</p>
-            <div class="d-flex justify-content-center gap-4">
-                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="perro">
-                    <img src="{{ url_for('static', filename='images/perro.png') }}" alt="Perro" class="mascota-icon">
-                    <p class="mt-2">Perro</p>
-                </button>
-                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="gato">
-                    <img src="{{ url_for('static', filename='images/gato.png') }}" alt="Gato" class="mascota-icon">
-                    <p class="mt-2">Gato</p>
-                </button>
-                <button type="button" class="btn btn-outline-secondary pet-type-button" id="especie" value="otro">
-=======
     <form method="POST" action="{{ url_for('cargar_mascota') }}" enctype="multipart/form-data" class="mt-4">
 
         <!-- Paso 1: Especie -->
@@ -38,7 +22,6 @@
                 </label>
                 <label class="btn btn-outline-secondary">
                     <input type="radio" name="especie" value="otro" class="d-none">
->>>>>>> Stashed changes
                     <img src="{{ url_for('static', filename='images/bird.png') }}" alt="Otro" class="mascota-icon">
                     <p class="mt-2">Otro</p>
                 </label>
@@ -62,36 +45,6 @@
             </div>
         </div>
 
-<<<<<<< Updated upstream
-        <!-- Paso 3: Campos de texto para datos adicionales -->
-        <div class="form-section" style="display: none;">
-            <label for="nombreMascota" class="form-label">Nombre Mascota</label>
-            <input type="text" class="form-control" id="nombreMascota" placeholder="Ej: Moro" required>
-            <label for="razaMascota" class="form-label">Raza Mascota</label>
-            <input type="text" class="form-control" id="razaMascota" placeholder="Ej: Ovejero Alemán" required>
-        </div>
-
-        <!-- Paso 4: Cargar foto de la mascota -->
-        <div class="form-section" style="display: none;">
-            <p class="mb-2 fw-bold">Subí la mejor foto de tu mascota</p>
-            <input type="file" class="form-control" id="foto_url" required>
-        </div>
-
-        <!-- Paso 5: Ubicación en el mapa -->
-        <div class="form-section" style="display: none;">
-            <p class="mb-2 fw-bold">¿Dónde se perdió?</p>
-            <input type="text" class="form-control" id="latitud" placeholder="Latitud">
-            <input type="text" class="form-control" id="longitud" placeholder="Longitud">
-            <small class="text-muted">Ingresa la ubicación de pérdida.</small>
-        </div>
-
-        <!-- Paso 6: Fecha de pérdida e información adicional -->
-        <div class="form-section" style="display: none;">
-            <label for="fechaPerdida" class="form-label">Fecha en que se perdió</label>
-            <input type="date" class="form-control" id="fechaPerdida" required>
-            <label for="infoAdicional" class="form-label">Información adicional</label>
-            <textarea class="form-control" id="infoAdicional" rows="3" placeholder="Ej: Tenía un collar negro. Se ofrece recompensa"></textarea>
-=======
         <!-- Paso 3: Nombre, Raza, Color, Estado, Condición, Foto URL -->
         <div class="form-section mb-4">
             <div class="mb-4">
@@ -152,23 +105,13 @@
         <div class="form-section mb-4">
             <label for="informacion_contacto" class="form-label fw-bold">Información de Contacto:</label>
             <input type="text" class="form-control" id="informacion_contacto" name="informacion_contacto" placeholder="Ej: 1120405533 o email@ejemplo.com" required>
->>>>>>> Stashed changes
         </div>
 
         <!-- Botones de Navegación -->
         <div class="d-flex justify-content-center gap-3 mt-4">
-<<<<<<< Updated upstream
-            <button type="button" class="btn btn-primary rounded-circle nav-btn btn-prev" style="display: none;">
-                <i class="bi bi-arrow-left"></i>
-            </button>
-            <button type="submit" class="btn btn-primary rounded-circle nav-btn btn-next">
-                <i class="bi bi-arrow-right"></i>
-            </button>
-=======
             <button type="button" class="btn btn-success btn-prev rounded-circle"><i class="bi bi-arrow-left"></i></button>
             <button type="button" class="btn btn-success btn-next rounded-circle"><i class="bi bi-arrow-right"></i></button>
             <button type="submit" class="btn btn-success">Guardar</button>
->>>>>>> Stashed changes
         </div>
     </form>
 </div>
