@@ -55,10 +55,13 @@ CREATE TABLE IF NOT EXISTS contactos (
 -- Insertar datos de prueba en la tabla de mascotas con las imágenes proporcionadas
 INSERT INTO mascotas (nombre, especie, raza, color, condicion, zona, barrio, latitud, longitud, foto_url, estado, informacion_contacto)
 VALUES
-    ('Teddy', 'perro', 'Husky', 'blanco y negro', 'sana', 'Palermo', 'Recoleta', -34.6037, -58.3816, 'https://unsplash.com/es/fotos/perro-blanco-y-negro-de-pelo-largo-durante-el-dia-mx0DEnfYxic', 'perdida', '+54 9 111 222 3333'),
-    ('Milo', 'gato', 'Siames', 'gris', 'lastimada', 'Belgrano', 'Nuñez', -34.5614, -58.4567, 'https://unsplash.com/es/fotos/white-and-gray-cat-IFxjDdqK_0U', 'en transito', '+54 9 111 333 4444'),
-    ('Pepito', 'otro', 'Loro', 'verde', 'sana', 'Caballito', 'Parque Chacabuco', -34.6234, -58.4011, 'https://unsplash.com/es/fotos/un-loro-verde-sentado-encima-de-un-trozo-de-madera-veSNcVHgjYU', 'en adopcion', '+54 9 111 555 6666'),
-    ('Luna', 'perro', 'Pug', 'negro', 'sana', 'San Telmo', 'Constitución', -34.6158, -58.3897, 'https://unsplash.com/es/fotos/pug-negro-encontrado-abc123', 'encontrada', '+54 9 111 444 5555');
+    ('Rocky', 'perro', 'Golden Retriever', 'dorado', 'sana', 'Palermo', 'Recoleta', -34.6037, -58.3816, 'user_images/rocky.png', 'perdida', '+54 9 111 222 3333'),
+    ('Nina', 'gato', 'Maine Coon', 'blanco y marrón', 'lastimada', 'Belgrano', 'Nuñez', -34.5614, -58.4567, 'user_images/nina.png', 'en transito', '+54 9 111 333 4444'),
+    ('Charlie', 'otro', 'Cacatúa', 'blanco con amarillo', 'sana', 'Caballito', 'Parque Chacabuco', -34.6234, -58.4011, 'user_images/charlie.png', 'en adopcion', '+54 9 111 555 6666'),
+    ('Lola', 'perro', 'Bulldog Francés', 'gris', 'sana', 'San Telmo', 'Constitución', -34.6158, -58.3897, 'user_images/lola.png', 'encontrada', '+54 9 111 444 5555'),
+    ('Max', 'perro', 'Pastor Alemán', 'negro y marrón', 'sana', 'Retiro', 'Villa Crespo', -34.5957, -58.3822, 'user_images/max.png', 'perdida', '+54 9 111 123 4567'),
+    ('Mimi', 'otro', 'Cabra', 'marrón con manchas', 'lastimada', 'Villa Urquiza', 'Coghlan', -34.5761, -58.4809, 'user_images/mimi.png', 'perdida', '+54 9 111 765 4321'),
+    ('Coco', 'perro', 'Cocker Spaniel', 'marrón claro', 'sana', 'Almagro', 'Boedo', -34.6076, -58.4188, 'user_images/coco.png', 'perdida', '+54 9 111 999 8888');
 
 -- Insertar datos de prueba en la tabla de casas de tránsito
 INSERT INTO casas_transito (id_mascota, latitud, longitud, informacion_contacto)

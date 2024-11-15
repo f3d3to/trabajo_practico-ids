@@ -102,7 +102,7 @@
         </div>
         <div class="offcanvas-body">
             <div id="mascota-detalle">
-                <img id="mascota-foto" src="" class="img-fluid mb-3" style="max-height: 200px;">
+                <img id="mascota-foto" src="{{ url_for('static', filename='') }}" class="img-fluid mb-3 mascota-foto-detalle">
                 <p><strong>Nombre:</strong> <span id="mascota-nombre"></span></p>
                 <p><strong>Especie:</strong> <span id="mascota-especie"></span></p>
                 <p><strong>Raza:</strong> <span id="mascota-raza"></span></p>
@@ -127,6 +127,11 @@
 
 <script>
     const mascotas = {{ mascotas|tojson }}; // Esto es necesario para que JavaScript "acepte" la variable "mascotas"
+    mascotas.forEach(mascota => {
+        if (mascota.foto_url) {
+            mascota.foto_url = "{{ url_for('static', filename='') }}" + mascota.foto_url;
+        }
+    });
 </script>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>

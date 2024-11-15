@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request, redirect, url_for
 import requests, os
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
+
+UPLOAD_FOLDER = 'static/user_images'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 BACKEND_URL = os.getenv("BACKEND_URL")
 
@@ -26,6 +30,14 @@ def cargar_mascota():
         if esquema_response.status_code == 200 and esquema_response.json().get("success"):
             esquema = esquema_response.json().get("esquema")
             mascota_data = castear_valores(request.form, esquema)
+
+            imagen = request.files.get('foto')
+            if imagen:
+                filename = secure_filename(imagen.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                imagen.save(filepath)  # Guardar la imagen en 'static/user_images'
+                mascota_data['foto_url'] = f"user_images/{filename}" if filename else None
+
             try:
                 requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
             except requests.exceptions.RequestException:
@@ -48,9 +60,19 @@ def contacto():
         return redirect(url_for('contacto'))
     return render_template('contacto.html')
 
-@app.route('/')
+@app.route("/")
 def index():
-    return render_template('home.html')
+    try:
+        response = requests.get(f"{BACKEND_URL}/api/mascotas", params={'estado': 'perdida'})
+        if response.status_code == 200:
+            mascotas_perdidas = response.json()
+        else:
+            mascotas_perdidas = []
+            print("Error al obtener mascotas perdidas:", response.json().get("error"))
+    except requests.exceptions.RequestException as e:
+        print("Error de conexión con el backend:", e)
+        mascotas_perdidas = []
+    return render_template("home.html", mascotas_perdidas=mascotas_perdidas)
 
 @app.route("/preguntasFrecuentes")
 def preguntasFrecuentes():
