@@ -2,6 +2,7 @@ from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
 from .config import engine
 
+## TO-DO: Que sean funciones
 class BaseDAO:
     """
     Clase base para crear DAOs (Data Access Objects) para cualquier tabla.
