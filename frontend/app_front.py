@@ -37,14 +37,11 @@ def cargar_mascota():
 @app.route('/contacto', methods=['GET', 'POST'])
 def contacto():
     if request.method == 'POST':
-        print(request.form)
         esquema_response = requests.post(BACKEND_URL+"/obtener_esquema_contacto", json={"tabla": "contactos"})
         if esquema_response.status_code == 200 and esquema_response.json().get("success"):
-            print(request.form)
             esquema = esquema_response.json().get("esquema")
             contacto_data = castear_valores(request.form, esquema)
             try:
-                print(contacto_data)
                 requests.post(BACKEND_URL+"/agregar_contacto", json=contacto_data)
             except requests.exceptions.RequestException:
                 print("Error de conexión con el backend.")
@@ -67,9 +64,28 @@ def preguntasFrecuentes():
         fq = []
     return render_template("preguntasFrecuentes.html", preguntas=fq)
 
-@app.route("/busquedaMascota")
+@app.route("/busquedaMascota", methods=['GET'])
 def busquedaMascota():
-    return render_template("busquedaMascota.html")
+    filtros = {
+        'nombre': request.args.get('nombre'),
+        'especie': request.args.get('especie'),
+        'raza': request.args.get('raza'),
+        'genero': request.args.get('sexo'),
+        'zona': request.args.get('zona'),
+        'barrio': request.args.get('barrio'),
+        'color': request.args.get('color'),
+        'informacion_contacto': request.args.get('informacion_contacto'),
+        'fecha_publicacion': request.args.get('fecha_publicacion'),
+    }
+    filtros = {k: v for k, v in filtros.items() if v is not None and v != ''}
+    try:
+        response = requests.get(BACKEND_URL + "/api/mascotas", params=filtros)
+        mascotas = response.json() if response.status_code == 200 else []
+    except requests.exceptions.RequestException:
+        print("Error de conexión con el backend.")
+        mascotas = []
+
+    return render_template("busquedaMascota.html", mascotas=mascotas)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)

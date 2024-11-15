@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS mascotas (
     raza VARCHAR(255),
     color VARCHAR(255),
     condicion ENUM('lastimada', 'sana'),
-    estado ENUM('perdida', 'en transito', 'en adopcion') NOT NULL,
+    estado ENUM('perdida', 'en transito', 'en adopcion', 'encontrada') NOT NULL,
     foto_url VARCHAR(255),
     zona VARCHAR(255),
     barrio VARCHAR(255),
@@ -57,7 +57,8 @@ INSERT INTO mascotas (nombre, especie, raza, color, condicion, zona, barrio, lat
 VALUES
     ('Teddy', 'perro', 'Husky', 'blanco y negro', 'sana', 'Palermo', 'Recoleta', -34.6037, -58.3816, 'https://unsplash.com/es/fotos/perro-blanco-y-negro-de-pelo-largo-durante-el-dia-mx0DEnfYxic', 'perdida', '+54 9 111 222 3333'),
     ('Milo', 'gato', 'Siames', 'gris', 'lastimada', 'Belgrano', 'Nuñez', -34.5614, -58.4567, 'https://unsplash.com/es/fotos/white-and-gray-cat-IFxjDdqK_0U', 'en transito', '+54 9 111 333 4444'),
-    ('Pepito', 'otro', 'Loro', 'verde', 'sana', 'Caballito', 'Parque Chacabuco', -34.6234, -58.4011, 'https://unsplash.com/es/fotos/un-loro-verde-sentado-encima-de-un-trozo-de-madera-veSNcVHgjYU', 'en adopcion', '+54 9 111 555 6666');
+    ('Pepito', 'otro', 'Loro', 'verde', 'sana', 'Caballito', 'Parque Chacabuco', -34.6234, -58.4011, 'https://unsplash.com/es/fotos/un-loro-verde-sentado-encima-de-un-trozo-de-madera-veSNcVHgjYU', 'en adopcion', '+54 9 111 555 6666'),
+    ('Luna', 'perro', 'Pug', 'negro', 'sana', 'San Telmo', 'Constitución', -34.6158, -58.3897, 'https://unsplash.com/es/fotos/pug-negro-encontrado-abc123', 'encontrada', '+54 9 111 444 5555');
 
 -- Insertar datos de prueba en la tabla de casas de tránsito
 INSERT INTO casas_transito (id_mascota, latitud, longitud, informacion_contacto)

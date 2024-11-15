@@ -29,7 +29,7 @@ deberá aparecer una vez cargada en el sitio web.
        - zona y barrio: Zona y barrio específicos.
        - ubicacion: Ubicación geográfica (latitud y longitud).
        - foto: Archivo de imagen de la mascota.
-       - estado: Estado (perdida, en tránsito, en adopción).
+       - estado: Estado (perdida, en tránsito, en adopción, encontrada).
      - *Respuesta:* Confirmación de creación y id de la mascota.
      - *Método:* POST
 

@@ -112,12 +112,14 @@ def obtener_mascotas():
         'nombre': request.args.get('nombre'),
         'especie': request.args.get('especie'),
         'raza': request.args.get('raza'),
-        'sexo': request.args.get('sexo'),
-        'ubicacion': request.args.get('ubicacion')
+        'genero': request.args.get('sexo'),
+        'zona': request.args.get('zona'),
+        'barrio': request.args.get('barrio'),
+        'color': request.args.get('color'),
+        'informacion_contacto': request.args.get('informacion_contacto'),
+        'fecha_publicacion': request.args.get('fecha_publicacion'),
     }
-
     filtros = {key: value for key, value in filtros.items() if value}
-
     try:
         mascotas = mascota_dao.obtener_todos(filtros)
         return jsonify(mascotas), 200
@@ -127,7 +129,6 @@ def obtener_mascotas():
 @app.route('/agregar_contacto', methods=['POST'])
 def agregar_contacto():
     data = request.json
-    print("Datos recibidos para inserción:", data)
     try:
         id_contacto_nuevo = contacto_dao.insertar(data)
         if id_contacto_nuevo:
