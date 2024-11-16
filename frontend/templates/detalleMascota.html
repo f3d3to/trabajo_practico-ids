@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Bienvenido{% endblock %}
+
+{% block content %}
+
+<!-- Contenedor principal -->
+<div class="card">
+    <!-- Columna izquierda con imagen y título -->
+    <div class="left-column">
+        <div class="header">
+            <h1>¡Buscamos a Catalina!</h1>
+        </div>
+        
+        <!-- Imagen del animal perdido -->
+        <img src="../static/images/ejemploFlyerBusqueda.png" alt="Catalina - Gata negra con mancha blanca" class="pet-image">
+        
+        <!-- Badge de ubicación -->
+        <div class="location-badge">
+            <span>📍</span>
+            <span>Estás a 3.22 km de distancia</span>
+        </div>
+    </div>
+
+    <!-- Columna derecha con detalles y botones de compartir -->
+    <div class="right-column">
+        <!-- Sección de detalles -->
+        <div class="details">
+            <h3>SE PERDIÓ EN:</h3>
+            <p>Cercanías a De la Democracia 2544, Pb. A, Lomas del mirador, Buenos Aires</p>
+            <p>el 01/03/2024 y estamos muy preocupados.</p>
+
+            <h3>CARACTERÍSTICAS:</h3>
+            <ul>
+                <li>Raza: Mestiza</li>
+                <li>Es toda negra con una mancha blanca en el pecho</li>
+                <li>Super preciosa</li>
+                <li>Nunca salió a la calle</li>
+                <li>Nunca trepó una pared</li>
+            </ul>
+
+            <p><strong>Si tienes información sobre su paradero:</strong><br>
+            favor contactar a Mariela al +11 5640 4481</p>
+        </div>
+
+        <!-- Sección de compartir -->
+        <div>
+            <p>Por favor, comparte esta publicación en grupos locales de Facebook, WhatsApp u otras redes sociales para ayudarnos a difundir su búsqueda en la zona.</p>
+
+            <!-- Botones de redes sociales -->
+            <div class="share-buttons">
+                <a href="#" class="share-button facebook">Facebook</a>
+                <a href="#" class="share-button whatsapp">WhatsApp</a>
+                <a href="#" class="share-button twitter">X</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
