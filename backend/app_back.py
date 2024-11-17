@@ -3,8 +3,8 @@ from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
 # Proyecto
-from .config import DATABASE_URI, verificar_conexion
-from .queries import MascotaDAO, PreguntasFrecuentesDAO, ContactoDAO
+from config import DATABASE_URI, verificar_conexion
+from queries import MascotaDAO, PreguntasFrecuentesDAO, ContactoDAO
 # Python
 import os
 
@@ -112,12 +112,14 @@ def obtener_mascotas():
         'nombre': request.args.get('nombre'),
         'especie': request.args.get('especie'),
         'raza': request.args.get('raza'),
-        'sexo': request.args.get('sexo'),
-        'ubicacion': request.args.get('ubicacion')
+        'genero': request.args.get('sexo'),
+        'zona': request.args.get('zona'),
+        'barrio': request.args.get('barrio'),
+        'color': request.args.get('color'),
+        'informacion_contacto': request.args.get('informacion_contacto'),
+        'fecha_publicacion': request.args.get('fecha_publicacion'),
     }
-
     filtros = {key: value for key, value in filtros.items() if value}
-
     try:
         mascotas = mascota_dao.obtener_todos(filtros)
         return jsonify(mascotas), 200
@@ -127,7 +129,6 @@ def obtener_mascotas():
 @app.route('/agregar_contacto', methods=['POST'])
 def agregar_contacto():
     data = request.json
-    print("Datos recibidos para inserción:", data)
     try:
         id_contacto_nuevo = contacto_dao.insertar(data)
         if id_contacto_nuevo:
@@ -147,6 +148,28 @@ def obtener_preguntas_frecuentes():
         return jsonify({"success": True, "preguntas_frecuentes": preguntas}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/mascotas/<int:id>", methods=['DELETE'])
+def eliminar_mascotas(id):
+    try:
+        mascota_dao.borrar(id)
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/transito/", methods=['GET'])
+def obtener_mascotas_transito(zona):
+    try:
+        if zona:
+            resultado = mascota_dao.obtener_todos({"estado": "en transito", "zona": zona})
+            if len(resultado) == 0:
+                return jsonify({"error": "no hubo coincidencias"}), 404
+            return jsonify({"success": True, "mascotas_transito": resultado}), 200
+        resultado = mascota_dao.obtener_todos({"estado": "en transito"})
+        return jsonify({"success": True, "mascotas_transito": resultado}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
 
 
 if __name__ == '__main__':
