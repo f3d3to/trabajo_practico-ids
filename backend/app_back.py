@@ -1,7 +1,7 @@
 # Third Party
 from flask import Flask, jsonify, request
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, false
 # Proyecto
 from config import DATABASE_URI, verificar_conexion
 from queries import MascotaDAO, PreguntasFrecuentesDAO, ContactoDAO
@@ -158,12 +158,15 @@ def eliminar_mascotas(id):
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/transito/", methods=['GET'])
-def obtener_mascotas_transito(zona):
+def obtener_mascotas_transito():
     try:
-        if zona:
-            resultado = mascota_dao.obtener_todos({"estado": "en transito", "zona": zona})
+        data = request.json()
+        if data:
+            if "estado" not in data:
+                data["estado"] = "en transito"
+            resultado = mascota_dao.obtener_todos(data)
             if len(resultado) == 0:
-                return jsonify({"error": "no hubo coincidencias"}), 404
+                return jsonify({"success": False, "error": "no hubo coincidencias"}), 404
             return jsonify({"success": True, "mascotas_transito": resultado}), 200
         resultado = mascota_dao.obtener_todos({"estado": "en transito"})
         return jsonify({"success": True, "mascotas_transito": resultado}), 200
@@ -171,19 +174,23 @@ def obtener_mascotas_transito(zona):
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/reportar-encontrado", methods=['POST'])
-def reportar_encontrado(id, zona, barrio, contacto):
+def reportar_encontrado(id):
     try:
-        mascota_dao.actualizar(id, {"barrio": barrio, "zona": zona,
-                                         "informacion_contacto": contacto, "estado": "encontrada"})
+        data = request.json()
+        if "estado" not in data:
+            data["estado"] = "encontrada"
+        mascota_dao.actualizar(id, data)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
 @app.route("/api/transito/", methods=['POST'])
-def mascota_reportar_transito(id, zona, barrio, contacto):
+def mascota_reportar_transito(id):
     try:
-        mascota_dao.actualizar(id, {"barrio": barrio, "zona": zona,
-                                         "informacion_contacto": contacto, "estado": "em transito"})
+        data = request.json()
+        if "estado" not in data:
+            data["estado"] = "en transito"
+        mascota_dao.actualizar(id, data)
         return jsonify({"success": True}), 200
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
