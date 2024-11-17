@@ -170,7 +170,23 @@ def obtener_mascotas_transito(zona):
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route("/api/reportar-encontrado", methods=['POST'])
+def reportar_encontrado(id, zona, barrio, contacto):
+    try:
+        mascota_dao.actualizar(id, {"barrio": barrio, "zona": zona,
+                                         "informacion_contacto": contacto, "estado": "encontrada"})
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route("/api/transito/", methods=['POST'])
+def mascota_reportar_transito(id, zona, barrio, contacto):
+    try:
+        mascota_dao.actualizar(id, {"barrio": barrio, "zona": zona,
+                                         "informacion_contacto": contacto, "estado": "em transito"})
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)
