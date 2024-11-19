@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Python: Kivy Debug",
+        "type": "python",
+        "request": "launch",
+        "program": "${workspaceFolder}/main.py",  // Cambia por la ruta a tu archivo principal.
+        "console": "integratedTerminal",
+        "justMyCode": false,  // Permite depurar librerías externas como Kivy.
+        "env": {
+          "KIVY_NO_CONSOLELOG": "1"  // Opcional: desactiva logs redundantes de Kivy.
+        }
+      }
+    ]
+  }

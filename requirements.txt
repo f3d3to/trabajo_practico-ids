@@ -1,7 +1,8 @@
 Flask
-# kivy
 requests
 flask_sqlalchemy
 mysql-connector-python
 python-dotenv
 werkzeug
+
+# buildozer
