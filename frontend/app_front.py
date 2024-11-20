@@ -109,5 +109,9 @@ def busquedaMascota():
 
     return render_template("busquedaMascota.html", mascotas=mascotas)
 
+@app.route("/detalleMascota")
+def detalleMascota():
+    return render_template("detalleMascota.html")
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
