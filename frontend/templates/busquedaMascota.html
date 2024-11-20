@@ -1,4 +1,6 @@
 {% extends "base.html" %}
+{% block title %}Búsqueda{% endblock %}
+
 {% block content %}
 
 <div class="container my-5">
@@ -8,65 +10,130 @@
     </div>
 
     <!-- Formulario de búsqueda -->
-    <form>
+    <form id="busquedaForm" method="GET" action="{{ url_for('busquedaMascota') }}">
         <div class="row">
-            <!-- Selección de especie -->
+            <!-- Especie -->
             <div class="col-md-4 mb-3">
                 <label for="especie" class="text-custom-green form-label">Especie:</label>
-                <select name="especie" id="especie" class="form-select" required>
+                <select name="especie" id="especie" class="form-select">
+                    <option value="" selected>Seleccione especie</option>
                     <option value="perro">Perro</option>
                     <option value="gato">Gato</option>
                     <option value="otro">Otro</option>
                 </select>
             </div>
 
-            <!-- Nombre -->
+            <!-- Sexo (Género) -->
             <div class="col-md-4 mb-3">
-                <label for="nombre" class="text-custom-green form-label">Nombre:</label>
-                <input type="text" name="nombre" id="nombre" class="form-control" required>
-            </div>
-
-            <!-- Raza -->
-            <div class="col-md-4 mb-3">
-                <label for="raza" class="text-custom-green form-label">Raza:</label>
-                <input type="text" name="raza" id="raza" class="form-control" required>
-            </div>
-        </div>
-
-        <div class="row">
-            <!-- Selección de género -->
-            <div class="col-md-6 mb-3">
                 <label for="sexo" class="text-custom-green form-label">Sexo:</label>
-                <select name="sexo" id="sexo" class="form-select" required>
+                <select name="sexo" id="sexo" class="form-select">
+                    <option value="" selected>Seleccione el sexo</option>
                     <option value="macho">Macho</option>
                     <option value="hembra">Hembra</option>
                 </select>
             </div>
 
-            <!-- Ubicación -->
-            <div class="col-md-6 mb-3">
-                <label for="ubicacion" class="text-custom-green form-label">Ubicación donde se perdió:</label>
-                <select name="ubicacion" id="ubicacion" class="form-select">
-                    <option value="" selected>Seleccionar ubicación</option>
-                    <option value="zona_norte">Zona Norte</option>
-                    <option value="zona_sur">Zona Sur</option>
-                    <option value="zona_este">Zona Este</option>
-                    <option value="zona_oeste">Zona Oeste</option>
-                    <option value="otro">Otra ubicación</option>
-                </select>
+            <!-- Raza -->
+            <div class="col-md-4 mb-3">
+                <label for="raza" class="text-custom-green form-label">Raza:</label>
+                <input type="text" name="raza" id="raza" class="form-control" placeholder="Seleccione la raza">
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Color -->
+            <div class="col-md-4 mb-3">
+                <label for="color" class="text-custom-green form-label">Color:</label>
+                <input type="text" name="color" id="color" class="form-control" placeholder="Seleccione el color">
+            </div>
+
+            <!-- Zona -->
+            <div class="col-md-4 mb-3">
+                <label for="zona" class="text-custom-green form-label">Zona:</label>
+                <input type="text" name="zona" id="zona" class="form-control" placeholder="Seleccione la zona">
+            </div>
+
+            <!-- Barrio -->
+            <div class="col-md-4 mb-3">
+                <label for="barrio" class="text-custom-green form-label">Barrio:</label>
+                <input type="text" name="barrio" id="barrio" class="form-control" placeholder="Seleccione el barrio">
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Información de Contacto -->
+            <div class="col-md-4 mb-3">
+                <label for="informacion_contacto" class="text-custom-green form-label">Información de contacto:</label>
+                <input type="text" name="informacion_contacto" id="informacion_contacto" class="form-control" placeholder="Ingrese información de contacto">
+            </div>
+
+            <!-- Fecha de Publicación -->
+            <div class="col-md-4 mb-3">
+                <label for="fecha_publicacion" class="text-custom-green form-label">Fecha de publicación:</label>
+                <input type="date" name="fecha_publicacion" id="fecha_publicacion" class="form-control">
             </div>
         </div>
 
         <!-- Botón de búsqueda -->
         <div class="text-center my-3">
-            <button class="btn-custom" id="buscar" type="submit" class="btn btn-primary btn-lg">Buscar</button>
+            <button class="btn-custom" id="buscar" type="submit">Buscar</button>
         </div>
+        <!-- Filtros aplicados -->
+        {% if request.args %}
+        <div class="applied-filters my-4">
+            <ul class="list-inline">
+                {% for key, value in request.args.items() %}
+                    {% if value %}
+                        <li class="list-inline-item badge bg-success">{{ key.replace('_', ' ') | capitalize }}: {{ value }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+            <div class="text-center my-3">
+                <a href="{{ url_for('busquedaMascota') }}" class="btn-custom">Limpiar filtros</a>
+            </div>
+        </div>
+        {% endif %}
+
     </form>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+        <div class="offcanvas-header">
+            <h3 class="offcanvas-title text-custom-green" id="offcanvasRightLabel"><strong>Buscamos a <span id="nombre-mascota-title"></span></strong></h3>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div id="mascota-detalle">
+                <img id="mascota-foto" src="{{ url_for('static', filename='') }}" class="img-fluid mb-3 mascota-foto-detalle">
+                <p><strong>Nombre:</strong> <span id="mascota-nombre"></span></p>
+                <p><strong>Especie:</strong> <span id="mascota-especie"></span></p>
+                <p><strong>Raza:</strong> <span id="mascota-raza"></span></p>
+                <p><strong>Estado:</strong> <span id="mascota-estado"></span></p>
+                <p><strong>Color:</strong> <span id="mascota-color"></span></p>
+                <p><strong>Zona:</strong> <span id="mascota-zona"></span></p>
+                <p><strong>Barrio:</strong> <span id="mascota-barrio"></span></p>
+                <p><strong>Información de contacto:</strong> <span id="mascota-contacto"></span></p>
+                <p><strong>Fecha de publicación:</strong> <span id="mascota-fecha-publicacion"></span></p>
+                <div class="text-center mt-4">
+                    <a href="#" id="mascota-detalle-link" class="btn-custom">Ver Detalle</a>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Mapa de ubicación -->
-    <div class="mapa_ubicacion d-flex flex-wrap justify-content-center">
-        <iframe class="mapa" src="https://maps.google.com/maps?width=520&amp;height=400&amp;hl=en&amp;q=%20Buenos%20Aires+()&amp;t=&amp;z=12&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"></iframe>
+    <div class="mapa_ubicacion d-flex flex-wrap justify-content-center mt-4">
+        <div id="map" style="height: 500px; width: 100%;"></div>
     </div>
 </div>
-<script src="{{ url_for('static', filename='js/busquedaMascota.js') }}"></script>
+
+<script>
+    const mascotas = {{ mascotas|tojson }}; // Esto es necesario para que JavaScript "acepte" la variable "mascotas"
+    mascotas.forEach(mascota => {
+        if (mascota.foto_url) {
+            mascota.foto_url = "{{ url_for('static', filename='') }}" + mascota.foto_url;
+        }
+    });
+</script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+<script src="{{ url_for('static', filename='js/marcadores_ubicacion.js') }}"></script>
 {% endblock %}

@@ -22,7 +22,6 @@ document.addEventListener('DOMContentLoaded', function () {
             document.getElementById('latitud').value = lat;
             document.getElementById('longitud').value = lng;
 
-            // Coloca o mueve el marcador en la ubicación solo después de tener todos los datos
             if (marker) {
                 marker.setLatLng([lat, lng]);
             } else {

@@ -1,13 +1,31 @@
 {% extends "base.html" %}
+{% block title %}Bienvenido{% endblock %}
 
 {% block content %}
 <div id="banner-index"></div>
-    
 
-<div class="container-imagenes d-flex flex-wrap justify-content-around p-2"></div>
-    <img src="../static/images/lydia.png" alt="..." class="container-index">
-    <img src="../static/images/bailey.png" alt="..." class="container-index">
-    <img src="../static/images/terry.png" alt="..." class="container-index">
-    <img src="../static/images/teddy.png" alt="..." class="container-index">
+<!-- Carrusel de mascotas perdidas -->
+<div id="carruselMascotasPerdidas" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+        {% for mascota in mascotas_perdidas %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}">
+                <img src="{{ url_for('static', filename=mascota.foto_url) }}" class="d-block w-100" alt="Foto de {{ mascota.nombre }}" style="max-height: 400px; object-fit: cover;">
+                <div class="carousel-caption d-none d-md-block">
+                    <h5>{{ mascota.nombre }}</h5>
+                    <p>Raza: {{ mascota.raza or 'Desconocida' }} | Color: {{ mascota.color or 'No especificado' }}</p>
+                    <p>Zona: {{ mascota.zona or 'No especificada' }} | Barrio: {{ mascota.barrio or 'No especificado' }}</p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carruselMascotasPerdidas" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carruselMascotasPerdidas" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
 </div>
+
 {% endblock %}

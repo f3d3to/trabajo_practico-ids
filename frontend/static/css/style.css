@@ -274,3 +274,13 @@ main {
     height: 330px;
     bottom: 14%;
 }
+
+.cargaMascota{
+    margin-bottom: 50px;
+}
+.mascota-foto-detalle {
+    width: 100%;
+    max-height: 300px; /* Ajusta según lo que necesites */
+    object-fit: cover;
+}
+
