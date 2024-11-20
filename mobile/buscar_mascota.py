@@ -1,6 +1,6 @@
 from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivy.uix.scrollview import ScrollView
-from kivy_garden.mapview import MapView
+from kivy_garden.mapview import MapView, MapMarker
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
@@ -9,6 +9,8 @@ from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.label import MDLabel
 from kivy.metrics import dp
 from logger import logger
+
+from solicitudes import obtener_mascotas_perdidas  # Importa el endpoint
 
 
 # Reusable components
@@ -58,8 +60,8 @@ def create_interactive_map(lat=-34.6037, lon=-58.3816, zoom=10):
         lat=lat,
         lon=lon,
         zoom=zoom,
-        size_hint=(1, None),  # Cambiar el tamaño para que se ajuste
-        height=dp(300),  # Altura específica para el mapa
+        size_hint=(1, None),
+        height=dp(300),
         double_tap_zoom=True,
     )
 
@@ -68,29 +70,54 @@ def create_interactive_map(lat=-34.6037, lon=-58.3816, zoom=10):
 class MobileBuscarMascotaView(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.map_view = create_interactive_map()  # Mapa interactivo
         self.build_view()
 
     def build_view(self):
-        scroll = ScrollView()  # Envolvemos todo el contenido en un ScrollView
+        scroll = ScrollView()
         layout = MDBoxLayout(
             orientation="vertical",
             spacing=dp(20),
             padding=[dp(20), dp(20), dp(20), dp(20)],
             size_hint_y=None,
         )
-        layout.bind(minimum_height=layout.setter("height"))  # Ajusta la altura para ScrollView
+        layout.bind(minimum_height=layout.setter("height"))
 
         layout.add_widget(create_step_title("Buscar Mascota", font_style="H5"))
         layout.add_widget(create_search_filters())
         layout.add_widget(create_search_button(self.perform_search))
-        layout.add_widget(create_interactive_map())  # Añade el mapa al final
+        layout.add_widget(self.map_view)
 
         scroll.add_widget(layout)
         self.add_widget(scroll)
 
     def perform_search(self):
         logger.info("Ejecutando búsqueda en móvil...")
+        # Llama al endpoint para obtener los datos
+        obtener_mascotas_perdidas(self.update_map_with_markers)
 
+    def update_map_with_markers(self, response):
+        """
+        Actualiza el mapa con los marcadores de mascotas.
+        """
+        if not response.get("success", False):
+            logger.error("Error al obtener los datos de mascotas: " + response.get("error", ""))
+            return
+
+        mascotas = response.get("data", [])
+        logger.info(f"Se encontraron {len(mascotas)} mascotas.")
+
+        # Limpia los marcadores actuales
+        self.map_view.clear_widgets()
+
+        for mascota in mascotas:
+            lat = mascota.get("latitud")
+            lon = mascota.get("longitud")
+            especie = mascota.get("especie", "desconocido").lower()
+
+            if lat and lon:
+                marker = MapMarker(lat=lat, lon=lon)
+                self.map_view.add_widget(marker)
 
 class ResponsiveBuscarMascotaView(MDResponsiveLayout, MDScreen):
     def __init__(self, **kwargs):

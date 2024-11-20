@@ -6,7 +6,7 @@ from kivymd.uix.textfield import MDTextField
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.card import MDCard
 from kivymd.uix.button import MDIconButton, MDRoundFlatButton
-from kivy_garden.mapview import MapView
+from kivy_garden.mapview import MapView, MapMarker
 from kivymd.uix.boxlayout import MDBoxLayout
 from logger import logger
 from kivy.metrics import dp
@@ -27,7 +27,6 @@ def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
 
 
 # Componente reutilizable: Selector de opciones
-
 
 def create_option_selector(options, callback):
     # GridLayout para las opciones
@@ -141,84 +140,112 @@ def create_navigation_buttons(previous_callback, next_callback):
 
 
 
-# Vista de carga para dispositivos móviles
+from solicitudes import cargar_mascota  # Importa el endpoint
+
 class MobileCargarMascotaView(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # logger.info("Inicializando MobileCargarMascotaView")
         self.current_step = 1
+        self.data = {
+            "especie": None,
+            "genero": None,
+            "nombre": None,
+            "raza": None,
+            "color": None,
+            "condicion": None,
+            "estado": None,
+            "foto_url": None,
+            "zona": None,
+            "barrio": None,
+            "latitud": None,
+            "longitud": None,
+            "informacion_contacto": None,
+        }
+        self.text_fields = {}  # Para almacenar referencias a los campos de texto
         self.build_step_1()
 
     def clear_screen(self):
-        # logger.debug("Limpiando pantalla")
         self.clear_widgets()
 
     def build_step_1(self):
-        # logger.info("Construyendo paso 1: Seleccionar especie")
         self.clear_screen()
         layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0],
+            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
         )
 
         layout.add_widget(create_step_title("Completá los datos de tu mascota"))
         layout.add_widget(create_step_title("Selecciona la especie:", font_style="Subtitle1"))
 
-        species_options = [("Perro", "dog"), ("Gato", "cat"), ("Otro", "bird")]
+        species_options = [("Perro", "assets/images/perro.png"), ("Gato", "assets/images/gato.png"), ("Otro", "assets/images/pajaro.png")]
         layout.add_widget(create_option_selector(species_options, self.on_species_selected))
 
         layout.add_widget(create_navigation_buttons(None, self.build_step_2))
         self.add_widget(layout)
 
     def build_step_2(self):
-        # logger.info("Construyendo paso 2: Seleccionar sexo")
         self.clear_screen()
         layout = MDBoxLayout(
             orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
         )
 
-        layout.add_widget(create_step_title("Selecciona el sexo:"))
-        sex_options = [("Macho", "gender-male"), ("Hembra", "gender-female")]
-        layout.add_widget(create_option_selector(sex_options, self.on_sex_selected))
+        layout.add_widget(create_step_title("Selecciona el género:"))
+        gender_options = [("Macho", "assets/images/macho.png"), ("Hembra", "assets/images/hembra.png")]
+        layout.add_widget(create_option_selector(gender_options, self.on_gender_selected))
 
         layout.add_widget(create_navigation_buttons(self.build_step_1, self.build_step_3))
         self.add_widget(layout)
 
     def build_step_3(self):
-        # logger.info("Construyendo paso 3: Formulario de datos")
         self.clear_screen()
         layout = MDBoxLayout(
             orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
         )
 
-        fields = ["Nombre", "Raza", "Color", "Condición", "Estado", "Foto URL"]
+        fields = [
+            "Nombre", "Raza", "Color", "Condición (Lastimada/Sana)",
+            "Estado (Perdida/En tránsito/En adopción/Encontrada)",
+            "Foto URL", "Zona", "Barrio"
+        ]
         layout.add_widget(create_step_title("Completá los datos de tu mascota"))
-        layout.add_widget(create_form(fields))
+
+        form_layout = MDGridLayout(cols=2, spacing=10, adaptive_height=True)
+        for field in fields:
+            hint = field.split("(")[0].strip()  # Mostrar solo el campo limpio en el hint
+            key = field.split()[0].lower()  # Usar el campo base como clave en data
+            text_field = MDTextField(hint_text=hint)
+            self.text_fields[key] = text_field
+            form_layout.add_widget(text_field)
+        layout.add_widget(form_layout)
 
         layout.add_widget(create_navigation_buttons(self.build_step_2, self.build_step_4))
         self.add_widget(layout)
 
     def build_step_4(self):
-        # logger.info("Construyendo paso 4: Seleccionar ubicación")
         self.clear_screen()
         layout = MDBoxLayout(
             orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
         )
 
         layout.add_widget(create_step_title("Selecciona la ubicación en el mapa"))
-        layout.add_widget(create_map())
+        self.map_view = MapView(lat=-34.6037, lon=-58.3816, zoom=10, size_hint=(1, 0.7))
+        self.marker = MapMarker(lat=-34.6037, lon=-58.3816)
+        self.map_view.add_marker(self.marker)
+        self.map_view.bind(on_touch_up=self.update_location)
+        layout.add_widget(self.map_view)
 
         layout.add_widget(create_navigation_buttons(self.build_step_3, self.build_step_5))
         self.add_widget(layout)
 
     def build_step_5(self):
-        # logger.info("Construyendo paso 5: Contacto")
         self.clear_screen()
         layout = MDBoxLayout(
             orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
         )
 
         layout.add_widget(create_step_title("Ingresa información de contacto"))
-        layout.add_widget(MDTextField(hint_text="Ej: 1120405533 o email@ejemplo.com"))
+        contact_field = MDTextField(hint_text="Ej: 1120405533 o email@ejemplo.com")
+        self.text_fields["informacion_contacto"] = contact_field
+        layout.add_widget(contact_field)
 
         layout.add_widget(create_navigation_buttons(self.build_step_4, None))
         layout.add_widget(
@@ -229,15 +256,38 @@ class MobileCargarMascotaView(MDScreen):
                 pos_hint={"center_x": 0.5},
                 size_hint=(None, None),
                 size=("200dp", "40dp"),
+                on_release=self.save_pet,
             )
         )
         self.add_widget(layout)
 
+    def update_location(self, instance, touch):
+        if self.map_view.collide_point(*touch.pos):
+            self.marker.lat, self.marker.lon = self.map_view.get_latlon_at(*touch.pos)
+            self.data["latitud"] = self.marker.lat
+            self.data["longitud"] = self.marker.lon
+
+    def save_pet(self, *args):
+        # Recopilar datos del formulario
+        for key, field in self.text_fields.items():
+            self.data[key] = field.text.strip()
+        logger.info(f"Enviando datos: {self.data}")
+        cargar_mascota(self.data, self.handle_response)
+
+    def handle_response(self, response):
+        if response.get("success"):
+            logger.info("Mascota cargada exitosamente.")
+        else:
+            logger.error(f"Error al cargar la mascota: {response.get('error')}.")
+
     def on_species_selected(self, species):
+        self.data["especie"] = species
         logger.info(f"Especie seleccionada: {species}")
 
-    def on_sex_selected(self, sex):
-        logger.info(f"Sexo seleccionado: {sex}")
+    def on_gender_selected(self, gender):
+        self.data["genero"] = gender
+        logger.info(f"Género seleccionado: {gender}")
+
 
 
 # Vista responsiva principal para cargar mascota
