@@ -1,120 +1,109 @@
- /* Contenedor principal estilo tarjeta */
- .card {
-     background: white;
-     border-radius: 12px;
-     /* Bordes redondeados */
-     padding: 20px;
-     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-     /* Sombra sutil */
-     display: flex;
-     /* Layout flexbox para formato apaisado */
-     gap: 20px;
-     /* Espacio entre columnas */
-     max-width: 1000px;
-     /* Ancho máximo para pantallas grandes */
-     margin: 0 auto;
-     min-height: 600px;
-     /* Altura mínima para formato apaisado */
- }
+/* General */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
 
- /* Columna izquierda - Imagen y título */
- .left-column {
-     flex: 1;
-     /* Toma 50% del espacio */
-     display: flex;
-     flex-direction: column;
- }
+#header,
+#footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
 
- /* Columna derecha - Detalles y botones */
- .right-column {
-     flex: 1;
-     /* Toma 50% del espacio */
-     display: flex;
-     flex-direction: column;
-     justify-content: space-between;
-     /* Distribuye el contenido verticalmente */
- }
+.main-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 160px);
+    /* Restar el alto del header y footer */
+    padding: 20px;
+}
 
- /* Estilos de la imagen */
- .pet-image {
-     width: 100%;
-     height: 400px;
-     object-fit: cover;
-     /* Mantiene proporción de la imagen */
-     border-radius: 8px;
-     margin-bottom: 20px;
- }
+.flyer {
+    display: flex;
+    flex-direction: row;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    height: 80%;
+    max-width: 1500px;
+    max-height: 600px;
+    overflow: hidden;
+}
 
- /* Badge de ubicación */
- .location-badge {
-     background: #E8F5E9;
-     /* Verde claro para el fondo */
-     color: #006D4E;
-     padding: 8px 16px;
-     border-radius: 20px;
-     /* Forma de píldora */
-     display: inline-flex;
-     align-items: center;
-     gap: 8px;
-     margin: 10px 0;
- }
+.column {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
- .details h3 {
-     color: #006D4E;
-     margin-bottom: 10px;
- }
+.image-column {
+    background-color: #f0f8ff;
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
- .details ul {
-     padding-left: 20px;
-     margin: 10px 0;
- }
+.text-column {
+    flex: 1.5;
+    text-align: left;
+}
 
- .details li {
-     margin-bottom: 5px;
- }
+.flyer h1 {
+    font-size: 2em;
+    color: #3d85c6;
+}
 
- /* Botones de compartir */
- .share-buttons {
-     display: flex;
-     gap: 10px;
-     margin-top: 20px;
- }
+.flyer-image {
+    max-width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
 
- .share-button {
-     padding: 8px 16px;
-     border-radius: 20px;
-     color: white;
-     text-decoration: none;
-     display: inline-flex;
-     align-items: center;
-     justify-content: center;
-     flex: 1;
-     /* Distribuye el espacio equitativamente */
- }
+.whatsapp-link {
+    display: inline-block;
+    margin: 10px 0;
+    padding: 10px 20px;
+    background-color: #25d366;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
 
- /* Colores de redes sociales */
- .facebook {
-     background: #1877F2;
- }
+.buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+}
 
- .whatsapp {
-     background: #25D366;
- }
+button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s;
+}
 
- .twitter {
-     background: #000000;
- }
+#update-btn {
+    background-color: #ffc107;
+    color: black;
+}
 
- /*
- /* Diseño responsive para modo retrato */
- @media (max-width: 768px) {
-     .card {
-         flex-direction: column;
-         /* Cambia a una columna */
-     }
+#delete-btn {
+    background-color: #dc3545;
+    color: white;
+}
 
-     .pet-image {
-         height: 300px;
-         /* Reduce altura de imagen */
-     }
- }
+button:hover {
+    opacity: 0.9;
+}

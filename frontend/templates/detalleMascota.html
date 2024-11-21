@@ -3,57 +3,27 @@
 
 {% block content %}
 
-<!-- Contenedor principal -->
-<div class="card">
-    <!-- Columna izquierda con imagen y título -->
-    <div class="left-column">
-        <div class="header">
-            <h1>¡Buscamos a Catalina!</h1>
-        </div>
-        
-        <!-- Imagen del animal perdido -->
-        <img src="../static/images/ejemploFlyerBusqueda.png" alt="Catalina - Gata negra con mancha blanca" class="pet-image">
-        
-        <!-- Badge de ubicación -->
-        <div class="location-badge">
-            <span>📍</span>
-            <span>Estás a 3.22 km de distancia</span>
-        </div>
-    </div>
-
-    <!-- Columna derecha con detalles y botones de compartir -->
-    <div class="right-column">
-        <!-- Sección de detalles -->
-        <div class="details">
-            <h3>SE PERDIÓ EN:</h3>
-            <p>Cercanías a De la Democracia 2544, Pb. A, Lomas del mirador, Buenos Aires</p>
-            <p>el 01/03/2024 y estamos muy preocupados.</p>
-
-            <h3>CARACTERÍSTICAS:</h3>
-            <ul>
-                <li>Raza: Mestiza</li>
-                <li>Es toda negra con una mancha blanca en el pecho</li>
-                <li>Super preciosa</li>
-                <li>Nunca salió a la calle</li>
-                <li>Nunca trepó una pared</li>
-            </ul>
-
-            <p><strong>Si tienes información sobre su paradero:</strong><br>
-            favor contactar a Mariela al +11 5640 4481</p>
-        </div>
-
-        <!-- Sección de compartir -->
-        <div>
-            <p>Por favor, comparte esta publicación en grupos locales de Facebook, WhatsApp u otras redes sociales para ayudarnos a difundir su búsqueda en la zona.</p>
-
-            <!-- Botones de redes sociales -->
-            <div class="share-buttons">
-                <a href="#" class="share-button facebook">Facebook</a>
-                <a href="#" class="share-button whatsapp">WhatsApp</a>
-                <a href="#" class="share-button twitter">X</a>
+    <!-- Contenido Principal -->
+    <main class="main-container">
+        <section class="flyer">
+            <div class="column image-column">
+                <img src="{{ url_for('static', filename='images/ejemploFlyerBusqueda.png') }}" alt="Foto de la mascota" class="flyer-image">
             </div>
-        </div>
-    </div>
-</div>
+            <div class="column text-column">
+                <h1>Buscamos a <span id="pet-name">[Nombre de la Mascota]</span></h1>
+                <p><strong>Se perdió en:</strong> <span id="location">[Ubicación]</span></p>
+                <p><strong>Raza:</strong> <span id="breed">[Raza]</span></p>
+                <p><strong>Detalles:</strong> <span id="details">[Detalles adicionales]</span></p>
+                <a href="#" id="contact-link" class="whatsapp-link">Contactar por WhatsApp</a>
+                <div class="buttons">
+                    <button id="update-btn">Actualizar Datos</button>
+                    <button id="delete-btn">Eliminar Mascota</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
 
 {% endblock %}
