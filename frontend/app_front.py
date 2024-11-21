@@ -86,6 +86,30 @@ def preguntasFrecuentes():
         fq = []
     return render_template("preguntasFrecuentes.html", preguntas=fq)
 
+# @app.route("/busquedaMascota", methods=['GET'])
+# def busquedaMascota():
+#     filtros = {
+#         'nombre': request.args.get('nombre'),
+#         'especie': request.args.get('especie'),
+#         'raza': request.args.get('raza'),
+#         'genero': request.args.get('sexo'),
+#         'zona': request.args.get('zona'),
+#         'barrio': request.args.get('barrio'),
+#         'color': request.args.get('color'),
+#         'informacion_contacto': request.args.get('informacion_contacto'),
+#         'fecha_publicacion': request.args.get('fecha_publicacion'),
+#     }
+#     filtros = {k: v for k, v in filtros.items() if v is not None and v != ''}
+#     try:
+#         response = requests.get(BACKEND_URL + "/api/mascotas", params=filtros)
+#         mascotas = response.json() if response.status_code == 200 else []
+#     except requests.exceptions.RequestException:
+#         print("Error de conexión con el backend.")
+#         mascotas = []
+
+#     return render_template("busquedaMascota.html", mascotas=mascotas)
+
+
 @app.route("/busquedaMascota", methods=['GET'])
 def busquedaMascota():
     filtros = {
@@ -100,6 +124,7 @@ def busquedaMascota():
         'fecha_publicacion': request.args.get('fecha_publicacion'),
     }
     filtros = {k: v for k, v in filtros.items() if v is not None and v != ''}
+    
     try:
         response = requests.get(BACKEND_URL + "/api/mascotas", params=filtros)
         mascotas = response.json() if response.status_code == 200 else []
@@ -107,12 +132,29 @@ def busquedaMascota():
         print("Error de conexión con el backend.")
         mascotas = []
 
-    return render_template("busquedaMascota.html", mascotas=mascotas)
+    mascota = mascotas[0] if mascotas else None # PRUEBA SOLO CON TEDDY
+
+    return render_template("busquedaMascota.html", mascotas=mascotas, mascota=mascota)
 
 
-@app.route("/detalleMascota")
-def detalleMascota():
-    return render_template("detalleMascota.html")
+@app.route("/detalleMascota/<int:id>")
+def detalleMascota(id):
+    try:
+        response = requests.get(f"{BACKEND_URL}/api/mascotas/{id}")
+        mascota = {}
+        if response.status_code == 200 and response.json().get("success"):
+            mascota = response.json().get("mascota", {})
+            print(mascota)  
+        elif response.status_code == 404:
+            return render_template("detalleMascota.html", error="Mascota no encontrada.")
+        else:
+            return render_template("detalleMascota.html", error="Error inesperado al obtener los detalles.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión al backend: {e}")
+        return render_template("detalleMascota.html", error="Error de conexión con el backend.")
+
+    # Verificar que la variable mascota se pase correctamente
+    return render_template("detalleMascota.html", mascota=mascota)
 
 
 @app.route('/updateMascota', methods=['GET', 'POST'])

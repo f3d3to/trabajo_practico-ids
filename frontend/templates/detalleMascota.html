@@ -1,59 +1,65 @@
-{% extends "base.html" %}
-{% block title %}Bienvenido{% endblock %}
+{% extends "base.html" %} 
+{% block title %}Detalles de la Mascota{% endblock %}
 
 {% block content %}
 
-<!-- Contenedor principal -->
 <div class="card">
-    <!-- Columna izquierda con imagen y título -->
     <div class="left-column">
         <div class="header">
-            <h1>¡Buscamos a Catalina!</h1>
+            {% if mascota['estado'] == 'perdida' %}
+                <h1>¡Buscamos a {{ mascota['nombre'] }}!</h1>
+            {% elif mascota['estado'] == 'en transito' %}
+                <h1>{{ mascota['nombre'] }} está en tránsito</h1>
+            {% elif mascota['estado'] == 'en adopcion' %}
+                <h1>{{ mascota['nombre'] }} está en adopción</h1>
+            {% else %}
+                <h1>Detalles de {{ mascota['nombre'] }}</h1>
+            {% endif %}
         </div>
         
         <!-- Imagen del animal perdido -->
-        <img src="../static/images/ejemploFlyerBusqueda.png" alt="Catalina - Gata negra con mancha blanca" class="pet-image">
+        <!-- <img src="{{ mascota['foto'] }}" alt="{{ mascota['nombre'] }} - {{ mascota['descripcion'] }}" class="pet-image"> -->
         
-        <!-- Badge de ubicación -->
         <div class="location-badge">
             <span>📍</span>
-            <span>Estás a 3.22 km de distancia</span>
+            <span>Estás a {{ mascota.get('distancia', 'N/A') }} km de distancia</span>
         </div>
     </div>
 
-    <!-- Columna derecha con detalles y botones de compartir -->
     <div class="right-column">
-        <!-- Sección de detalles -->
         <div class="details">
-            <h3>SE PERDIÓ EN:</h3>
-            <p>Cercanías a De la Democracia 2544, Pb. A, Lomas del mirador, Buenos Aires</p>
-            <p>el 01/03/2024 y estamos muy preocupados.</p>
-
+            {% if mascota['estado'] == 'perdida' %}
+                <h1>SE PERDIÓ EN:</h1>
+                <p>Cercanías a {{ mascota['zona'] }}, {{ mascota['barrio'] }}, {{ mascota['localidad'] }}</p>
+                <p>el {{ mascota['fecha_publicacion'] }} y estamos muy preocupados.</p>
+            {% elif mascota['estado'] == 'en transito' %}
+                <h1>ESTA EN BUSCA DE UN NUEVO HOGAR</h1>
+            {% elif mascota['estado'] == 'en adopcion' %}
+                <h1>ADOPTA Y CAMBIA SU VIDA</h1>
+            {% else %}
+                <h1> </h1>
+            {% endif %}
+            
             <h3>CARACTERÍSTICAS:</h3>
             <ul>
-                <li>Raza: Mestiza</li>
-                <li>Es toda negra con una mancha blanca en el pecho</li>
-                <li>Super preciosa</li>
-                <li>Nunca salió a la calle</li>
-                <li>Nunca trepó una pared</li>
+                <li>Raza: {{ mascota['raza'] }}</li>
+                <li>Color: {{ mascota['color'] }}</li>
+                <li>Condicion: {{ mascota['condicion'] }}</li>
             </ul>
 
-            <p><strong>Si tienes información sobre su paradero:</strong><br>
-            favor contactar a Mariela al +11 5640 4481</p>
+            {% if mascota['estado'] == 'perdida' %}
+                <p><strong>Si tienes información sobre su paradero:</strong><br>
+                    favor contactar a {{ mascota['informacion_contacto'] }}</p>
+            {% endif %}
         </div>
 
-        <!-- Sección de compartir -->
         <div>
-            <p>Por favor, comparte esta publicación en grupos locales de Facebook, WhatsApp u otras redes sociales para ayudarnos a difundir su búsqueda en la zona.</p>
-
-            <!-- Botones de redes sociales -->
+            <p>Por favor, comparte esta publicación en grupos locales de Facebook, WhatsApp u otras redes sociales para ayudarnos a difundir</p>
             <div class="share-buttons">
                 <a href="#" class="share-button facebook">Facebook</a>
                 <a href="#" class="share-button whatsapp">WhatsApp</a>
-                <a href="#" class="share-button twitter">X</a>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}
