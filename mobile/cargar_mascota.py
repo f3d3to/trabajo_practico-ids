@@ -12,6 +12,7 @@ from logger import logger
 from kivy.metrics import dp
 from kivy.core.window import Window
 
+
 # Componente reutilizable: Título
 def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
     # logger.debug(f"Creando título: {text}")
@@ -202,7 +203,7 @@ class MobileCargarMascotaView(MDScreen):
         )
 
         fields = [
-            "Nombre", "Raza", "Color", "Condición (Lastimada/Sana)",
+            "Nombre", "Raza", "Color", "Condicion (Lastimada/Sana)",
             "Estado (Perdida/En tránsito/En adopción/Encontrada)",
             "Foto URL", "Zona", "Barrio"
         ]

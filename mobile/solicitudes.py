@@ -1,7 +1,7 @@
 from kivy.network.urlrequest import UrlRequest
 import urllib
 import logging
-
+import json
 # Configuración de logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -72,12 +72,13 @@ class RequestManager:
             if on_error:
                 on_error(req, error)
 
-        headers = headers or {"Content-Type": "application/x-www-form-urlencoded"}
-        params = urllib.parse.urlencode(data)
+        headers = headers or {"Content-Type": "application/json"}
+        body = json.dumps(data)
+    
 
         req = UrlRequest(
             url,
-            req_body=params,
+            req_body=body,
             req_headers=headers,
             on_success=_success,
             on_error=_error,
@@ -120,23 +121,26 @@ def cargar_mascota(data, callback):
         wait_for_completion=True,
     )
 
+
 def contacto(data, callback):
     """
     Envía información de contacto al backend.
     """
     url = f"{API_BASE_URL}/agregar_contacto"
     headers = {"Content-Type": "application/json"}
+    
+    # Convierte el diccionario `data` a una cadena JSON
     body = data
-
     logging.debug(f"Enviando datos de contacto: {data}")
     manager.post(
         url,
-        data=body,
+        data=body,  # Usamos `data` para enviar la cadena JSON
         headers=headers,
         on_success=lambda req, result: callback({"success": True, "data": result}),
         on_error=lambda req, error: callback({"success": False, "error": error}),
         wait_for_completion=True,
     )
+
 
 def obtener_mascotas_perdidas(callback):
     """

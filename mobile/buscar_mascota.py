@@ -1,6 +1,6 @@
 from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivy.uix.scrollview import ScrollView
-from kivy_garden.mapview import MapView, MapMarker
+from kivy_garden.mapview import MapView, MapMarker,MapMarkerPopup
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.textfield import MDTextField
@@ -9,6 +9,13 @@ from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.label import MDLabel
 from kivy.metrics import dp
 from logger import logger
+
+#anado gabyo
+from kivy.uix.popup import Popup
+from kivy.uix.image import Image
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.label import Label
+from kivy.uix.button import Button
 
 from solicitudes import obtener_mascotas_perdidas  # Importa el endpoint
 
@@ -65,6 +72,45 @@ def create_interactive_map(lat=-34.6037, lon=-58.3816, zoom=10):
         double_tap_zoom=True,
     )
 
+# class para el popup
+class MascotaPopup(Popup):
+    def __init__(self, mascota, **kwargs):
+        super().__init__(**kwargs)
+        self.title = f"Buscamos a {mascota.get('nombre', 'Mascota desconocida')}"
+        self.size_hint = (0.8, 0.7)  # Tamaño del popup
+        self.content = Label(text=self.get_mascota_info(mascota))
+
+    def get_mascota_info(self, mascota):
+        # cadena con informacion de la mascota
+        info = f"Nombre: {mascota.get('nombre', 'Desconocida')}\n"
+        info += f"Especie: {mascota.get('especie', 'Desconocida')}\n"
+        info += f"Raza: {mascota.get('raza', 'Desconocida')}\n"
+        info += f"Estado: {mascota.get('estado', 'Desconocida')}\n"
+        info += f"Color: {mascota.get('color', 'Desconocido')}\n"
+        info += f"Zona: {mascota.get('zona', 'Desconocida')}\n"
+        info += f"Barrio: {mascota.get('barrio', 'Desconocida')}\n"
+        info += f"Fecha: {mascota.get('fecha_publicacion', 'Desconocida')}\n"
+        info += f"Contacto: {mascota.get('informacion_contacto', 'No disponible')}\n"  
+
+        return info
+
+
+# Clase personalizada para el marcador
+class CustomMapMarker(MapMarker):
+    def __init__(self, especie_mascota, **kwargs):
+        super().__init__(**kwargs)
+        # Elegir el ícono según el tipo de mascota
+        if especie_mascota == 'perro':
+            self.icon = Image(source="assets/images/perro.png", size=(50, 50))
+        elif especie_mascota == 'gato':
+            self.icon = Image(source="assets/images/gato.png", size=(50, 50))
+        else:
+            self.icon = Image(source="assets/images/pajaro.png", size=(50, 50))
+
+        self.add_widget(self.icon)
+
+
+
 
 # Mobile view with scrolling enabled
 class MobileBuscarMascotaView(MDScreen):
@@ -72,6 +118,7 @@ class MobileBuscarMascotaView(MDScreen):
         super().__init__(**kwargs)
         self.map_view = create_interactive_map()  # Mapa interactivo
         self.build_view()
+        self.dialog = None  # Para mantener la referencia al dialogo
 
     def build_view(self):
         scroll = ScrollView()
@@ -107,17 +154,35 @@ class MobileBuscarMascotaView(MDScreen):
         mascotas = response.get("data", [])
         logger.info(f"Se encontraron {len(mascotas)} mascotas.")
 
-        # Limpia los marcadores actuales
-        self.map_view.clear_widgets()
+        
+        if not self.map_view or not self.map_view.parent:
+            logger.error("El mapa no está correctamente inicializado.")
+            return
+
+        #elimina marcadores existentes
+        for marker in self.map_view.children[:]:
+            if isinstance(marker, MapMarker):
+                self.map_view.remove_widget(marker)
 
         for mascota in mascotas:
             lat = mascota.get("latitud")
             lon = mascota.get("longitud")
-            especie = mascota.get("especie", "desconocido").lower()
+            especie = mascota.get("especie")
 
             if lat and lon:
-                marker = MapMarker(lat=lat, lon=lon)
+                marker = CustomMapMarker(especie_mascota=especie, lat=lat, lon=lon)
+
+                def on_marker_touch(marker, mascota=mascota):
+                    popup = MascotaPopup(mascota=mascota)
+                    popup.open()
+                #  muestra la tarjeta al tocar el marcador
+                
+
+                marker.bind(on_release=on_marker_touch)
+
                 self.map_view.add_widget(marker)
+
+
 
 class ResponsiveBuscarMascotaView(MDResponsiveLayout, MDScreen):
     def __init__(self, **kwargs):
@@ -133,3 +198,5 @@ class ResponsiveBuscarMascotaView(MDResponsiveLayout, MDScreen):
             return self.tablet_view
         else:  # Desktop
             return self.desktop_view
+        
+
