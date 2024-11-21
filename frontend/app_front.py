@@ -109,5 +109,28 @@ def busquedaMascota():
 
     return render_template("busquedaMascota.html", mascotas=mascotas)
 
+
+@app.route('/updateMascota', methods=['GET', 'POST'])
+def update_mascota():
+    if request.method == 'POST':
+        esquema_response = requests.post(BACKEND_URL+"/obtener_esquema", json={"tabla": "mascotas"})
+        if esquema_response.status_code == 200 and esquema_response.json().get("success"):
+            esquema = esquema_response.json().get("esquema")
+            mascota_data = castear_valores(request.form, esquema)
+
+            imagen = request.files.get('foto')
+            if imagen:
+                filename = secure_filename(imagen.filename)
+                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                imagen.save(filepath)  # Guardar la imagen en 'static/user_images'
+                mascota_data['foto_url'] = f"user_images/{filename}" if filename else None
+
+            try:
+                requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
+            except requests.exceptions.RequestException:
+                print("Error de conexión con el backend.")
+        return redirect(url_for('cargar_mascota'))
+    return render_template('update.html')
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
