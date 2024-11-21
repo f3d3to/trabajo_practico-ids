@@ -109,11 +109,11 @@ def busquedaMascota():
 
     return render_template("busquedaMascota.html", mascotas=mascotas)
 
-<<<<<<< HEAD
+
 @app.route("/detalleMascota")
 def detalleMascota():
     return render_template("detalleMascota.html")
-=======
+
 
 @app.route('/updateMascota', methods=['GET', 'POST'])
 def update_mascota():
@@ -136,7 +136,6 @@ def update_mascota():
                 print("Error de conexión con el backend.")
         return redirect(url_for('cargar_mascota'))
     return render_template('update.html')
->>>>>>> origin/update-mascota
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
