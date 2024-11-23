@@ -179,5 +179,16 @@ def update_mascota():
         return redirect(url_for('cargar_mascota'))
     return render_template('update.html')
 
+@app.route("/eliminarMascota/<int:id>")
+def eliminarMascota(id):
+    try:
+        delete = requests.delete(f"{BACKEND_URL}/api/mascotas/{id}")
+        if delete.status_code == 200:
+            success = delete.json()
+        else:
+            success = delete.json()
+    except requests.exceptions.RequestException:
+        print("Error de conexión con el backend.") 
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
