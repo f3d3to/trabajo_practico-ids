@@ -83,7 +83,7 @@ button {
     color: white;
 }
 
-.delete-btn {
+#delete-btn {
     background-color: #E74C3C;
     color: white;
 }

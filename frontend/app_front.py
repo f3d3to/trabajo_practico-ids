@@ -109,9 +109,35 @@ def busquedaMascota():
 
     return render_template("busquedaMascota.html", mascotas=mascotas)
 
-@app.route("/detalleMascota")
-def detalleMascota():
-    return render_template("detalleMascota.html")
+@app.route("/detalleMascota/<int:id>")
+def detalleMascota(id):
+    try:
+        response = requests.get(f"{BACKEND_URL}/api/mascotas/{id}")
+        mascota = {}
+        if response.status_code == 200 and response.json().get("success"):
+            mascota = response.json().get("mascota", {})
+            print(mascota) 
+        elif response.status_code == 404:
+            return render_template("detalleMascota.html", error="Mascota no encontrada.")
+        else:
+            return render_template("detalleMascota.html", error="Error inesperado al obtener los detalles.")
+    except requests.exceptions.RequestException as e:
+        print(f"Error de conexión al backend: {e}")
+        return render_template("detalleMascota.html", error="Error de conexión con el backend.")
+
+    # Verificar que la variable mascota se pase correctamente
+    return render_template("detalleMascota.html", mascota=mascota)
+
+@app.route("/eliminarMascota/<int:id>")
+def eliminarMascota(id):
+    try:
+        delete = requests.delete(f"{BACKEND_URL}/api/mascotas/{id}")
+        if delete.status_code == 200:
+            success = delete.json()
+        else:
+            success = delete.json()
+    except requests.exceptions.RequestException:
+        print("Error de conexión con el backend.")        
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
