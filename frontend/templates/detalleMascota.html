@@ -3,27 +3,32 @@
 
 {% block content %}
 
-    <!-- Contenido Principal -->
-    <main class="main-container">
-        <section class="flyer">
-            <div class="column image-column">
-                <img src="{{ url_for('static', filename='images/ejemploFlyerBusqueda.png') }}" alt="Foto de la mascota" class="flyer-image">
+<div class="pet-card">
+    <div class="pet-info">
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/ejemploFlyerBusqueda.png') }}" alt="Mascota perdida" class="pet-image">
+        </div>
+        <div class="details">
+            <h2 id="petName">Nombre de la Mascota</h2>
+            <p id="location">Ubicación: <span></span></p>
+            <p id="date">Fecha de pérdida: <span></span></p>
+            <p id="description">Descripción: <span></span></p>
+            <div id="tags">
+                <span class="tag">#MascotaPerdida</span>
+                <span class="tag">#Busqueda</span>
             </div>
-            <div class="column text-column">
-                <h1>Buscamos a <span id="pet-name">[Nombre de la Mascota]</span></h1>
-                <p><strong>Se perdió en:</strong> <span id="location">[Ubicación]</span></p>
-                <p><strong>Raza:</strong> <span id="breed">[Raza]</span></p>
-                <p><strong>Detalles:</strong> <span id="details">[Detalles adicionales]</span></p>
-                <a href="#" id="contact-link" class="whatsapp-link">Contactar por WhatsApp</a>
-                <div class="buttons">
-                    <button id="update-btn">Actualizar Datos</button>
-                    <button id="delete-btn">Eliminar Mascota</button>
-                </div>
+            <div class="social-share">
+                <button onclick="compartir('facebook')" class="share-btn">Facebook</button>
+                <button onclick="compartir('whatsapp')" class="share-btn">WhatsApp</button>
+                <button onclick="compartir('twitter')" class="share-btn">Twitter</button>
             </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <div id="footer"></div>
+            <div class="buttons">
+                <button class="refresh-btn" onclick="refreshData()">Actualizar</button>
+                <button class="update-btn" onclick="updateData()">Modificar</button>
+                <button class="delete-btn" onclick="deleteData()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
