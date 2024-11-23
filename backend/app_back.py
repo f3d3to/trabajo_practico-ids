@@ -149,6 +149,51 @@ def obtener_preguntas_frecuentes():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route("/api/mascotas/<int:id>", methods=['DELETE'])
+def eliminar_mascotas(id):
+    try:
+        mascota_dao.borrar(id)
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/transito/", methods=['GET'])
+def obtener_mascotas_transito():
+    try:
+        data = request.json()
+        if data:
+            if "estado" not in data:
+                data["estado"] = "en transito"
+            resultado = mascota_dao.obtener_todos(data)
+            if len(resultado) == 0:
+                return jsonify({"success": False, "error": "no hubo coincidencias"}), 404
+            return jsonify({"success": True, "mascotas_transito": resultado}), 200
+        resultado = mascota_dao.obtener_todos({"estado": "en transito"})
+        return jsonify({"success": True, "mascotas_transito": resultado}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/reportar-encontrado", methods=['POST'])
+def reportar_encontrado(id):
+    try:
+        data = request.json()
+        if "estado" not in data:
+            data["estado"] = "encontrada"
+        mascota_dao.actualizar(id, data)
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
+
+@app.route("/api/transito/", methods=['POST'])
+def mascota_reportar_transito(id):
+    try:
+        data = request.json()
+        if "estado" not in data:
+            data["estado"] = "en transito"
+        mascota_dao.actualizar(id, data)
+        return jsonify({"success": True}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)
