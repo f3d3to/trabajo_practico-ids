@@ -1,109 +1,118 @@
-/* General */
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4;
+    box-sizing: border-box;
 }
 
-#header,
-#footer {
-    background-color: #333;
-    color: white;
-    text-align: center;
-    padding: 1em 0;
-}
-
-.main-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: calc(100vh - 160px);
-    /* Restar el alto del header y footer */
-    padding: 20px;
-}
-
-.flyer {
-    display: flex;
-    flex-direction: row;
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    height: 80%;
-    max-width: 1500px;
-    max-height: 600px;
-    overflow: hidden;
-}
-
-.column {
-    padding: 20px;
+body {
+    font-family: Arial, sans-serif;
+    min-height: 100vh;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
-.image-column {
-    background-color: #f0f8ff;
-    flex: 1;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.text-column {
-    flex: 1.5;
-    text-align: left;
-}
-
-.flyer h1 {
-    font-size: 2em;
-    color: #3d85c6;
-}
-
-.flyer-image {
-    max-width: 100%;
-    height: auto;
-    border-radius: 10px;
-}
-
-.whatsapp-link {
-    display: inline-block;
-    margin: 10px 0;
-    padding: 10px 20px;
-    background-color: #25d366;
+header {
+    background-color: #2C3E50;
     color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    font-weight: bold;
+    padding: 1rem;
+    text-align: center;
+}
+
+main {
+    flex: 1;
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.pet-card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pet-info {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+}
+
+.pet-image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    border-radius: 8px;
+}
+
+.details {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.tag {
+    background-color: #27AE60;
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    display: inline-block;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .buttons {
-    margin-top: 20px;
     display: flex;
-    gap: 10px;
+    gap: 1rem;
+    margin-top: 1rem;
 }
 
 button {
-    padding: 10px 15px;
+    padding: 0.5rem 1rem;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    font-size: 1em;
     transition: background-color 0.3s;
 }
 
-#update-btn {
-    background-color: #ffc107;
-    color: black;
-}
-
-#delete-btn {
-    background-color: #dc3545;
+.update-btn {
+    background-color: #3498DB;
     color: white;
 }
 
-button:hover {
-    opacity: 0.9;
+.delete-btn {
+    background-color: #E74C3C;
+    color: white;
+}
+
+.refresh-btn {
+    background-color: #27AE60;
+    color: white;
+}
+
+footer {
+    background-color: #2C3E50;
+    color: white;
+    padding: 1rem;
+    text-align: center;
+}
+
+.social-share {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin-top: 1rem;
+}
+
+@media (max-width: 768px) {
+    .pet-info {
+        grid-template-columns: 1fr;
+    }
+
+    .pet-image {
+        margin: 0 auto;
+    }
 }
