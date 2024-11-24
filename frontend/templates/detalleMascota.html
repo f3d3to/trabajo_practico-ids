@@ -53,7 +53,7 @@
             {% endif %}
         </div>
         <div class="buttom">
-                <button href="{{url_for('eliminarMascota')}}" id="delete-btn">Eliminar</button>
+                <button href="{{url_for('eliminarMascota', id=mascota['id'])}}" id="delete-btn">Eliminar</button>
         </div>
         <div>
             <p>Por favor, comparte esta publicación en grupos locales de Facebook, WhatsApp u otras redes sociales para ayudarnos a difundir</p>
