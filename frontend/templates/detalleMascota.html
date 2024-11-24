@@ -1,32 +1,82 @@
 {% extends "base.html" %}
-{% block title %}Bienvenido{% endblock %}
+{% block title %}Detalles de {{ mascota['nombre'] }}{% endblock %}
 
 {% block content %}
 
 <div class="pet-card">
+
+    <div class="main-title">
+        {% if mascota['estado'] == 'perdida' %}
+            <h1>¡Buscamos a {{ mascota['nombre'] }}!</h1>
+        {% elif mascota['estado'] == 'en transito' %}
+            <h1>{{ mascota['nombre'] }} está en tránsito</h1>
+        {% elif mascota['estado'] == 'en adopcion' %}
+            <h1>{{ mascota['nombre'] }} está en adopción</h1>
+        {% else %}
+            <h1>Detalles de {{ mascota['nombre'] }}</h1>
+        {% endif %}
+    </div>
+
+
     <div class="pet-info">
         <div class="image-container">
-            <img src="{{ url_for('static', filename='images/ejemploFlyerBusqueda.png') }}" alt="Mascota perdida" class="pet-image">
-        </div>
-        <div class="details">
-            <h2 id="petName">Nombre de la Mascota</h2>
-            <p id="location">Ubicación: <span></span></p>
-            <p id="date">Fecha de pérdida: <span></span></p>
-            <p id="description">Descripción: <span></span></p>
-            <div id="tags">
-                <span class="tag">#MascotaPerdida</span>
-                <span class="tag">#Busqueda</span>
+            
+            <!-- Imagen del animal perdido -->
+            <img src="{{ mascota['foto_url'] }}" alt="{{ mascota['nombre'] }} - {{ mascota['estado'] }}" class="pet-image">
+
+            <!-- Badge de ubicación -->
+            <div class="location-badge">
+                <span>📍</span>
+                <span>Estás a {{ mascota.get('distancia', 'N/A') }} km de distancia</span>
             </div>
-            <div class="social-share">
-                <button onclick="compartir('facebook')" class="share-btn">Facebook</button>
-                <button onclick="compartir('whatsapp')" class="share-btn">WhatsApp</button>
-                <button onclick="compartir('twitter')" class="share-btn">Twitter</button>
-            </div>
+
+            <!-- Botón de eliminar -->
             <div class="buttons">
-                <button class="refresh-btn" onclick="refreshData()">Actualizar</button>
-                <button class="update-btn" onclick="updateData()">Modificar</button>
-                <button href= "{{url_for('eliminarMascota')}}" id="delete-btn">Eliminar</button>
+                <button href="#" id="delete-btn">Eliminar</button>
             </div>
+            
+        </div>
+
+        <div class="details">
+            <!-- Sección de detalles -->
+            <div class="details">
+                {% if mascota['estado'] == 'perdida' %}
+                    <h1>SE PERDIÓ EN:</h1>
+                    <p>Cercanías a {{ mascota['zona'] }}, {{ mascota['barrio'] }}, {{ mascota['localidad'] }}</p>
+                    <p>el {{ mascota['fecha_publicacion'] }} y estamos muy preocupados.</p>
+                {% elif mascota['estado'] == 'en transito' %}
+                    <h1>ESTA EN BUSCA DE UN NUEVO HOGAR</h1>
+                {% elif mascota['estado'] == 'en adopcion' %}
+                    <h1>ADOPTA Y CAMBIA SU VIDA</h1>
+                {% else %}
+                    <h1> </h1>
+                {% endif %}
+                
+                <h3>CARACTERÍSTICAS:</h3>
+                <ul>
+                    <li>• Raza: {{ mascota['raza'] }}</li>
+                    <li>• Color: {{ mascota['color'] }}</li>
+                    <li>• Condicion: {{ mascota['condicion'] }}</li>
+                </ul>
+
+                <!-- Info de contacto -->
+                {% if mascota['estado'] == 'perdida' %}
+                    <p><strong>Si tienes información sobre su paradero, favor de contactar a {{ mascota['informacion_contacto'] }}</strong><br></p>
+                    <a href="#" class="share-button whatsapp">Enviar mensaje por WhatsApp</a>
+                {% endif %}
+
+            </div>
+
+            <!-- Sección de compartir -->
+            <div>
+                <p>Por favor, compartí este aviso en grupos locales por redes sociales para ayudarnos a difundir</p>
+                <div class="share-buttons">
+                    <a href="#" class="share-button facebook">Facebook</a>
+                    <a href="#" class="share-button whatsapp">WhatsApp</a>
+                    <a href="#" class="share-button twitter">X</a>
+                </div>
+            </div>
+            
         </div>
     </div>
 </div>

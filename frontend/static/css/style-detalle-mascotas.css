@@ -11,11 +11,19 @@ body {
     flex-direction: column;
 }
 
-header {
-    background-color: #2C3E50;
-    color: white;
-    padding: 1rem;
+/* Estilos del título principal */
+.main-title {
     text-align: center;
+    color: #6d3100;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.header-detalles {
+    color: #D2763A;
+    /* Color principal naranja/marrón */
+    margin-bottom: 15px;
 }
 
 main {
@@ -43,9 +51,10 @@ main {
 
 .pet-image {
     width: 100%;
-    max-width: 300px;
-    height: auto;
+    height: 350px;
+    object-fit: cover;
     border-radius: 8px;
+    margin-bottom: 20px;
 }
 
 .details {
@@ -55,7 +64,8 @@ main {
 }
 
 .tag {
-    background-color: #27AE60;
+    background-color: #D2763A;
+    /* Color principal naranja/marrón */
     color: white;
     padding: 0.5rem 1rem;
     border-radius: 20px;
@@ -70,7 +80,7 @@ main {
     margin-top: 1rem;
 }
 
-button {
+.button {
     padding: 0.5rem 1rem;
     border: none;
     border-radius: 4px;
@@ -79,22 +89,33 @@ button {
 }
 
 .update-btn {
-    background-color: #3498DB;
+    background-color: #D2763A;
+    /* Color principal naranja/marrón */
     color: white;
 }
 
 #delete-btn {
-    background-color: #E74C3C;
+    padding: 8px 16px;
+    border-radius: 20px;
     color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    background-color: #E74C3C;
+    /* Color de eliminación */
 }
 
 .refresh-btn {
-    background-color: #27AE60;
+    background-color: #A0522D;
+    /* Color marrón */
     color: white;
 }
 
 footer {
-    background-color: #2C3E50;
+    background-color: #D2763A;
+    /* Color principal naranja/marrón */
     color: white;
     padding: 1rem;
     text-align: center;
@@ -114,5 +135,100 @@ footer {
 
     .pet-image {
         margin: 0 auto;
+    }
+}
+
+/* Contenedor principal estilo tarjeta */
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    gap: 20px;
+    max-width: 1000px;
+    margin: 0 auto;
+    min-height: 600px;
+}
+
+/* Columna izquierda - Imagen y título */
+.left-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Columna derecha - Detalles y botones */
+.right-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Badge de ubicación */
+.location-badge {
+    background: #f3dfd2;
+    color: #cf4a0d;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.details h3 {
+    color: #D2763A;
+    /* Color principal naranja/marrón */
+    margin-bottom: 10px;
+}
+
+.details ul {
+    padding-left: 20px;
+    margin: 10px 0;
+}
+
+.details li {
+    margin-bottom: 5px;
+}
+
+/* Botones de compartir */
+.share-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.share-button {
+    padding: 8px 16px;
+    border-radius: 20px;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+}
+
+.facebook {
+    background: #1877F2;
+}
+
+.whatsapp {
+    background: #25D366;
+}
+
+.twitter {
+    background: #000000;
+}
+
+@media (max-width: 768px) {
+    .card {
+        flex-direction: column;
+    }
+
+    .pet-image {
+        height: 300px;
     }
 }

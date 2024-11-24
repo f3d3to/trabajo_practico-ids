@@ -37,13 +37,15 @@ body {
 }
 
 .navbar-nav .nav-link:hover {
-    color: #81B29A !important; /* Color de hover */
+    color: #81B29A !important;
+    /* Color de hover */
 }
 
 
 
 /* Layout general y sticky footer */
-html, body {
+html,
+body {
     height: 100%;
     margin: 0;
     display: flex;
@@ -108,18 +110,24 @@ main {
 .nav-btn:hover {
     background-color: #357A4C;
 }
+
 .btn-custom {
-    background-color: #81B29A; /* Color de fondo del botón */
+    background-color: #81B29A;
+    /* Color de fondo del botón */
     color: #FFFFFF;
     font-weight: bold;
     padding: 8px 16px;
     border-radius: 20px;
-    border: 2px solid #000000; /* Borde negro */
+    border: 2px solid #000000;
+    /* Borde negro */
 }
+
 .btn-custom:hover {
-    background-color: #6e9b85; /* Verde un poco más oscuro */
+    background-color: #6e9b85;
+    /* Verde un poco más oscuro */
     color: #FFFFFF;
-    border: 2px solid #000000; /* Borde negro */
+    border: 2px solid #000000;
+    /* Borde negro */
 }
 
 /* Campos de formulario */
@@ -149,7 +157,8 @@ main {
         width: 100%;
     }
 
-    .mascota-icon, .gender-icon {
+    .mascota-icon,
+    .gender-icon {
         height: 40px;
         width: 40px;
     }
@@ -215,9 +224,12 @@ main {
 
 /* Logo en el footer */
 .footer-logo {
-    width: 100%; /* Ocupa el ancho de la columna */
-    height: 100%; /* Ocupa el alto de la columna */
-    object-fit: cover; /* Ajusta la imagen sin distorsión */
+    width: 100%;
+    /* Ocupa el ancho de la columna */
+    height: 100%;
+    /* Ocupa el alto de la columna */
+    object-fit: cover;
+    /* Ajusta la imagen sin distorsión */
 }
 
 /* Imagen de animales */
@@ -235,52 +247,62 @@ main {
 .social-links .social-icon:hover {
     color: #81B29A;
 }
+
 /* Ajustes de responsividad */
 @media (max-width: 768px) {
     .footer-logo {
         max-height: 50px;
     }
-    .footer-icons, .social-links {
+
+    .footer-icons,
+    .social-links {
         justify-content: center;
     }
+
     .bg-logo-footer {
-        text-align: center; /* Centra el contenido del logo solo en pantallas pequeñas */
+        text-align: center;
+        /* Centra el contenido del logo solo en pantallas pequeñas */
     }
 }
 
-#banner-index{
-    height: 25rem!important;
+#banner-index {
+    height: 25rem !important;
     background-image: url(../images/HeaderHome.png);
     background-size: cover;
     background-position-y: 10%;
 }
 
-.container-index{
+.container-index {
     width: 20rem;
     transition: transform 0.5s ease-out;
-  }
-  .container-index:hover{
-    transform : rotate(10);
-  }
-.social-links {
-        justify-content: center;
-    }
-.bg-logo-footer {
-    text-align: center; /* Centra el contenido del logo solo en pantallas pequeñas */
 }
 
-.mapa{
+.container-index:hover {
+    transform: rotate(10);
+}
+
+.social-links {
+    justify-content: center;
+}
+
+.bg-logo-footer {
+    text-align: center;
+    /* Centra el contenido del logo solo en pantallas pequeñas */
+}
+
+.mapa {
     width: 1325px;
     height: 330px;
     bottom: 14%;
 }
 
-.cargaMascota{
+.cargaMascota {
     margin-bottom: 50px;
 }
+
 .mascota-foto-detalle {
     width: 100%;
-    max-height: 300px; /* Ajusta según lo que necesites */
+    max-height: 300px;
+    /* Ajusta según lo que necesites */
     object-fit: cover;
 }
-

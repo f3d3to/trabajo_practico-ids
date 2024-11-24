@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Detalles de *mascota*{% endblock %}
+
+{% block content %}
+
+<div class="pet-card">
+
+    <h1 class="main-title">¡Buscamos a Bailey!</h1>
+
+    <div class="pet-info">
+        <div class="image-container">
+
+            <!-- Imagen del animal perdido -->
+            <img src="{{ url_for('static', filename='images/bailey.png') }}" alt="Mascota perdida" class="pet-image">
+            
+            <!-- Badge de ubicación -->
+            <div class="location-badge">
+                <span>📍</span>
+                <span>Estás a 3.22 km de distancia</span>
+            </div>
+
+            <!-- Botón de eliminar -->
+            <div class="buttons">
+                <button href="#" id="delete-btn">Eliminar</button>
+            </div>
+            
+        </div>
+
+        <div class="details">
+            <!-- Sección de detalles -->
+            <div class="details">
+                <h3>SE PERDIÓ EN:</h3>
+                <p>*Dirección o lugar aproximado*</p>
+
+                <h3>CARACTERÍSTICAS:</h3>
+                <ul>
+                    <li>*Detalles de la mascota*</li>
+                </ul>
+
+                <p><strong>Si tienes información sobre su paradero, favor de contactar a Mariela al +15 9462 5948. </strong><br></p>
+                <a href="#" class="share-button whatsapp">Enviar mensaje por WhatsApp</a>
+
+            </div>
+
+            <!-- Sección de compartir -->
+            <div>
+                <p>Por favor, compartí este aviso en grupos locales por redes sociales para ayudarnos a difundir</p>
+                <div class="share-buttons">
+                    <a href="#" class="share-button facebook">Facebook</a>
+                    <a href="#" class="share-button whatsapp">WhatsApp</a>
+                    <a href="#" class="share-button twitter">X</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

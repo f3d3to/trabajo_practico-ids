@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}Bienvenido{% endblock %}
+
+{% block content %}
+
+<div class="pet-card">
+    <div class="pet-info">
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/ejemploFlyerBusqueda.png') }}" alt="Mascota perdida" class="pet-image">
+        </div>
+        <div class="details">
+            <h2 id="petName">Nombre de la Mascota</h2>
+            <p id="location">Ubicación: <span></span></p>
+            <p id="date">Fecha de pérdida: <span></span></p>
+            <p id="description">Descripción: <span></span></p>
+            <div id="tags">
+                <span class="tag">#MascotaPerdida</span>
+                <span class="tag">#Busqueda</span>
+            </div>
+            <div class="social-share">
+                <button onclick="compartir('facebook')" class="share-btn">Facebook</button>
+                <button onclick="compartir('whatsapp')" class="share-btn">WhatsApp</button>
+                <button onclick="compartir('twitter')" class="share-btn">Twitter</button>
+            </div>
+            <div class="buttons">
+                <button class="refresh-btn" onclick="refreshData()">Actualizar</button>
+                <button class="update-btn" onclick="updateData()">Modificar</button>
+                <button class="delete-btn" onclick="deleteData()">Eliminar</button>                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

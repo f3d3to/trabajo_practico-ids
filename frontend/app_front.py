@@ -109,6 +109,7 @@ def busquedaMascota():
 
     return render_template("busquedaMascota.html", mascotas=mascotas)
 
+
 @app.route("/detalleMascota/<int:id>")
 def detalleMascota(id):
     try:
@@ -116,7 +117,7 @@ def detalleMascota(id):
         mascota = {}
         if response.status_code == 200 and response.json().get("success"):
             mascota = response.json().get("mascota", {})
-            print(mascota) 
+            print(mascota)  
         elif response.status_code == 404:
             return render_template("detalleMascota.html", error="Mascota no encontrada.")
         else:
@@ -127,6 +128,12 @@ def detalleMascota(id):
 
     # Verificar que la variable mascota se pase correctamente
     return render_template("detalleMascota.html", mascota=mascota)
+
+'''
+@app.route("/detalleMascota")
+def detalleMascota():
+    return render_template("detalleMascota.html")
+'''
 
 @app.route("/eliminarMascota/<int:id>")
 def eliminarMascota(id):
