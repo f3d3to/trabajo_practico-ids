@@ -55,7 +55,7 @@ if (mascotas && Array.isArray(mascotas)) {
 
             marker.on('click', () => {
                 document.getElementById('nombre-mascota-title').textContent = nombre || 'N/A';
-
+                // document.getElementById('mascota-id').textContent = id || 'N/A';
                 document.getElementById('mascota-foto').src = foto_url || 'N/A';
                 document.getElementById('mascota-nombre').textContent = nombre || 'N/A';
                 document.getElementById('mascota-especie').textContent = especie || 'N/A';
@@ -66,6 +66,9 @@ if (mascotas && Array.isArray(mascotas)) {
                 document.getElementById('mascota-contacto').textContent = informacion_contacto || 'N/A';
                 document.getElementById('mascota-barrio').textContent = barrio || 'N/A';
                 document.getElementById('mascota-fecha-publicacion').textContent = fecha_publicacion || 'N/A';
+
+                const detalleLink = document.getElementById('mascota-id');
+                detalleLink.href = `/detalleMascota/${id}`;
 
                 const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
                 offcanvas.show();
