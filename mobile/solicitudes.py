@@ -2,6 +2,8 @@ from kivy.network.urlrequest import UrlRequest
 import urllib
 import logging
 import json
+from urllib.parse import quote
+
 # Configuración de logging
 logging.basicConfig(level=logging.DEBUG)
 
@@ -44,6 +46,7 @@ class RequestManager:
             url,
             on_success=_success,
             on_error=_error,
+            
         )
 
         if wait_for_completion:
@@ -176,14 +179,20 @@ def buscar_mascota(filtros, callback):
     """
     Busca mascotas basadas en los filtros proporcionados.
     """
+    print(f"Filtros originales: {filtros}")
+    params = {k: v for k, v in filtros.items() if v}  # filtra los valores no nulos
+    print(f"Filtros aplicados: {params}")
+
     url = f"{API_BASE_URL}/api/mascotas"
-    query_string = "&".join([f"{key}={value}" for key, value in filtros.items()])
-    full_url = f"{url}?{query_string}"
+    if params:
+        encoded_params = {key: quote(value) for key, value in params.items()}
+        query_string = '&'.join([f"{key}={value}" for key, value in encoded_params.items()])
+        url = f"{url}?{query_string}"
     headers = {"Content-Type": "application/json"}
 
     logging.debug(f"Buscando mascotas con filtros: {filtros}")
     manager.get(
-        full_url,
+        url,
         on_success=lambda req, result: callback({"success": True, "data": result}),
         on_error=lambda req, error: callback({"success": False, "error": error}),
         wait_for_completion=True,
