@@ -69,13 +69,13 @@ Para ver los logs de un entorno en específico (por ejemplo del backend), usá e
 
 Para ver logs del servicio en particular:
 ```bash
-docker-compose logs -f <nombre_servicio>
+docker compose logs -f <nombre_servicio>
 ```
 
 Para ver todos los logs:
 
 ```bash
-docker-compose logs -f
+docker compose logs -f
 ```
 
 ### Acceder a la db
@@ -83,7 +83,12 @@ docker-compose logs -f
 Para acceder al contenedor de mysql (sustituir con los valores del .env):
 
 ```bash
-docker-compose exec <nombre_servicio> psql -U $DB_USER -d $DB_NAME
+docker compose exec db mysql -u <db> -p
+Enter password: <db>
+mysql> USE db;
+Database changed
+mysql> SELECT * FROM mascotas;
+
 ```
 
 Aclaración: abre una "línea de comandos" de mysql y se puede ejecutar comandos, por ejemplo `SELECT * FROM mascotas;`.
@@ -93,13 +98,13 @@ Aclaración: abre una "línea de comandos" de mysql y se puede ejecutar comandos
 Para detener ambos entornos del proyecto:
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 *CUIDADO*. Este comando detiene el proyecto, pero *elimina* todos los elementos de la base de datos:
 
 ```bash
-docker-compose down -v
+docker compose down -v
 ```
 
 ## Consideraciones de Desarrollo
