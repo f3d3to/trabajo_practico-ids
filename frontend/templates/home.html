@@ -10,7 +10,7 @@
         {% for mascota in mascotas_perdidas %}
             <div class="carousel-item {% if loop.first %}active{% endif %}">
                 <a href="{{ url_for('detalleMascota', id=mascota.id) }}">
-                    <img src="http://127.0.0.1:5000/uploads/{{ mascota.foto_url }}"
+                    <img src="http://127.0.0.1:5000/uploads/user_images/{{ mascota.foto_url }}"
                          class="d-block w-100 mascota-foto-detalle"
                          alt="Foto de {{ mascota.nombre }}">
                 </a>
