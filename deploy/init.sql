@@ -1,6 +1,5 @@
 -- Eliminar tablas si ya existen (en orden inverso de dependencias)
 DROP TABLE IF EXISTS contactos;
-DROP TABLE IF EXISTS casas_transito;
 DROP TABLE IF EXISTS preguntas_frecuentes;
 DROP TABLE IF EXISTS mascotas;
 
@@ -62,11 +61,6 @@ VALUES
     ('Max', 'perro', 'Pastor Alemán', 'negro y marrón', 'sana', 'Retiro', 'Villa Crespo', -34.5957, -58.3822, 'user_images/max.png', 'perdida', '+54 9 111 123 4567'),
     ('Mimi', 'otro', 'Cabra', 'marrón con manchas', 'lastimada', 'Villa Urquiza', 'Coghlan', -34.5761, -58.4809, 'user_images/mimi.png', 'perdida', '+54 9 111 765 4321'),
     ('Coco', 'perro', 'Cocker Spaniel', 'marrón claro', 'sana', 'Almagro', 'Boedo', -34.6076, -58.4188, 'user_images/coco.png', 'perdida', '+54 9 111 999 8888');
-
--- Insertar datos de prueba en la tabla de casas de tránsito
-INSERT INTO casas_transito (id_mascota, latitud, longitud, informacion_contacto)
-VALUES
-    (2, -34.5614, -58.4567, '+54 9 111 333 4444');
 
 -- Insertar datos de prueba en la tabla de preguntas frecuentes
 INSERT INTO preguntas_frecuentes (pregunta, respuesta)
