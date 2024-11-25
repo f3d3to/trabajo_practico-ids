@@ -113,8 +113,8 @@ deberá aparecer una vez cargada en el sitio web.
 
 - [X] Jueves 31/10: Entrega del Backlog de producto y mockup del sitio web
 - [X] Jueves 7/11: Creación del repositorio y vistas del proyecto
-- [ ] Jueves 14/11: Avances de la API y comunicación con el front
-- [ ] Jueves 21/11: Integración de app mobile, front con API
+- [X] Jueves 14/11: Avances de la API y comunicación con el front
+- [X] Jueves 21/11: Integración de app mobile, front con API
 - [ ] Jueves 28/11: 1er entrega del TP Integrador
 - [ ] Martes 3/12: 2da entrega del TP integrador
 
