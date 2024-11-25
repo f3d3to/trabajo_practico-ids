@@ -107,7 +107,7 @@ def busquedaMascota():
         print("Error de conexión con el backend.")
         mascotas = []
 
-    return render_template("busquedaMascota.html", mascotas=mascotas, image_url_backend="http://127.0.0.1:5000"+"/uploads") # TO-DO: Cambiar URL harcodeada
+    return render_template("busquedaMascota.html", mascotas=mascotas, image_url_backend="http://127.0.0.1:5000"+"/uploads/") # TO-DO: Cambiar URL harcodeada
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
