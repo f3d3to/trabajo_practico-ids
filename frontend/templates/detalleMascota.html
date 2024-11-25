@@ -16,14 +16,7 @@
                 <h1>Detalles de {{ mascota['nombre'] }}</h1>
             {% endif %}
         </div>
-        
-        <!-- Imagen del animal perdido -->
-        <img src="{{ mascota['foto_url'] }}" alt="{{ mascota['nombre'] }} - {{ mascota['estado'] }}" class="pet-image">
-        
-        <div class="location-badge">
-            <span>📍</span>
-            <span>Estás a {{ mascota.get('distancia', 'N/A') }} km de distancia</span>
-        </div>
+        <img src="{{ url_for('static', filename=mascota['foto_url']) }}" alt="{{ mascota['nombre'] }} - {{ mascota['estado'] }}" class="pet-image">
     </div>
 
     <div class="right-column">
@@ -31,7 +24,7 @@
             {% if mascota['estado'] == 'perdida' %}
                 <h1>SE PERDIÓ EN:</h1>
                 <p>Cercanías a {{ mascota['zona'] }}, {{ mascota['barrio'] }}, {{ mascota['localidad'] }}</p>
-                <p>el {{ mascota['fecha_publicacion'] }} y estamos muy preocupados.</p>
+                <p>el {{ mascota['fecha_publicacion'].strftime('%d de %B de %Y, %H:%M:%S') }} y estamos muy preocupados.</p>
             {% elif mascota['estado'] == 'en transito' %}
                 <h1>ESTA EN BUSCA DE UN NUEVO HOGAR</h1>
             {% elif mascota['estado'] == 'en adopcion' %}

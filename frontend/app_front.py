@@ -1,3 +1,4 @@
+from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import requests, os
 from werkzeug.utils import secure_filename
@@ -136,6 +137,11 @@ def detalleMascota(id):
         mascota = {}
         if response.status_code == 200 and response.json().get("success"):
             mascota = decodificar_objeto_utf8(response.json().get("mascota", {}))
+            if 'fecha_publicacion' in mascota: # Darle formato a fecha_publicacion 
+                try:
+                    mascota['fecha_publicacion'] = datetime.strptime(mascota['fecha_publicacion'], "%a, %d %b %Y %H:%M:%S %Z")
+                except ValueError as e:
+                    print(f"Error al convertir fecha_publicacion: {e}")
             print(mascota)  
         elif response.status_code == 404:
             return render_template("detalleMascota.html", error="Mascota no encontrada.")
