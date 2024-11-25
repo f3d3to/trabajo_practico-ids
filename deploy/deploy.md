@@ -10,10 +10,10 @@ Este proyecto está dividio en tres entornos: frotend, backend y mobile. A conti
 
 ### 1. Variables de Entorno
 
-Copiar el archivo `.env.example` y renombrarlo a `.env`:
+Copiar el archivo `.env-example` y renombrarlo a `.env`:
 
 ```bash
-cp .env.example .env
+cp .env-example .env
 ```
 
 En el archivo `.env`, seteás las variables. Por ejemplo:

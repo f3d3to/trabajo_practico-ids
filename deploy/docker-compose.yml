@@ -46,5 +46,6 @@ services:
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql # actua como script inicial de mysql.
       - ./my.cnf:/etc/mysql/conf.d/my.cnf # Monta el archivo my.cnf
 
+
 volumes:
   mysql_data:

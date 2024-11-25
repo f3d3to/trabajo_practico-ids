@@ -66,6 +66,11 @@ if (mascotas && Array.isArray(mascotas)) {
                 document.getElementById('mascota-barrio').textContent = barrio || 'N/A';
                 document.getElementById('mascota-fecha-publicacion').textContent = fecha_publicacion || 'N/A';
 
+                const detalleLink = document.getElementById('mascota-id');
+                detalleLink.href = `/detalleMascota/${id}`;
+                const actualizarLink = document.getElementById('actualizar-mascota');
+                actualizarLink.href = `/actualizarMascota/${id}`;
+
                 const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
                 offcanvas.show();
             });
