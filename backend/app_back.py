@@ -1,15 +1,18 @@
 # Third Party
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import create_engine
+from werkzeug.utils import secure_filename
 # Proyecto
 from .config import DATABASE_URI, verificar_conexion
 from .queries import MascotaDAO, PreguntasFrecuentesDAO, ContactoDAO
 # Python
 import os
 
-
+UPLOAD_FOLDER = os.getenv('USER_IMAGES_FOLDER', 'uploads/user_images/')
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 app = Flask(__name__)
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 app.config['SQLALCHEMY_DATABASE_URI'] = DATABASE_URI
 db = SQLAlchemy(app)
 
@@ -18,8 +21,6 @@ db = SQLAlchemy(app)
 mascota_dao = MascotaDAO()
 preguntas_frecuentes_dao = PreguntasFrecuentesDAO()
 contacto_dao = ContactoDAO()
-
-app = Flask(__name__)
 
 # Configuración de la base de datos
 DATABASE_URI = f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset=utf8mb4"
@@ -149,6 +150,26 @@ def obtener_preguntas_frecuentes():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)}), 500
 
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    if 'file' not in request.files:
+        return jsonify({"success": False, "error": "No file part"}), 400
+    file = request.files['file']
+    if file.filename == '':
+        return jsonify({"success": False, "error": "No selected file"}), 400
+    if file and allowed_file(file.filename):
+        filename = secure_filename(file.filename)
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        file.save(filepath)
+        return jsonify({"success": True, "file_url": f"/user_images/{filename}"}), 201
+    return jsonify({"success": False, "error": "Invalid file type"}), 400
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/uploads/user_images/<filename>')
+def serve_file(filename):
+    return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER']), filename)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=True, port=5000)

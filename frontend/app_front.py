@@ -4,9 +4,6 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
-UPLOAD_FOLDER = 'static/user_images'
-app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
-
 BACKEND_URL = os.getenv("BACKEND_URL")
 
 def decodificar_utf8(cadena):
@@ -33,10 +30,19 @@ def cargar_mascota():
 
             imagen = request.files.get('foto')
             if imagen:
-                filename = secure_filename(imagen.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                imagen.save(filepath)  # Guardar la imagen en 'static/user_images'
-                mascota_data['foto_url'] = f"user_images/{filename}" if filename else None
+                try:
+                    # Subir la imagen al backend
+                    filename = secure_filename(imagen.filename)
+                    files = {'file': (filename, imagen.stream, imagen.mimetype)}
+                    upload_response = requests.post(BACKEND_URL + "/upload", files=files)
+
+                    # Verificar si la subida fue exitosa
+                    if upload_response.status_code == 201 and upload_response.json().get("success"):
+                        mascota_data['foto_url'] = upload_response.json().get("file_url")
+                    else:
+                        print("Error al subir la imagen:", upload_response.json())
+                except requests.exceptions.RequestException as e:
+                    print("Error al conectar con el backend para subir la imagen:", e)
 
             try:
                 requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
@@ -107,7 +113,7 @@ def busquedaMascota():
         print("Error de conexión con el backend.")
         mascotas = []
 
-    return render_template("busquedaMascota.html", mascotas=mascotas)
+    return render_template("busquedaMascota.html", mascotas=mascotas, image_url_backend="http://127.0.0.1:5000"+"/uploads") # TO-DO: Cambiar URL harcodeada
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0',debug=True, port=5001)
