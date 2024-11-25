@@ -22,9 +22,9 @@ mascota_dao = MascotaDAO()
 preguntas_frecuentes_dao = PreguntasFrecuentesDAO()
 contacto_dao = ContactoDAO()
 
-# Configuración de la base de datos
-DATABASE_URI = f"mysql+mysqlconnector://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}?charset=utf8mb4"
-engine = create_engine(DATABASE_URI)
+engine = create_engine(DATABASE_URI, connect_args={"charset": "utf8mb4"})
+
+app.config['JSON_AS_ASCII'] = False
 
 @app.route('/obtener_esquema', methods=['POST'])
 def obtener_esquema():

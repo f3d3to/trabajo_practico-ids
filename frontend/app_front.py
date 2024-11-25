@@ -6,12 +6,6 @@ app = Flask(__name__)
 
 BACKEND_URL = os.getenv("BACKEND_URL")
 
-def decodificar_utf8(cadena):
-    """
-    Recibe una cadena con caracteres codificados y los decodifica a UTF-8.
-    """
-    return {key: value.encode('latin1').decode('utf-8') if isinstance(value, str) else value for key, value in cadena.items()}
-
 def castear_valores(data, esquema):
     tipos_y_valores = {"str": str, "int": int, "float": float, "bool": bool}
     valores_cast = {
@@ -86,7 +80,7 @@ def preguntasFrecuentes():
         response = requests.get(BACKEND_URL + "/api/preguntas_frecuentes")
         fq = []
         if response.status_code == 200 and response.json().get("success"):
-            fq = [decodificar_utf8(pregunta) for pregunta in response.json().get("preguntas_frecuentes", [])]
+            fq = response.json().get("preguntas_frecuentes", [])
     except requests.exceptions.RequestException:
         print("Error de conexión con el backend.")
         fq = []
