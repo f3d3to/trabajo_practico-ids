@@ -34,14 +34,6 @@ def castear_valores(data, esquema):
     }
     return valores_cast
 
-def castear_valores(data, esquema):
-    tipos_y_valores = {"str": str, "int": int, "float": float, "bool": bool}
-    valores_cast = {
-        campo: tipos_y_valores[tipo_str](data[campo]) if campo in data else None
-        for campo, tipo_str in esquema.items()
-    }
-    return valores_cast
-
 @app.route('/cargarMascota', methods=['GET', 'POST'])
 def cargar_mascota():
     if request.method == 'POST':
