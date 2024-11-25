@@ -55,8 +55,7 @@ if (mascotas && Array.isArray(mascotas)) {
 
             marker.on('click', () => {
                 document.getElementById('nombre-mascota-title').textContent = nombre || 'N/A';
-
-                document.getElementById('mascota-foto').src = foto_url || 'N/A';
+                document.getElementById('mascota-foto').src = foto_url || '';
                 document.getElementById('mascota-nombre').textContent = nombre || 'N/A';
                 document.getElementById('mascota-especie').textContent = especie || 'N/A';
                 document.getElementById('mascota-raza').textContent = raza || 'N/A';
