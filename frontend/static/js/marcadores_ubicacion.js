@@ -69,6 +69,8 @@ if (mascotas && Array.isArray(mascotas)) {
 
                 const detalleLink = document.getElementById('mascota-id');
                 detalleLink.href = `/detalleMascota/${id}`;
+                const actualizarLink = document.getElementById('actualizar-mascota');
+                actualizarLink.href = `/actualizarMascota/${id}`;
 
                 const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasRight'));
                 offcanvas.show();

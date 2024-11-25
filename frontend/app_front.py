@@ -4,16 +4,32 @@ from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 
+
+
 UPLOAD_FOLDER = 'static/user_images'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 BACKEND_URL = os.getenv("BACKEND_URL")
+
 
 def decodificar_utf8(cadena):
     """
     Recibe una cadena con caracteres codificados y los decodifica a UTF-8.
     """
     return {key: value.encode('latin1').decode('utf-8') if isinstance(value, str) else value for key, value in cadena.items()}
+
+def decodificar_objeto_utf8(objeto):
+    """
+    Recibe un objeto/diccionario/lista y lo decodifica a UTF-8
+    """
+    if isinstance(objeto, dict):
+        return {key: decodificar_objeto_utf8(value) for key, value in objeto.items()}
+    elif isinstance(objeto, list):
+        
+        return [decodificar_objeto_utf8(elemento) for elemento in objeto]
+    
+    else:
+        return objeto
 
 def castear_valores(data, esquema):
     tipos_y_valores = {"str": str, "int": int, "float": float, "bool": bool}
@@ -64,6 +80,7 @@ def contacto():
 def index():
     try:
         response = requests.get(f"{BACKEND_URL}/api/mascotas", params={'estado': 'perdida'})
+        
         if response.status_code == 200:
             mascotas_perdidas = response.json()
         else:
@@ -72,7 +89,7 @@ def index():
     except requests.exceptions.RequestException as e:
         print("Error de conexión con el backend:", e)
         mascotas_perdidas = []
-    return render_template("home.html", mascotas_perdidas=mascotas_perdidas)
+    return render_template("home.html", mascotas_perdidas=decodificar_objeto_utf8(mascotas_perdidas))
 
 @app.route("/preguntasFrecuentes")
 def preguntasFrecuentes():
@@ -118,7 +135,7 @@ def detalleMascota(id):
         response = requests.get(f"{BACKEND_URL}/api/mascotas/{id}")
         mascota = {}
         if response.status_code == 200 and response.json().get("success"):
-            mascota = response.json().get("mascota", {})
+            mascota = decodificar_objeto_utf8(response.json().get("mascota", {}))
             print(mascota)  
         elif response.status_code == 404:
             return render_template("detalleMascota.html", error="Mascota no encontrada.")
@@ -131,27 +148,58 @@ def detalleMascota(id):
     return render_template("detalleMascota.html", mascota=mascota)
 
 
-@app.route('/updateMascota', methods=['GET', 'POST'])
-def update_mascota():
+@app.route('/actualizarMascota/<int:id>', methods=['GET', 'POST'])
+def actualizarMascota(id):
+    if request.method == 'GET':
+        try:
+            response = requests.get(f"{BACKEND_URL}/api/mascotas/{id}")
+            mascota = {}
+            if response.status_code == 200 and response.json().get("success"):
+                mascota = response.json().get("mascota", {})
+                print(mascota)  
+        except requests.exceptions.RequestException as e:
+            print(f"Error de conexión al backend: {e}")
+            return render_template("busquedaMascota.html", error="Error de conexión con el backend.")
+        
+
     if request.method == 'POST':
         esquema_response = requests.post(BACKEND_URL+"/obtener_esquema", json={"tabla": "mascotas"})
         if esquema_response.status_code == 200 and esquema_response.json().get("success"):
             esquema = esquema_response.json().get("esquema")
-            mascota_data = castear_valores(request.form, esquema)
+            #mascota_data = castear_valores(request.form, esquema)
 
-            imagen = request.files.get('foto')
-            if imagen:
-                filename = secure_filename(imagen.filename)
-                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                imagen.save(filepath)  # Guardar la imagen en 'static/user_images'
-                mascota_data['foto_url'] = f"user_images/{filename}" if filename else None
-
+                    # mascota_data = {"especie": request.form.get("especie"),
+                    #                 "genero": request.form.get("genero"),
+                    #                 "nombre": request.form.get("nombre"),             
+                    #                 "raza": request.form.get("raza"),             
+                    #                 "color": request.form.get("color"),             
+                    #                 "condicion": request.form.get("condicion"),             
+                    #                 "estado": request.form.get("estado"),             
+                    #                 "zona": request.form.get("zona"),             
+                    #                 "barrio": request.form.get("barrio"),             
+                    #                 "latitud": request.form.get("latitud"), 
+                    #                 "longitud": request.form.get("longitud"), 
+                    #                 "informacion_contacto": request.form.get("informacion_contacto"), }
+             
+            mascota_data = { "nombre": request.form.get("nombre"),
+                            "raza": request.form.get("raza"),             
+                            "color": request.form.get("color"),             
+                            "condicion": request.form.get("condicion"),             
+                            "estado": request.form.get("estado"),
+                            "informacion_contacto": request.form.get("informacion_contacto")
+                            }
+            print(mascota_data)
             try:
-                requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
+                #requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
+                response = requests.post(f"{BACKEND_URL}/api/mascotas/{id}", json=mascota_data)
+                if response.status_code == 200 and response.json().get("success"):
+                    print(f"Respuesta del backend: {response.json()}")
+                    print("Mascota actualizada exitosamente.")
             except requests.exceptions.RequestException:
                 print("Error de conexión con el backend.")
-        return redirect(url_for('cargar_mascota'))
-    return render_template('update.html')
+        return render_template('home.html')
+    
+    return render_template('actualizarMascota.html', mascota=mascota)
 
 
 @app.route("/eliminarMascota/<int:id>", methods = ['DELETE'])
