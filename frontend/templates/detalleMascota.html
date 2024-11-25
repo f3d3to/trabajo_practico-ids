@@ -1,10 +1,10 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% block title %}Detalles de {{ mascota['nombre'] }}{% endblock %}
 
 {% block content %}
 <div class="container my-5">
     <div class="card shadow-lg">
-        <div class="card-header text-white 
+        <div class="card-header text-white
             {% if mascota['estado'] == 'perdida' %}bg-danger
             {% elif mascota['estado'] == 'en transito' %}bg-warning
             {% elif mascota['estado'] == 'en adopcion' %}bg-success
@@ -24,9 +24,9 @@
 
         <div class="row g-0">
             <div class="col-md-5">
-                <img src="{{ url_for('static', filename=mascota['foto_url']) }}" 
-                     class="img-fluid rounded-start" 
-                     alt="{{ mascota['nombre'] }} - {{ mascota['estado'] }}">
+                <img src="http://127.0.0.1:5000/uploads/{{ mascota['foto_url'] }}"
+                class="img-fluid rounded-start"
+                alt="{{ mascota['nombre'] }} - {{ mascota['estado'] }}">
             </div>
 
             <div class="col-md-7">

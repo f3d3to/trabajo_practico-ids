@@ -28,6 +28,12 @@ db = SQLAlchemy(app)
 engine = create_engine(DATABASE_URI, connect_args={"charset": "utf8mb4"})
 app.config['JSON_AS_ASCII'] = False
 
+@app.route("/api/status", methods=["GET"])
+def status():
+    """
+    Endpoint para verificar el estado del backend.
+    """
+    return jsonify({"status": "ok", "message": "En funcionamiento"}), 200
 
 @app.route('/obtener_esquema', methods=['POST'])
 def obtener_esquema():
@@ -118,6 +124,8 @@ def agregar_contacto():
 
 @app.route('/api/preguntas_frecuentes', methods=['GET'])
 def obtener_preguntas_frecuentes():
+
+    print(app.config["FULL_UPLOAD_URL"])
     try:
         preguntas = obtener_todos("preguntas_frecuentes", PREGUNTAS_FRECUENTES_SCHEMA)
         return jsonify({"success": True, "preguntas_frecuentes": preguntas}), 200
@@ -136,7 +144,7 @@ def upload_file():
         filename = secure_filename(file.filename)
         filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
         file.save(filepath)
-        return jsonify({"success": True, "file_url": f"/user_images/{filename}"}), 201
+        return jsonify({"success": True, "file_url": f"/{filename}"}), 201
     return jsonify({"success": False, "error": "Invalid file type"}), 400
 
 def allowed_file(filename):

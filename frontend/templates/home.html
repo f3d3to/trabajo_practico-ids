@@ -9,7 +9,11 @@
     <div class="carousel-inner">
         {% for mascota in mascotas_perdidas %}
             <div class="carousel-item {% if loop.first %}active{% endif %}">
-                <img src="{{ url_for('static', filename=mascota.foto_url) }}" class="d-block w-100" alt="Foto de {{ mascota.nombre }}" style="max-height: 400px; object-fit: cover;">
+                <a href="{{ url_for('detalleMascota', id=mascota.id) }}">
+                    <img src="http://127.0.0.1:5000/uploads/{{ mascota.foto_url }}"
+                         class="d-block w-100 mascota-foto-detalle"
+                         alt="Foto de {{ mascota.nombre }}">
+                </a>
                 <div class="carousel-caption d-none d-md-block">
                     <h5>{{ mascota.nombre }}</h5>
                     <p>Raza: {{ mascota.raza or 'Desconocida' }} | Color: {{ mascota.color or 'No especificado' }}</p>

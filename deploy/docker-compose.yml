@@ -14,7 +14,7 @@ services:
       - "${BACKEND_PORT}:${BACKEND_PORT}"
     volumes:
       - ../backend:/app
-    command: flask --app app_back.py --debug run --host=0.0.0.0 --port=5000
+    command: flask --app app_back.py --debug run --host=0.0.0.0 --port=${BACKEND_PORT}
     depends_on:
       - db
 
@@ -25,11 +25,12 @@ services:
     container_name: frontend
     environment:
       - BACKEND_URL=http://backend:${BACKEND_PORT}
+      - USER_IMAGES_API=http://backend:${BACKEND_PORT}/${USER_IMAGES_FOLDER}
     ports:
       - "${FRONTEND_PORT}:${FRONTEND_PORT}"
     volumes:
       - ../frontend:/app
-    command: flask --app app_front.py --debug run --host=0.0.0.0 --port=5001
+    command: flask --app app_front.py --debug run --host=0.0.0.0 --port=${FRONTEND_PORT}
     depends_on:
       - backend
 
