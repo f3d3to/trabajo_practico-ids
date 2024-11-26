@@ -13,7 +13,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 # URL base del backend
 API_BASE_URL = "http://127.0.0.1:5000"  # Cambia esto por la URL de tu servidor
-API_SERVICIO_FOTO= "http://localhost:5000/uploads/user_images/"
+API_SERVICIO_FOTO= "http://localhost:5000/uploads/user_images"
 
 class RequestManager:
     """
