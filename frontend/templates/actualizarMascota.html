@@ -7,67 +7,72 @@
     <h2 class="text-custom-green">Actualizá los datos de tu mascota</h2>
 
     <form method="POST" action="{{ url_for('actualizarMascota', id=mascota['id']) }}" enctype="multipart/form-data" class="mt-4">
-        <!-- <form action="{{ url_for('actualizarMascota', id=mascota['id']) }}" method="POST" enctype="multipart/form-data">
-            <input type="hidden" name="_method" value="PUT">     -->
-        {{mascota}}
         <div class="form-section mb-4">
+            <!-- Especie -->
             <div class="row mb-3 align-items-center">
-            <div class="col-md-4">
-                <label for="especieMascota" class="form-label fw-bold">Especie:</label>
+                <div class="col-md-4">
+                    <label for="especieMascota" class="form-label fw-bold">Especie:</label>
+                </div>
+                <div class="col-md-8">
+                    <select id="especieMascota" class="form-select" name="especie">
+                        <option value="">Seleccione</option>
+                        <option value="perro" {% if mascota['especie'] == 'perro' %}selected{% endif %}>Perro</option>
+                        <option value="gato" {% if mascota['especie'] == 'gato' %}selected{% endif %}>Gato</option>
+                        <option value="otro" {% if mascota['especie'] == 'otro' %}selected{% endif %}>Otro</option>
+                    </select>
+                </div>
             </div>
-            <div class="col-md-8">
-                <select id="especieMascota" class="form-select" name="especie">
-                    <option value="">Seleccione</option>
-                    <option value="perro" {% if mascota['especie'] == 'perro' %}selected{% endif %}>Perro</option>
-                    <option value="gato" {% if mascota['especie'] == 'gato' %}selected{% endif %} >Gato</option>
-                    <option value="otro" {% if mascota['especie'] == 'otro' %}selected{% endif %} >Otro</option>
-                </select>
-            </div>
-            </div>
+
+            <!-- Sexo -->
             <div class="row mb-3 align-items-center">
-                <div class="form-label fw-bold col-md-4">
-                <label>Sexo:</label>
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Sexo:</label>
                 </div>
                 <div class="col-md-8">
                     <div class="d-flex justify-content-center gap-5">
-
                         <label>
-                            <input type="radio" name="genero" value="macho" required {% if mascota['genero'] == 'macho' %}checked{% endif %}>
+                            <input type="radio" name="genero" value="macho" {% if mascota['genero'] == 'macho' %}checked{% endif %}>
                             Macho
                         </label>
-                    
                         <label>
-                        <input type="radio" name="genero" value="hembra" {% if mascota['genero'] == 'hembra' %}checked{% endif %}>
+                            <input type="radio" name="genero" value="hembra" {% if mascota['genero'] == 'hembra' %}checked{% endif %}>
                             Hembra
                         </label>
                     </div>
                 </div>
             </div>
-        
+
+            <!-- Nombre -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
                     <label for="nombre" class="form-label fw-bold">Nombre:</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{mascota['nombre']}}" placeholder="Nombre" required>
+                    <input type="text" class="form-control" id="nombre" name="nombre" value="{{ mascota['nombre'] }}" placeholder="Nombre" required>
                 </div>
             </div>
+
+            <!-- Raza -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
                     <label for="razaMascota" class="form-label fw-bold">Raza:</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="razaMascota" name="raza" value="{{mascota['raza']}}" placeholder="Raza" required>
+                    <input type="text" class="form-control" id="razaMascota" name="raza" value="{{ mascota['raza'] }}" placeholder="Raza" required>
                 </div>
             </div>
+
+            <!-- Color -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
                     <label for="colorMascota" class="form-label fw-bold">Color:</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="text" class="form-control" id="colorMascota" name="color" value="{{mascota['color']}}" placeholder="Color" required>
+                    <input type="text" class="form-control" id="colorMascota" name="color" value="{{ mascota['color'] }}" placeholder="Color" required>
                 </div>
             </div>
+
+            <!-- Condición -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
                     <label for="condicionMascota" class="form-label fw-bold">Condición:</label>
@@ -76,60 +81,63 @@
                     <select id="condicionMascota" class="form-select" name="condicion">
                         <option value="">Seleccione</option>
                         <option value="sana" {% if mascota['condicion'] == 'sana' %}selected{% endif %}>Sana</option>
-                        <option value="lastimada" {% if mascota['condicion'] == 'lastimada' %}selected{% endif %} >Lastimada</option>
+                        <option value="lastimada" {% if mascota['condicion'] == 'lastimada' %}selected{% endif %}>Lastimada</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Estado -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
                     <label for="estadoMascota" class="form-label fw-bold">Estado:</label>
                 </div>
                 <div class="col-md-8">
-                    <select id="estadoMascota"  class="form-select" name="estado" required>
+                    <select id="estadoMascota" class="form-select" name="estado" required>
                         <option value="perdida" {% if mascota['estado'] == 'perdida' %}selected{% endif %}>Perdida</option>
                         <option value="en transito" {% if mascota['estado'] == 'en transito' %}selected{% endif %}>En tránsito</option>
                         <option value="en adopcion" {% if mascota['estado'] == 'en adopcion' %}selected{% endif %}>En adopción</option>
                     </select>
                 </div>
             </div>
+
+            <!-- Foto -->
             <div class="row mb-3 align-items-center">
                 <div class="col-md-4">
-                    <!-- Foto: ¿deberíamos mostrar la foto actual tal vez?-->
-                    <label for="fotoMascota" class="form-label fw-bold">Foto URL:</label>
+                    <label for="fotoMascota" class="form-label fw-bold">Foto:</label>
                 </div>
                 <div class="col-md-8">
-                    <input type="file" class="form-control" id="fotoMascota" name="foto" accept="image/*" required>
+                    <input type="file" class="form-control" id="fotoMascota" name="foto" accept="image/*">
+                    <small class="form-text text-muted">Foto actual: {{ mascota['foto_url'] or 'No disponible' }}</small>
                 </div>
             </div>
         </div>
-        
 
+        <!-- Mapa -->
         <div class="form-section mb-4">
-        <!-- Mapa: debería mostrar la ubicación actual de la mascota-->
             <label for="map" class="form-label fw-bold">Actualizar ubicación de tu mascota:</label>
             <div id="map" style="height: 400px; width: 100%;"></div>
             <small class="form-text text-muted">Haz clic en el mapa para seleccionar la ubicación.</small>
-            <!-- Campos ocultos para latitud, longitud, zona, y barrio -->
-            <input type="hidden" id="latitud" name="latitud" required>
-            <input type="hidden" id="longitud" name="longitud" required>
-            <input type="hidden" id="zonaMascota" name="zona" required>
-            <input type="hidden" id="barrioMascota" name="barrio" required>
+            <input type="hidden" id="latitud" name="latitud" value="{{ mascota['latitud'] }}" required>
+            <input type="hidden" id="longitud" name="longitud" value="{{ mascota['longitud'] }}" required>
+            <input type="hidden" id="zonaMascota" name="zona" value="{{ mascota['zona'] }}" required>
+            <input type="hidden" id="barrioMascota" name="barrio" value="{{ mascota['barrio'] }}" required>
         </div>
 
+        <!-- Información de contacto -->
         <div class="form-section mb-4">
             <label for="informacion_contacto" class="form-label fw-bold">¿Querés actualizar la información de contacto?</label>
-            <input type="text" class="form-control" id="informacion_contacto" value="{{mascota['informacion_contacto']}}" name="informacion_contacto" placeholder="Teléfono o email" required>
+            <input type="text" class="form-control" id="informacion_contacto" value="{{ mascota['informacion_contacto'] }}" name="informacion_contacto" placeholder="Teléfono o email" required>
         </div>
 
-        
+        <!-- Botones -->
         <div class="d-flex justify-content-center gap-3 mt-4">
             <button type="reset" class="btn btn-warning">Deshacer cambios</button>
             <button type="submit" class="btn btn-success">Actualizar</button>
         </div>
-       
     </form>
 </div>
 
+<!-- Scripts -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
 <script src="{{ url_for('static', filename='js/ubicacion.js') }}"></script>
