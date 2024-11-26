@@ -1,30 +1,34 @@
+"""
+Módulo principal para la vista de búsqueda de mascotas. 
+Incluye una interfaz responsiva y componentes para filtrar y visualizar mascotas en un mapa interactivo.
+"""
+
 from kivymd.uix.responsivelayout import MDResponsiveLayout
-from kivy.uix.scrollview import ScrollView
-from kivy_garden.mapview import MapView, MapMarker,MapMarkerPopup
 from kivymd.uix.screen import MDScreen
+from kivy.uix.scrollview import ScrollView
 from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.textfield import MDTextField
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.button import MDRoundFlatButton
 from kivymd.uix.label import MDLabel
+from kivymd.uix.textfield import MDTextField
+from kivy_garden.mapview import MapView, MapMarker
 from kivy.metrics import dp
-from logger import logger
-
-#anado gabyo
 from kivy.uix.popup import Popup
-from kivy.uix.image import Image
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.label import Label
-from kivy.uix.button import Button
+from kivy.uix.boxlayout import BoxLayout
+
+from logger import logger
+from solicitudes import obtener_mascotas_perdidas,buscar_mascota,obtener_imagen# Importa el endpoint
 
 
+# =========================
+# Componentes reutilizables
+# =========================
 
-
-from solicitudes import obtener_mascotas_perdidas,buscar_mascota# Importa el endpoint
-
-
-# Reusable components
 def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+    """
+    Crea un título estilizado para los pasos de la interfaz.
+    """
     return MDLabel(
         text=text,
         halign="center",
@@ -35,9 +39,12 @@ def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
         height=dp(40),
     )
 
-def create_search_filters(filter_fields):
-    layout = MDGridLayout(cols=2, spacing=dp(10), adaptive_height=True, padding=[dp(20), dp(10)])
 
+def create_search_filters(filter_fields):
+    """
+    Crea un layout con los campos de filtro para la búsqueda de mascotas.
+    """
+    layout = MDGridLayout(cols=2, spacing=dp(10), adaptive_height=True, padding=[dp(20), dp(10)])
     filters = [
         ("Especie", "especie"),
         ("Sexo", "genero"),
@@ -46,20 +53,21 @@ def create_search_filters(filter_fields):
         ("Zona", "zona"),
         ("Barrio", "barrio"),
         ("Contacto", "informacion_contacto"),
-        ("Fecha de publicación (dd/mm/aaaa)", "fecha")
+        ("Fecha de publicación (dd/mm/aaaa)", "fecha"),
     ]
 
     for hint, id_name in filters:
         text_field = MDTextField(hint_text=hint, size_hint_x=0.9, pos_hint={"center_x": 0.5})
-        filter_fields[id_name] = text_field  # Guarda cada campo en el diccionario
+        filter_fields[id_name] = text_field
         layout.add_widget(text_field)
     
     return layout
 
 
-
-
-def create_search_button(filtros, callback):
+def create_search_button(filters, callback):
+    """
+    Crea el botón de búsqueda que invoca un callback al ser presionado.
+    """
     return MDRoundFlatButton(
         text="Buscar",
         md_bg_color=(0.2, 0.8, 0.6, 1),
@@ -67,10 +75,14 @@ def create_search_button(filtros, callback):
         size_hint=(None, None),
         size=(dp(200), dp(40)),
         pos_hint={"center_x": 0.5},
-        on_release=lambda _: callback(filtros)  # Pasa los filtros al callback
+        on_release=lambda _: callback(filters),
     )
 
+
 def create_clear_filters_button(callback):
+    """
+    Crea el botón para limpiar los filtros de búsqueda.
+    """
     return MDRoundFlatButton(
         text="Limpiar Filtros",
         md_bg_color=(0.2, 0.8, 0.6, 1),
@@ -78,10 +90,14 @@ def create_clear_filters_button(callback):
         size_hint=(None, None),
         size=(dp(200), dp(40)),
         pos_hint={"center_x": 0.5},
-        on_release=lambda _: callback()  
+        on_release=lambda _: callback(),
     )
 
+
 def create_interactive_map(lat=-34.6076, lon=-58.4188, zoom=10):
+    """
+    Crea un mapa interactivo para mostrar marcadores de mascotas.
+    """
     return MapView(
         lat=lat,
         lon=lon,
@@ -92,57 +108,81 @@ def create_interactive_map(lat=-34.6076, lon=-58.4188, zoom=10):
     )
 
 
+# ==================
+# Clases Especificas
+# ==================
 
-
-
-# clase para el popup
 class MascotaPopup(Popup):
-    def __init__(self, mascota, **kwargs):
+    """
+    Popup que muestra información detallada de una mascota.
+    """
+    def __init__(self, mascota,imagen=None, **kwargs):
         super().__init__(**kwargs)
         self.title = f"Buscamos a {mascota.get('nombre', 'Mascota desconocida')}"
-        self.size_hint = (1, 0.8)  
+        self.size_hint = (1, 0.8)
         self.content = Label(text=self.get_mascota_info(mascota))
 
-    def get_mascota_info(self, mascota):
-        # cadena con informacion de la mascota
-        info = f"Nombre: {mascota.get('nombre', 'Desconocida')}\n"
-        info += f"Especie: {mascota.get('especie', 'Desconocida')}\n"
-        info += f"Raza: {mascota.get('raza', 'Desconocida')}\n"
-        info += f"Estado: {mascota.get('estado', 'Desconocida')}\n"
-        info += f"Color: {mascota.get('color', 'Desconocido')}\n"
-        info += f"Zona: {mascota.get('zona', 'Desconocida')}\n"
-        info += f"Barrio: {mascota.get('barrio', 'Desconocida')}\n"
-        info += f"Fecha: {mascota.get('fecha_publicacion', 'Desconocida')}\n"
-        info += f"Contacto: {mascota.get('informacion_contacto', 'No disponible')}\n"  
+        layout = BoxLayout(orientation='vertical')
 
+        if imagen:
+            layout.add_widget(imagen)  # AsyncImage ya procesado
+
+        info_label = Label(
+            text=self.get_mascota_info(mascota),
+            size_hint=(0.8, 0.4),
+            halign='left', valign='top'
+        )
+        info_label.bind(size=info_label.setter('text_size'))  
+        layout.add_widget(info_label)
+
+        self.content = layout
+
+    def get_mascota_info(self, mascota):
+        """
+        Devuelve una cadena con la información de la mascota.
+        """
+        info = "\n".join(
+            [
+                f"Nombre: {mascota.get('nombre', 'Desconocida')}",
+                f"Especie: {mascota.get('especie', 'Desconocida')}",
+                f"Raza: {mascota.get('raza', 'Desconocida')}",
+                f"Estado: {mascota.get('estado', 'Desconocida')}",
+                f"Color: {mascota.get('color', 'Desconocido')}",
+                f"Zona: {mascota.get('zona', 'Desconocida')}",
+                f"Barrio: {mascota.get('barrio', 'Desconocida')}",
+                f"Fecha: {mascota.get('fecha_publicacion', 'Desconocida')}",
+                f"Contacto: {mascota.get('informacion_contacto', 'No disponible')}",
+            ]
+        )
         return info
 
-#clase para modificar los marcadores de mapa
+
 class CustomMapMarker(MapMarker):
+    """
+    Marcador de mapa personalizado que cambia de ícono según la especie de la mascota.
+    """
     def __init__(self, especie_mascota, **kwargs):
         super().__init__(**kwargs)
         self.especie_mascota = especie_mascota
-
-        #cambia el icono segun la especie
-        if self.especie_mascota == "perro":
-            self.source = "assets/images/perro.png"
-        elif self.especie_mascota == "gato":
-            self.source = "assets/images/gato.png"
-        else:
-            self.source = "assets/images/pajaro.png"
+        self.source = f"assets/images/{especie_mascota}.png" if especie_mascota in ["perro", "gato"] else "assets/images/pajaro.png"
         self.size = (25, 25)
 
-# Mobile view with scrolling enabled
+
 class MobileBuscarMascotaView(MDScreen):
+    """
+    Vista principal para la búsqueda de mascotas en dispositivos móviles.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.map_view = create_interactive_map()  # Mapa interactivo
-        self.filter_fields = {}  # Diccionario para guardar los campos de filtro
+        self.map_view = create_interactive_map()
+        self.filter_fields = {}
+        self.map_markers = []
         self.build_view()
-        self.map_markers = [] #lista  para guardar los marcadores de mapa
-        self.dialog = None  # Para mantener la referencia al dialogo
 
     def build_view(self):
+        """
+        Construye la interfaz principal.
+        """
         scroll = ScrollView()
         layout = MDBoxLayout(
             orientation="vertical",
@@ -152,7 +192,7 @@ class MobileBuscarMascotaView(MDScreen):
         )
         layout.bind(minimum_height=layout.setter("height"))
 
-        layout.add_widget(create_step_title("Buscar Mascota", font_style="H5"))
+        layout.add_widget(create_step_title("Buscar Mascota"))
         layout.add_widget(create_search_filters(self.filter_fields))
         layout.add_widget(create_search_button({}, self.perform_search))
         layout.add_widget(create_clear_filters_button(self.clear_filters_and_search))
@@ -161,83 +201,73 @@ class MobileBuscarMascotaView(MDScreen):
         scroll.add_widget(layout)
         self.add_widget(scroll)
 
-    def get_search_filters(self):
-        #obtienen los valos del campo de busqueda
-        return {key: field.text for key, field in self.filter_fields.items()}
-   
     def perform_search(self, filtros):
-        filtros = self.get_search_filters()
+        """
+        Realiza la búsqueda de mascotas según los filtros.
+        """
+        filtros = {key: field.text for key, field in self.filter_fields.items()}
         logger.info(f"Ejecutando búsqueda con filtros: {filtros}")
-        # se invoca al endpoint pasandole por parametro filtros obtenidos del form
         buscar_mascota(filtros, self.update_map_with_markers)
-    
+
     def clear_filters_and_search(self):
-        # limpiamos los campos
+        """
+        Limpia los campos de búsqueda y obtiene todas las mascotas.
+        """
         for field in self.filter_fields.values():
             field.text = ""
-
         obtener_mascotas_perdidas(self.update_map_with_markers)
 
-
- 
     def update_map_with_markers(self, response):
         """
-        Actualiza el mapa con los marcadores de mascotas.
+        Actualiza los marcadores en el mapa según la respuesta.
         """
         if not response.get("success", False):
-            logger.error("Error al obtener los datos de mascotas: " + response.get("error", ""))
+            logger.error(f"Error al obtener los datos de mascotas: {response.get('error', '')}")
             return
 
         mascotas = response.get("data", [])
         logger.info(f"Se encontraron {len(mascotas)} mascotas.")
-
-        
-        if not self.map_view or not self.map_view.parent:
-            logger.error("El mapa no está correctamente inicializado.")
-            return
-        logger.info(f"Eliminando {len(self.map_view.children)} marcadores actuales")
-
         self.remove_all_markers()
 
         for mascota in mascotas:
-            lat = mascota.get("latitud")
-            lon = mascota.get("longitud")
-            especie = mascota.get("especie")
-            
-
+            lat, lon, especie, url_foto= mascota.get("latitud"), mascota.get("longitud"), mascota.get("especie"), mascota.get("foto_url")
             if lat and lon:
                 marker = CustomMapMarker(especie_mascota=especie, lat=lat, lon=lon)
-
-                def on_marker_touch(marker, mascota=mascota):
-                    popup = MascotaPopup(mascota=mascota)
+                def on_marker_touch(marker, mascota=mascota, url_foto=url_foto):
+                    imagen = obtener_imagen(url_foto)
+                    popup = MascotaPopup(mascota=mascota, imagen=imagen)
                     popup.open()
                 #  muestra la tarjeta al tocar el marcador
                 marker.bind(on_release=on_marker_touch)
-
                 self.map_view.add_widget(marker)
-                self.map_markers.append(marker) 
+                self.map_markers.append(marker)
 
     def remove_all_markers(self):
         """
-        Elimina todos los marcadores actualmente visibles en el mapa
+        Elimina todos los marcadores del mapa.
         """
         for marker in self.map_markers:
-            self.map_view.remove_widget(marker) 
+            self.map_view.remove_widget(marker)
         self.map_markers.clear()
 
+
 class ResponsiveBuscarMascotaView(MDResponsiveLayout, MDScreen):
+    """
+    Vista responsiva que adapta la interfaz a distintos tamaños de pantalla.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mobile_view = MobileBuscarMascotaView()
-        self.tablet_view = self.mobile_view  # Reutilizar para simplificar
-        self.desktop_view = self.mobile_view  # Reutilizar para simplificar
+        self.tablet_view = self.mobile_view  # Reutilización simplificada
+        self.desktop_view = self.mobile_view
 
     def get_current_view(self, window_width=800, window_height=600):
+        """
+        Devuelve la vista actual según el ancho de la ventana.
+        """
         if window_width < 600:  # Mobile
             return self.mobile_view
         elif window_width < 1200:  # Tablet
             return self.tablet_view
         else:  # Desktop
             return self.desktop_view
-        
-

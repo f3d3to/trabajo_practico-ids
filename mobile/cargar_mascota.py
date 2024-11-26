@@ -11,11 +11,20 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from logger import logger
 from kivy.metrics import dp
 from kivy.core.window import Window
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineListItem
+from kivymd.uix.button import MDRaisedButton
+from solicitudes import cargar_mascota  # Importa el endpoint
+from kivy.uix.filechooser import FileChooserIconView
+from kivy.uix.popup import Popup
+# =========================
+# COMPONENTES REUTILIZABLES
+# =========================
 
-
-# Componente reutilizable: Título
 def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
-    # logger.debug(f"Creando título: {text}")
+    """
+    Crea un título para cada paso del formulario.
+    """
     return MDLabel(
         text=text,
         halign="center",
@@ -26,32 +35,29 @@ def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
         height="50dp",
     )
 
-
-# Componente reutilizable: Selector de opciones
-
 def create_option_selector(options, callback):
-    # GridLayout para las opciones
+    """
+    Crea un selector de opciones representado por tarjetas con íconos.
+    """
     layout = MDGridLayout(
-        cols=len(options),  # Inicialmente tantas columnas como opciones
+        cols=len(options),
         spacing=dp(20),
         adaptive_size=True,
-        size_hint=(None, None),  # Para que podamos centrar el layout
-        padding=[dp(20), dp(0), dp(20), dp(0)],  # Espaciado horizontal y vertical
+        size_hint=(None, None),
+        padding=[dp(20), dp(0), dp(20), dp(0)],
     )
 
-    # Ajusta el número de columnas y la posición basado en el ancho de la ventana
     def adjust_layout_size(*args):
-        if Window.width < dp(400):  # Pantallas pequeñas
-            layout.cols = 1  # Apilar las tarjetas en una columna
-        elif Window.width < dp(600):  # Pantallas medianas
-            layout.cols = 2  # Dos tarjetas por fila
+    # Ajusta el num de columnas y la posición con base en el ancho de la ventana
+        if Window.width < dp(400):
+            layout.cols = 1
+        elif Window.width < dp(600):
+            layout.cols = 2
         else:
-            layout.cols = len(options)  # Todas las tarjetas en una fila
-
-        # Asegurar que el layout esté centrado horizontalmente
+            layout.cols = len(options)
         layout.size_hint_x = None
-        layout.width = layout.cols * dp(170)  # Ajustar el ancho total del layout
-        layout.pos_hint = {"center_x": 0.5}  # Centrar el layout
+        layout.width = layout.cols * dp(170)
+        layout.pos_hint = {"center_x": 0.5}
 
     # Enlaza la función de ajuste al evento de cambio de tamaño de ventana
     Window.bind(on_resize=adjust_layout_size)
@@ -72,13 +78,13 @@ def create_option_selector(options, callback):
         card.add_widget(card_layout)
         layout.add_widget(card)
 
-    adjust_layout_size()  # Ajusta al inicializar
+    adjust_layout_size()
     return layout
 
-
-# Componente reutilizable: Formulario dinámico
 def create_form(fields):
-    # logger.debug(f"Creando formulario con campos: {fields}")
+    """
+    Crea un formulario dinámico a partir de una lista de campos.
+    """
     layout = MDGridLayout(
         cols=2, spacing=10, size_hint=(1, None), adaptive_height=True
     )
@@ -87,30 +93,23 @@ def create_form(fields):
         layout.add_widget(MDTextField(hint_text=f"Ejem: {field}"))
     return layout
 
-
-# Componente reutilizable: Mapa interactivo
 def create_map(lat=-34.6037, lon=-58.3816, zoom=10):
-    # logger.debug(f"Creando mapa interactivo en latitud {lat}, longitud {lon}, zoom {zoom}")
+    """
+    Crea un mapa interactivo con un marcador inicial.
+    """
     return MapView(lat=lat, lon=lon, zoom=zoom, size_hint=(1, 0.7))
 
-
-# Componente reutilizable: Botones de navegación
-# Componente reutilizable: Botones de navegación
 def create_navigation_buttons(previous_callback, next_callback):
-    # Contenedor principal para centrar el layout
-    wrapper = BoxLayout(
-        orientation="horizontal",
-        size_hint=(None, None),  # El tamaño del contenedor no depende del padre
-        width=dp(120),  # Ancho ajustado dinámicamente
-        height=dp(50),  # Altura fija para los botones
-        pos_hint={"center_x": 0.5},  # Centra el contenedor en el eje horizontal
-    )
-
-    # Contenedor para los botones
+    """
+    Crea botones de navegación para moverse entre pasos.
+    """
+    # Contenedor para los botones, centrado horizontalmente
     layout = BoxLayout(
         orientation="horizontal",
-        spacing=dp(20),  # Espaciado entre botones
-        size_hint=(None, None),  # Tamaño independiente
+        spacing=dp(20),
+        size_hint=(None, None),
+        width=dp(120),
+        pos_hint={"center_x": 0.5},
     )
 
     # Botón de navegación anterior
@@ -119,7 +118,7 @@ def create_navigation_buttons(previous_callback, next_callback):
             MDIconButton(
                 icon="arrow-left",
                 on_release=lambda x: previous_callback(),
-                size_hint=(None, None),  # Ajuste para no deformar
+                size_hint=(None, None),
                 size=(dp(40), dp(40)),
             )
         )
@@ -130,23 +129,23 @@ def create_navigation_buttons(previous_callback, next_callback):
             MDIconButton(
                 icon="arrow-right",
                 on_release=lambda x: next_callback(),
-                size_hint=(None, None),  # Ajuste para no deformar
-                size=(dp(40), dp(40)),
+                size_hint=(None, None),
+                size=(dp(40), dp(40)),  
             )
         )
 
-    # Ajusta el ancho del contenedor principal al contenido de los botones
-    wrapper.add_widget(layout)
-    return wrapper
+    return layout
 
-
-
-from solicitudes import cargar_mascota  # Importa el endpoint
+# ===============
+# CLASE PRINCIPAL
+# ===============
 
 class MobileCargarMascotaView(MDScreen):
+    """
+    Vista principal para cargar una mascota, dividida en pasos.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.current_step = 1
         self.data = {
             "especie": None,
             "genero": None,
@@ -161,54 +160,47 @@ class MobileCargarMascotaView(MDScreen):
             "latitud": None,
             "longitud": None,
             "informacion_contacto": None,
-        }
-        self.text_fields = {}  # Para almacenar referencias a los campos de texto
+        }# Almacena los datos de la mascota
+        self.text_fields = {}  # Almacena los campos de texto
         self.build_step_1()
 
     def clear_screen(self):
+        """Limpia todos los widgets de la pantalla."""
         self.clear_widgets()
 
     def build_step_1(self):
+        """
+        Construye el primer paso para seleccionar la especie de la mascota.
+        """
         self.clear_screen()
-        layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
-        )
-
-        layout.add_widget(create_step_title("Completá los datos de tu mascota"))
-        layout.add_widget(create_step_title("Selecciona la especie:", font_style="Subtitle1"))
-
-        species_options = [("Perro", "assets/images/perro.png"), ("Gato", "assets/images/gato.png"), ("Otro", "assets/images/pajaro.png")]
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout.add_widget(create_step_title("Selecciona la especie:"))
+        species_options = [("Perro", "dog"), ("Gato", "cat"), ("Otro", "bird")]
         layout.add_widget(create_option_selector(species_options, self.on_species_selected))
-
         layout.add_widget(create_navigation_buttons(None, self.build_step_2))
         self.add_widget(layout)
 
     def build_step_2(self):
+        """
+        Construye el segundo paso para seleccionar el género de la mascota.
+        """
         self.clear_screen()
-        layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
-        )
-
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
         layout.add_widget(create_step_title("Selecciona el género:"))
         gender_options = [("Macho", "assets/images/macho.png"), ("Hembra", "assets/images/hembra.png")]
         layout.add_widget(create_option_selector(gender_options, self.on_gender_selected))
-
         layout.add_widget(create_navigation_buttons(self.build_step_1, self.build_step_3))
         self.add_widget(layout)
 
     def build_step_3(self):
+        """
+        Construye el tercer paso para ingresar los datos básicos de la mascota.
+        """
         self.clear_screen()
-        layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
-        )
-
-        fields = [
-            "Nombre", "Raza", "Color", "Condicion (Lastimada/Sana)",
-            "Estado (Perdida/En tránsito/En adopción/Encontrada)",
-            "Foto URL", "Zona", "Barrio"
-        ]
-        layout.add_widget(create_step_title("Completá los datos de tu mascota"))
-
+        fields = ["Nombre", "Raza", "Color"]
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout.add_widget(create_step_title("Datos básicos de la mascota:"))
+        
         form_layout = MDGridLayout(cols=2, spacing=10, adaptive_height=True)
         for field in fields:
             hint = field.split("(")[0].strip()  # Mostrar solo el campo limpio en el hint
@@ -218,37 +210,57 @@ class MobileCargarMascotaView(MDScreen):
             form_layout.add_widget(text_field)
         layout.add_widget(form_layout)
 
+        load_image_button = MDRaisedButton(
+            text="Cargar Imagen", on_release=self.open_filechooser
+        )
+        form_layout.add_widget(load_image_button)
+
         layout.add_widget(create_navigation_buttons(self.build_step_2, self.build_step_4))
+      
         self.add_widget(layout)
+    
 
     def build_step_4(self):
+        """
+        Construye el cuarto paso para seleccionar la ubicación de la mascota en el mapa.
+        """
         self.clear_screen()
-        layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
-        )
-
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
         layout.add_widget(create_step_title("Selecciona la ubicación en el mapa"))
+        
+        # Crear el mapa y marcador
         self.map_view = MapView(lat=-34.6037, lon=-58.3816, zoom=10, size_hint=(1, 0.7))
         self.marker = MapMarker(lat=-34.6037, lon=-58.3816)
         self.map_view.add_marker(self.marker)
         self.map_view.bind(on_touch_up=self.update_location)
         layout.add_widget(self.map_view)
 
-        layout.add_widget(create_navigation_buttons(self.build_step_3, self.build_step_5))
+        # Botones de navegación, centrados
+        nav_buttons = create_navigation_buttons(self.build_step_3, self.build_step_5)
+        layout.add_widget(nav_buttons)
+
+        # Centrar el layout dentro de la pantalla
+        layout.pos_hint = {"center_x": 0.5, "center_y": 0.5}
         self.add_widget(layout)
 
     def build_step_5(self):
+        """
+        Construye el quinto paso para ingresar la información de contacto.
+        """
         self.clear_screen()
-        layout = MDBoxLayout(
-            orientation="vertical", spacing=20, padding=[20, 40, 20, 0]
-        )
-
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
         layout.add_widget(create_step_title("Ingresa información de contacto"))
+        
+        # Campo para información de contacto
         contact_field = MDTextField(hint_text="Ej: 1120405533 o email@ejemplo.com")
         self.text_fields["informacion_contacto"] = contact_field
         layout.add_widget(contact_field)
 
-        layout.add_widget(create_navigation_buttons(self.build_step_4, None))
+        # Botón de navegación
+        nav_buttons = create_navigation_buttons(self.build_step_4, None)
+        layout.add_widget(nav_buttons)
+
+        # Botón de guardar
         layout.add_widget(
             MDRoundFlatButton(
                 text="Guardar",
@@ -260,57 +272,139 @@ class MobileCargarMascotaView(MDScreen):
                 on_release=self.save_pet,
             )
         )
+
+        # Centrar el layout dentro de la pantalla
+        layout.pos_hint = {"center_x": 0.5, "center_y": 0.5}
         self.add_widget(layout)
 
+    def open_filechooser(self, instance):        # Creo un FileChooser para elegir la imagen
+
+        filechooser = FileChooserIconView(filters=['*.png', '*.jpg', '*.jpeg'])
+        filechooser.bind(selection=self.on_image_selected)
+        
+        # Creo un Popup para mostrar el FileChooser
+        self.popup = Popup(
+            title="Seleccionar Imagen", 
+            content=filechooser, 
+            size_hint=(0.8, 0.8)
+        )
+        self.popup.open()
+
+    def on_image_selected(self, filechooser, selection):
+        print("Evento de selección detectado.")  
+        if selection:
+            image_path = selection[0]  
+            print(f"Imagen seleccionada: {image_path}")  
+            self.data["foto_url"] = image_path
+            self.popup.dismiss() 
+        else:
+            print("No se seleccionó ninguna imagen.")
+
     def update_location(self, instance, touch):
+        """
+        Actualiza la ubicación en el mapa cuando se toca sobre él.
+        """
         if self.map_view.collide_point(*touch.pos):
-            self.marker.lat, self.marker.lon = self.map_view.get_latlon_at(*touch.pos)
-            self.data["latitud"] = self.marker.lat
-            self.data["longitud"] = self.marker.lon
+            lat, lon = self.map_view.get_latlon_at(*touch.pos)
+            if lat is not None and lon is not None:
+                self.marker.lat, self.marker.lon = lat, lon
+                self.data["latitud"] = lat
+                self.data["longitud"] = lon
+            else:
+                logger.warning("No se pudo obtener la ubicación en el mapa.")
 
     def save_pet(self, *args):
-        # Recopilar datos del formulario
+        """
+        Guarda la mascota enviando los datos al servidor.
+        """
         for key, field in self.text_fields.items():
             self.data[key] = field.text.strip()
+
+        # Validaciones antes de enviar los datos
+        if not self.data.get("latitud") or not self.data.get("longitud"):
+            logger.error("La ubicación no ha sido seleccionada.")
+            return
+
+        if not self.data.get("informacion_contacto"):
+            logger.error("La información de contacto está vacía.")
+            return
+
         logger.info(f"Enviando datos: {self.data}")
         cargar_mascota(self.data, self.handle_response)
 
     def handle_response(self, response):
+        """
+        Maneja la respuesta del servidor después de cargar la mascota.
+        """
         if response.get("success"):
             logger.info("Mascota cargada exitosamente.")
         else:
-            logger.error(f"Error al cargar la mascota: {response.get('error')}.")
+            error_message = response.get("error", "Desconocido")
+            logger.error(f"Error al cargar la mascota: {error_message}")
 
     def on_species_selected(self, species):
-        self.data["especie"] = species
-        logger.info(f"Especie seleccionada: {species}")
+        """
+        Maneja la selección de especie.
+        """
+        if species:
+            self.data["especie"] = species
+            logger.info(f"Especie seleccionada: {species}")
+        else:
+            logger.warning("No se seleccionó ninguna especie.")
 
     def on_gender_selected(self, gender):
-        self.data["genero"] = gender
-        logger.info(f"Género seleccionado: {gender}")
+        """
+        Maneja la selección de género.
+        """
+        if gender:
+            self.data["genero"] = gender
+            logger.info(f"Género seleccionado: {gender}")
+        else:
+            logger.warning("No se seleccionó ningún género.")
 
+    
+# ===========================
+# RESPONSIVE LAYOUT
+# ===========================
 
-
-# Vista responsiva principal para cargar mascota
 class ResponsiveCargarMascotaView(MDResponsiveLayout, MDScreen):
+    """
+    Vista responsiva para cargar una mascota, adaptada a móvil, tablet y escritorio.
+    """
+
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        # logger.info("Inicializando ResponsiveCargarMascotaView")
+        # Inicializa las vistas para móvil, tablet y escritorio.
         self.mobile_view = MobileCargarMascotaView()
         self.tablet_view = MobileCargarMascotaView()
         self.desktop_view = MobileCargarMascotaView()
 
     def get_current_view(self, window_width=800, window_height=600):
-        # Ajustar la vista según el ancho
-        if window_width < 600:  # Móvil
+        """
+        Selecciona la vista adecuada según el ancho de la ventana.
+        
+        Args:
+            window_width (int): El ancho actual de la ventana.
+            window_height (int): El alto actual de la ventana.
+
+        Returns:
+            Widget: Vista seleccionada (móvil, tablet o escritorio).
+        """
+        # Vista para dispositivos móviles
+        if window_width < 600:
             self.mobile_view.size_hint = (1, None)
             self.mobile_view.height = window_height - dp(150)  # Restar altura del TopBar y Footer
             return self.mobile_view
-        elif window_width < 1200:  # Tablet
+        
+        # Vista para tabletas
+        elif window_width < 1200:
             self.tablet_view.size_hint = (1, None)
             self.tablet_view.height = window_height - dp(150)
             return self.tablet_view
-        else:  # Escritorio
+        
+        # Vista para escritorio
+        else:
             self.desktop_view.size_hint = (1, None)
             self.desktop_view.height = window_height - dp(150)
             return self.desktop_view
+
