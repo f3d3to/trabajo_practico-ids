@@ -72,6 +72,15 @@
  .details li {
      margin-bottom: 5px;
  }
+ 
+ /* Boton de Eliminar*/
+ #delete-btn{
+    background-color: rgba(253, 48, 48, 0.92);
+    border-radius: 20px;
+     height: 35px;
+     width: 100px;
+     border-color: rgba(253, 48, 48, 0.92);
+ }
 
  /* Botones de compartir */
  .share-buttons {

@@ -3,12 +3,12 @@ const borrar = document.getElementById("delete-btn")
 borrar.addEventListener("click", () =>
     Swal.fire
 ({
-        title: "seguro",
+        title: "Estas seguro",
         text: "desea borrar definitivamente?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText:"si",
-        cancelButtonText: "no, me equivoque"
+        confirmButtonText:"Aceptar",
+        cancelButtonText: "Cancelar"
     }).then((result) => 
         {
         if (result.isConfirmed) {
