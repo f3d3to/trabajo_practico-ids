@@ -4,3 +4,4 @@ kivymd==1.1.1
 kivy-garden
 mapview
 werkzeug
+requests
