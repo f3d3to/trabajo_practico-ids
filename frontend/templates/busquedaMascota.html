@@ -113,13 +113,9 @@
                 <p><strong>Información de contacto:</strong> <span id="mascota-contacto"></span></p>
                 <p><strong>Fecha de publicación:</strong> <span id="mascota-fecha-publicacion"></span></p>
                 <div class="text-center mt-4">
-                    <!-- <a href="#" id="mascota-detalle-link" class="btn-custom">Ver Detalle</a> -->
-                    {% if mascota and 'id' in mascota %}
-                        <a href="{{ url_for('detalleMascota', id=mascota['id']) }}" class="btn-custom">Ver Detalle</a>
-                    {% else %}
-                        <p>No se puede mostrar el detalle de la mascota.</p>
-                    {% endif %}
-                    <a href= "{{ url_for('update_mascota') }}" id="mascota-update-link" class="btn-custom">Actualizar datos</a>
+                    <a href="#" class="btn-custom" id="mascota-id">Ver Detalle</a>
+                    <a href="#" class="btn-custom" id="actualizar-mascota">Actualizar</a>
+                   
                 </div>
             </div>
         </div>

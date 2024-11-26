@@ -93,7 +93,7 @@ def obtener_mascota(id):
         return jsonify({"success": False, "error": str(e)}), 500
 
 
-@app.route('/api/mascotas/<int:id>', methods=['PUT'])
+@app.route('/api/mascotas/<int:id>', methods=['POST'])
 def actualizar_mascota(id):
     data = request.json
 
