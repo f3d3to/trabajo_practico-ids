@@ -124,8 +124,6 @@ def agregar_contacto():
 
 @app.route('/api/preguntas_frecuentes', methods=['GET'])
 def obtener_preguntas_frecuentes():
-
-    print(app.config["FULL_UPLOAD_URL"])
     try:
         preguntas = obtener_todos("preguntas_frecuentes", PREGUNTAS_FRECUENTES_SCHEMA)
         return jsonify({"success": True, "preguntas_frecuentes": preguntas}), 200
