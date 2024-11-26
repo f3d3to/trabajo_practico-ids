@@ -56,7 +56,7 @@
                     {% endif %}
 
                     <div class="d-flex flex-wrap justify-content-center mt-4">
-                        <a href="{{ url_for('eliminarMascota', id=mascota['id']) }}" class="btn btn-danger me-3">Eliminar</a>
+                        <a href="{{ url_for('eliminarMascota', id=mascota['id']) }}" id= "delete-btn" class="btn btn-danger me-3">Eliminar</a>
                         <a href="https://es-la.facebook.com/login/device-based/regular/login/" class="btn btn-primary">Compartir en Facebook</a>
                         <a href="https://web.whatsapp.com/" class="btn btn-success ms-2">Compartir en WhatsApp</a>
                     </div>

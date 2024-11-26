@@ -7,8 +7,8 @@ borrar.addEventListener("click", () =>
         text: "desea borrar definitivamente?",
         icon: "question",
         showCancelButton: true,
-        confirmButtonText:"si",
-        cancelButtonText: "no, me equivoque"
+        confirmButtonText:"Aceptar",
+        cancelButtonText: "Cancelar"
     }).then((result) => 
         {
         if (result.isConfirmed) {
