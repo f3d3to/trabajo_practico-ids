@@ -165,35 +165,26 @@ def actualizarMascota(id):
         except requests.exceptions.RequestException as e:
             print(f"Error de conexión al backend: {e}")
             return render_template("busquedaMascota.html", error="Error de conexión con el backend.")
-
-
+        
     if request.method == 'POST':
         esquema_response = requests.post(BACKEND_URL+"/obtener_esquema", json={"tabla": "mascotas"})
         if esquema_response.status_code == 200 and esquema_response.json().get("success"):
             esquema = esquema_response.json().get("esquema")
             #mascota_data = castear_valores(request.form, esquema)
-
-                    # mascota_data = {"especie": request.form.get("especie"),
-                    #                 "genero": request.form.get("genero"),
-                    #                 "nombre": request.form.get("nombre"),
-                    #                 "raza": request.form.get("raza"),
-                    #                 "color": request.form.get("color"),
-                    #                 "condicion": request.form.get("condicion"),
-                    #                 "estado": request.form.get("estado"),
-                    #                 "zona": request.form.get("zona"),
-                    #                 "barrio": request.form.get("barrio"),
-                    #                 "latitud": request.form.get("latitud"),
-                    #                 "longitud": request.form.get("longitud"),
-                    #                 "informacion_contacto": request.form.get("informacion_contacto"), }
-
-            mascota_data = { "nombre": request.form.get("nombre"),
+            mascota_data = { "especie": request.form.get("especie"),
+                            "genero": request.form.get("genero"),
+                            "nombre": request.form.get("nombre"),
                             "raza": request.form.get("raza"),
                             "color": request.form.get("color"),
                             "condicion": request.form.get("condicion"),
                             "estado": request.form.get("estado"),
+                            "zona": request.form.get("zona"),
+                            "barrio": request.form.get("barrio"),
+                            "latitud": request.form.get("latitud"),
+                            "longitud": request.form.get("longitud"),
                             "informacion_contacto": request.form.get("informacion_contacto")
                             }
-            print(mascota_data)
+            print(f"DATOS DEL FORMULARIO: {mascota_data}")
             try:
                 #requests.post(BACKEND_URL+"/agregar_mascota", json=mascota_data)
                 response = requests.post(f"{BACKEND_URL}/api/mascotas/{id}", json=mascota_data)
