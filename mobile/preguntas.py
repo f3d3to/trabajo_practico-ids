@@ -5,9 +5,14 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.expansionpanel import MDExpansionPanel, MDExpansionPanelOneLine
 from solicitudes import obtener_preguntas_frecuentes  # Importar endpoint
 
+# ========================
+# Componente reutilizables
+# ========================
 
-# Componente reutilizable: Crear título
 def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+    """
+    Crea un título con las configuraciones personalizables.
+    """
     return MDLabel(
         text=text,
         halign="center",
@@ -18,9 +23,10 @@ def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
         height="50dp"
     )
 
-
-# Componente reutilizable: Crear una pregunta expandible
 def create_expandable_question(question_text, answer_text):
+    """
+    Crea un panel expandible para una pregunta frecuente.
+    """
     return MDExpansionPanel(
         content=MDLabel(
             text=answer_text,
@@ -32,12 +38,15 @@ def create_expandable_question(question_text, answer_text):
         panel_cls=MDExpansionPanelOneLine(text=question_text),
     )
 
-
 def fetch_questions_and_update(layout):
     """
     Obtiene preguntas frecuentes desde el backend y actualiza la vista.
     """
     def update_view(response):
+        """
+        Callback para actualizar la vista con la respuesta de la API.
+        """
+        # Verifica si la respuesta es exitosa
         if not response.get("success", False):
             layout.add_widget(
                 MDLabel(
@@ -60,16 +69,23 @@ def fetch_questions_and_update(layout):
                 )
             )
         else:
+            # Agrega cada pregunta y su respuesta al layout
             for pregunta in preguntas_frecuentes:
                 question_text = pregunta.get("pregunta", "Pregunta no disponible")
                 answer_text = pregunta.get("respuesta", "Respuesta no disponible")
                 layout.add_widget(create_expandable_question(question_text, answer_text))
 
+    # Llamada al endpoint para obtener las preguntas frecuentes
     obtener_preguntas_frecuentes(update_view)
 
+# ===================================
+# Vistas para diferentes dispositivos
+# ===================================
 
-# Vista móvil para preguntas
 class MobilePreguntasView(MDScreen):
+    """
+    Vista para dispositivos móviles.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = MDBoxLayout(orientation="vertical", spacing=10, padding=20)
@@ -79,33 +95,38 @@ class MobilePreguntasView(MDScreen):
         # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
-
-# Vista tablet para preguntas
 class TabletPreguntasView(MDScreen):
+    """
+    Vista para tabletas.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = MDBoxLayout(orientation="vertical", spacing=20, padding=30)
         layout.add_widget(create_title("Preguntas Frecuentes", font_style="H4", text_color=(0.1, 0.7, 0.5, 1)))
         self.add_widget(layout)
 
-        # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
-
-# Vista escritorio para preguntas
 class DesktopPreguntasView(MDScreen):
+    """
+    Vista para escritorio.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = MDBoxLayout(orientation="vertical", spacing=30, padding=50)
         layout.add_widget(create_title("Preguntas Frecuentes", font_style="H3", text_color=(0.0, 0.6, 0.4, 1)))
         self.add_widget(layout)
 
-        # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
+# ==========================
+# Vista responsiva principal
+# ==========================
 
-# Vista responsiva principal para preguntas
 class ResponsivePreguntasView(MDResponsiveLayout, MDScreen):
+    """
+    Vista responsiva que ajusta la interfaz según el tamaño de pantalla.
+    """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.mobile_view = MobilePreguntasView()
