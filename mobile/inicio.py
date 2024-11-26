@@ -7,7 +7,7 @@ from kivymd.uix.label import MDLabel
 from kivymd.uix.boxlayout import MDBoxLayout
 from logger import logger
 from kivy.metrics import dp
-from solicitudes import obtener_mascotas_perdidas
+from solicitudes import obtener_mascotas_perdidas,obtener_imagen  
 
 # =========================
 # Componentes reutilizables
@@ -34,14 +34,11 @@ def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1), padding=2
         logger.error(f"Error al crear título '{text}': {e}")
 
 
-def create_image_carousel(images, size_hint=(1, 0.8)):
-    """
-    Crea un carrusel de imágenes a partir de las URLs proporcionadas.
-    """
+def create_image_carousel(imagenes, size_hint=(1, 0.8)):
     try:
         carousel = Carousel(loop=True, size_hint=size_hint)
-        for img_path in images:
-            carousel.add_widget(Image(source=img_path, allow_stretch=True))
+        for imagen in imagenes:  # `images` debe ser una lista de objetos AsyncImage
+            carousel.add_widget(imagen)  # Añadir cada AsyncImage al carrusel
         return carousel
     except Exception as e:
         logger.error(f"Error al crear carrusel de imágenes: {e}")
@@ -83,12 +80,13 @@ class MobileInicioView(MDScreen):
             Maneja la respuesta del servidor después de obtener las mascotas perdidas.
             """
             if response.get("success"):
-                pets = response.get("data", [])
-                image_urls = ["assets/"+pet["foto_url"] for pet in pets if pet.get("foto_url")]
-                if image_urls:
+                mascotas = response.get("data", [])
+                foto_urls = [ mascota.get("foto_url") for mascota in mascotas if mascota.get("foto_url")]
+                if foto_urls:
                     self.carousel.clear_widgets()
-                    for img_url in image_urls:
-                        self.carousel.add_widget(Image(source=img_url, allow_stretch=True))
+                    for foto_url in foto_urls:
+                        imagen = obtener_imagen(foto_url)
+                        self.carousel.add_widget(imagen)
                 else:
                     logger.warning("No hay fotos de mascotas perdidas disponibles.")
             else:

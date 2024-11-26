@@ -5,6 +5,7 @@ Incluye una interfaz responsiva y componentes para filtrar y visualizar mascotas
 
 from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivymd.uix.screen import MDScreen
+from kivy.uix.scrollview import ScrollView
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.gridlayout import MDGridLayout
 from kivymd.uix.button import MDRoundFlatButton
@@ -14,9 +15,10 @@ from kivy_garden.mapview import MapView, MapMarker
 from kivy.metrics import dp
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
+from kivy.uix.boxlayout import BoxLayout
 
 from logger import logger
-from solicitudes import obtener_mascotas_perdidas, buscar_mascota
+from solicitudes import obtener_mascotas_perdidas,buscar_mascota,obtener_imagen# Importa el endpoint
 
 
 # =========================
@@ -114,11 +116,26 @@ class MascotaPopup(Popup):
     """
     Popup que muestra información detallada de una mascota.
     """
-    def __init__(self, mascota, **kwargs):
+    def __init__(self, mascota,imagen=None, **kwargs):
         super().__init__(**kwargs)
         self.title = f"Buscamos a {mascota.get('nombre', 'Mascota desconocida')}"
         self.size_hint = (1, 0.8)
         self.content = Label(text=self.get_mascota_info(mascota))
+
+        layout = BoxLayout(orientation='vertical')
+
+        if imagen:
+            layout.add_widget(imagen)  # AsyncImage ya procesado
+
+        info_label = Label(
+            text=self.get_mascota_info(mascota),
+            size_hint=(0.8, 0.4),
+            halign='left', valign='top'
+        )
+        info_label.bind(size=info_label.setter('text_size'))  
+        layout.add_widget(info_label)
+
+        self.content = layout
 
     def get_mascota_info(self, mascota):
         """
@@ -213,11 +230,15 @@ class MobileBuscarMascotaView(MDScreen):
         self.remove_all_markers()
 
         for mascota in mascotas:
-            lat, lon, especie = mascota.get("latitud"), mascota.get("longitud"), mascota.get("especie")
+            lat, lon, especie, url_foto= mascota.get("latitud"), mascota.get("longitud"), mascota.get("especie"), mascota.get("foto_url")
             if lat and lon:
                 marker = CustomMapMarker(especie_mascota=especie, lat=lat, lon=lon)
-                marker.bind(on_release=lambda marker, mascota=mascota: 
-                            MascotaPopup(mascota=mascota).open())
+                def on_marker_touch(marker, mascota=mascota, url_foto=url_foto):
+                    imagen = obtener_imagen(url_foto)
+                    popup = MascotaPopup(mascota=mascota, imagen=imagen)
+                    popup.open()
+                #  muestra la tarjeta al tocar el marcador
+                marker.bind(on_release=on_marker_touch)
                 self.map_view.add_widget(marker)
                 self.map_markers.append(marker)
 

@@ -11,8 +11,12 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from logger import logger
 from kivy.metrics import dp
 from kivy.core.window import Window
+from kivymd.uix.menu import MDDropdownMenu
+from kivymd.uix.list import OneLineListItem
+from kivymd.uix.button import MDRaisedButton
 from solicitudes import cargar_mascota  # Importa el endpoint
-
+from kivy.uix.filechooser import FileChooserIconView
+from kivy.uix.popup import Popup
 # =========================
 # COMPONENTES REUTILIZABLES
 # =========================
@@ -142,7 +146,21 @@ class MobileCargarMascotaView(MDScreen):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.data = {}  # Almacena los datos de la mascota
+        self.data = {
+            "especie": None,
+            "genero": None,
+            "nombre": None,
+            "raza": None,
+            "color": None,
+            "condicion": None,
+            "estado": None,
+            "foto_url": None,
+            "zona": None,
+            "barrio": None,
+            "latitud": None,
+            "longitud": None,
+            "informacion_contacto": None,
+        }# Almacena los datos de la mascota
         self.text_fields = {}  # Almacena los campos de texto
         self.build_step_1()
 
@@ -169,7 +187,7 @@ class MobileCargarMascotaView(MDScreen):
         self.clear_screen()
         layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
         layout.add_widget(create_step_title("Selecciona el género:"))
-        gender_options = [("Macho", "male"), ("Hembra", "female")]
+        gender_options = [("Macho", "assets/images/macho.png"), ("Hembra", "assets/images/hembra.png")]
         layout.add_widget(create_option_selector(gender_options, self.on_gender_selected))
         layout.add_widget(create_navigation_buttons(self.build_step_1, self.build_step_3))
         self.add_widget(layout)
@@ -179,13 +197,28 @@ class MobileCargarMascotaView(MDScreen):
         Construye el tercer paso para ingresar los datos básicos de la mascota.
         """
         self.clear_screen()
-        fields = ["Nombre", "Raza", "Color", "Foto URL"]
+        fields = ["Nombre", "Raza", "Color"]
         layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
         layout.add_widget(create_step_title("Datos básicos de la mascota:"))
-        form = create_form(fields)
-        layout.add_widget(form)
+        
+        form_layout = MDGridLayout(cols=2, spacing=10, adaptive_height=True)
+        for field in fields:
+            hint = field.split("(")[0].strip()  # Mostrar solo el campo limpio en el hint
+            key = field.split()[0].lower()  # Usar el campo base como clave en data
+            text_field = MDTextField(hint_text=hint)
+            self.text_fields[key] = text_field
+            form_layout.add_widget(text_field)
+        layout.add_widget(form_layout)
+
+        load_image_button = MDRaisedButton(
+            text="Cargar Imagen", on_release=self.open_filechooser
+        )
+        form_layout.add_widget(load_image_button)
+
         layout.add_widget(create_navigation_buttons(self.build_step_2, self.build_step_4))
+      
         self.add_widget(layout)
+    
 
     def build_step_4(self):
         """
@@ -243,6 +276,29 @@ class MobileCargarMascotaView(MDScreen):
         # Centrar el layout dentro de la pantalla
         layout.pos_hint = {"center_x": 0.5, "center_y": 0.5}
         self.add_widget(layout)
+
+    def open_filechooser(self, instance):        # Creo un FileChooser para elegir la imagen
+
+        filechooser = FileChooserIconView(filters=['*.png', '*.jpg', '*.jpeg'])
+        filechooser.bind(selection=self.on_image_selected)
+        
+        # Creo un Popup para mostrar el FileChooser
+        self.popup = Popup(
+            title="Seleccionar Imagen", 
+            content=filechooser, 
+            size_hint=(0.8, 0.8)
+        )
+        self.popup.open()
+
+    def on_image_selected(self, filechooser, selection):
+        print("Evento de selección detectado.")  
+        if selection:
+            image_path = selection[0]  
+            print(f"Imagen seleccionada: {image_path}")  
+            self.data["foto_url"] = image_path
+            self.popup.dismiss() 
+        else:
+            print("No se seleccionó ninguna imagen.")
 
     def update_location(self, instance, touch):
         """

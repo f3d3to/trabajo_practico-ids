@@ -2,12 +2,18 @@ from kivy.network.urlrequest import UrlRequest
 import json
 import logging
 from urllib.parse import quote
+from kivy.uix.image import AsyncImage
+import requests
+from werkzeug.utils import secure_filename
+import os
+import mimetypes
 
 # Configuración de logging
 logging.basicConfig(level=logging.DEBUG)
 
 # URL base del backend
 API_BASE_URL = "http://127.0.0.1:5000"  # Cambia esto por la URL de tu servidor
+API_SERVICIO_FOTO= "http://localhost:5000/uploads/user_images/"
 
 class RequestManager:
     """
@@ -111,23 +117,43 @@ def manejar_error(req, error):
 
 def cargar_mascota(data, callback):
     """
-    Envía la información de una nueva mascota al backend.
-    
-    :param data: Datos de la mascota a enviar.
-    :param callback: Función de callback que maneja la respuesta.
+    Envía información de una nueva mascota al backend.
     """
     url = f"{API_BASE_URL}/agregar_mascota"
     headers = {"Content-Type": "application/json"}
-    
+    body = data
+    imagen = body.get('foto_url')
+    if imagen:
+        
+        nombre_archivo = secure_filename(os.path.basename(imagen)) 
+        mime_tipo = mimetypes.guess_type(nombre_archivo)  #  obtiene el tipo mime
+        try:
+            if not mime_tipo:
+                mime_tipo = 'application/octet-stream' 
+            #Enviamos la imagen al backend
+            with open(imagen, 'rb') as file:
+                files = {'file': (nombre_archivo, file, mime_tipo)}  
+                response = requests.post(API_BASE_URL + "/upload", files=files)
+                if response.status_code == 201:  
+                    file_url = response.json().get('file_url') 
+                    print(f"file_url: {file_url}") 
+                    body["foto_url"] = file_url  
+                else:
+                    print(f"Error al cargar la imagen: {response.text}")
+                    return callback({"success": False, "error": "No se pudo cargar la imagen"})
+        except requests.exceptions.RequestException as e:
+            print("No se pudo conectar con el backend:", e)
+
     logging.debug(f"Enviando datos de mascota: {data}")
     manager.post(
         url,
-        data=data,
+        data=body,
         headers=headers,
         on_success=lambda req, result: callback({"success": True, "data": result}),
         on_error=lambda req, error: callback({"success": False, "error": error}),
-        wait_for_completion=True
+        wait_for_completion=True,
     )
+
 
 def contacto(data, callback):
     """
@@ -208,6 +234,23 @@ def buscar_mascota(filtros, callback):
         on_error=lambda req, error: callback({"success": False, "error": error}),
         wait_for_completion=True
     )
+
+def obtener_imagen(url_foto):
+    """
+    Obtiene la imagen desde la url.
+    """
+    if not url_foto:
+        logging.debug("La URL de la foto es inválida o está vacía.")
+        return None
+    
+    url_completa = f"{API_SERVICIO_FOTO}{url_foto}" 
+    
+    try:
+        return AsyncImage(source=url_completa)
+    
+    except Exception as e:
+        logging.debug(f"Error al cargar la imagen desde {url_completa}: {e}")
+        return None
 
 # Instancia global de RequestManager
 manager = RequestManager()
