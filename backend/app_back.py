@@ -152,10 +152,10 @@ def allowed_file(filename):
 def serve_file(filename):
     return send_from_directory(os.path.join(app.config['UPLOAD_FOLDER']), filename)
 
-@app.route("/api/mascotas/<int:id>", methods=['DELETE'])
+@app.route("/api/mascotas/<int:id>", methods=['DELETE', 'GET'])
 def eliminar_mascotas(id):
     try:
-        borrar_mascota = borrar(MASCOTA_SCHEMA, id)
+        borrar_mascota = borrar("mascotas", id)
         # mascota_dao.borrar(id)
         return jsonify({"success": True}), 200
     except Exception as e:

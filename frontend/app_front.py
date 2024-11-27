@@ -202,7 +202,7 @@ def actualizarMascota(id):
     return redirect(url_for('index'))
 
 
-@app.route("/eliminarMascota/<int:id>", methods = ['DELETE'])
+@app.route("/eliminarMascota/<int:id>", methods = ['DELETE', 'GET'])
 def eliminarMascota(id):
     try:
         delete = requests.delete(f"{BACKEND_URL}/api/mascotas/{id}")
