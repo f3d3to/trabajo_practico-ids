@@ -7,14 +7,21 @@ import requests
 from werkzeug.utils import secure_filename
 import os
 import mimetypes
+import os
+from dotenv import load_dotenv
 
 # Configuración de logging
 logging.basicConfig(level=logging.DEBUG)
+env_path_deploy = os.path.join(os.getcwd(),'..', 'deploy', '.env')
+load_dotenv(env_path_deploy)
 
-# URL base del backend
-API_BASE_URL = "http://127.0.0.1:5000"  # Cambia esto por la URL de tu servidor
-API_SERVICIO_FOTO= "http://localhost:5000/uploads/user_images"
+print(env_path_deploy)
+API_BASE_URL = os.getenv('BACK_URL_KIVY')
+API_SERVICIO_FOTO = f"{API_BASE_URL}/uploads/user_images"
 
+# Verificar si las variables de entorno se cargaron correctamente
+print(f"BACKEND_URL: {API_BASE_URL}")
+print(f"USER_IMAGES_FOLDER: {API_SERVICIO_FOTO}")
 class RequestManager:
     """
     Clase para manejar solicitudes HTTP utilizando UrlRequest.

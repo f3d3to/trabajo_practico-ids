@@ -7,7 +7,6 @@ from kivymd.uix.toolbar import MDTopAppBar
 from kivy.uix.image import Image
 from kivymd.uix.button import MDRoundFlatButton
 import logging
-
 from kivy.modules import inspector
 from kivy.core.window import Window
 from kivy.metrics import dp
@@ -71,11 +70,9 @@ class MyApp(MDApp):
         footer = self.create_footer()
         root.add_widget(footer)
 
-        # Inspector para depuración (opcional)
-        inspector.create_inspector(Window, root)
-
+        
         return root
-
+   
     def create_top_bar(self):
         """
         Crea el TopBar que contiene el logo y el botón de inicio de búsqueda.

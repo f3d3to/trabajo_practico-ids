@@ -164,7 +164,7 @@ class CustomMapMarker(MapMarker):
     def __init__(self, especie_mascota, **kwargs):
         super().__init__(**kwargs)
         self.especie_mascota = especie_mascota
-        self.source = f"assets/images/{especie_mascota}.png" if especie_mascota in ["perro", "gato"] else "assets/images/pajaro.png"
+        self.source = f"assets/images/{especie_mascota}.png" if especie_mascota in ["perro", "gato"] else "assets/images/bird.png"
         self.size = (25, 25)
 
 

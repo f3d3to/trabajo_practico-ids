@@ -11,12 +11,20 @@ from kivymd.uix.boxlayout import MDBoxLayout
 from logger import logger
 from kivy.metrics import dp
 from kivy.core.window import Window
-from kivymd.uix.menu import MDDropdownMenu
-from kivymd.uix.list import OneLineListItem
 from kivymd.uix.button import MDRaisedButton
+from plyer import filechooser
+from kivy import platform
+
+if platform == "android":
+    from android.permissions import request_permissions, Permission, check_permission  
+    request_permissions([Permission.READ_EXTERNAL_STORAGE,
+                        Permission.WRITE_EXTERNAL_STORAGE])
+
+
+
+    
 from solicitudes import cargar_mascota  # Importa el endpoint
-from kivy.uix.filechooser import FileChooserIconView
-from kivy.uix.popup import Popup
+
 # =========================
 # COMPONENTES REUTILIZABLES
 # =========================
@@ -163,6 +171,8 @@ class MobileCargarMascotaView(MDScreen):
         }# Almacena los datos de la mascota
         self.text_fields = {}  # Almacena los campos de texto
         self.build_step_1()
+    def requerir_permisos(self):
+        request_permissions([Permission.READ_EXTERNAL_STORAGE,Permission.WRITE_EXTERNAL_STORAGE])
 
     def clear_screen(self):
         """Limpia todos los widgets de la pantalla."""
@@ -277,26 +287,26 @@ class MobileCargarMascotaView(MDScreen):
         layout.pos_hint = {"center_x": 0.5, "center_y": 0.5}
         self.add_widget(layout)
 
-    def open_filechooser(self, instance):        # Creo un FileChooser para elegir la imagen
+    
+    def open_filechooser(self, instance):
+        """Función para abrir el selector de archivos y verificar permisos."""
+        if platform == "android":
+            if check_permission(Permission.READ_EXTERNAL_STORAGE) and check_permission(Permission.WRITE_EXTERNAL_STORAGE):
+                logger.info("Permisos concedidos. Abriendo filechooser...")
+                filechooser.open_file(on_selection=self.on_image_selected)
+            else:
+                print("Permisos no concedidos. Solicitando permisos.")
+                logger.warning("Permisos no concedidos. Solicitando permisos...")
+                self.requerir_permisos()
+        else:
+            filechooser.open_file(on_selection=self.on_image_selected)
 
-        filechooser = FileChooserIconView(filters=['*.png', '*.jpg', '*.jpeg'])
-        filechooser.bind(selection=self.on_image_selected)
-        
-        # Creo un Popup para mostrar el FileChooser
-        self.popup = Popup(
-            title="Seleccionar Imagen", 
-            content=filechooser, 
-            size_hint=(0.8, 0.8)
-        )
-        self.popup.open()
 
-    def on_image_selected(self, filechooser, selection):
-        print("Evento de selección detectado.")  
+
+    def on_image_selected(self, selection):
         if selection:
-            image_path = selection[0]  
-            print(f"Imagen seleccionada: {image_path}")  
-            self.data["foto_url"] = image_path
-            self.popup.dismiss() 
+            print(f"Imagen seleccionada: {selection[0]}")
+            self.data["foto_url"] = selection[0]  # Procesar el archivo
         else:
             print("No se seleccionó ninguna imagen.")
 
