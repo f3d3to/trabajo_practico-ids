@@ -22,17 +22,6 @@ CREATE TABLE IF NOT EXISTS mascotas (
     fecha_publicacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Crear la tabla de casas de tránsito
-CREATE TABLE IF NOT EXISTS casas_transito (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    id_mascota INT NOT NULL,
-    latitud FLOAT,   -- Coordenada de latitud para ubicación de tránsito
-    longitud FLOAT,  -- Coordenada de longitud para ubicación de tránsito
-    informacion_contacto VARCHAR(255) NOT NULL,
-    fecha_entrada TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_mascota) REFERENCES mascotas(id) ON DELETE CASCADE
-);
-
 -- Crear la tabla de preguntas frecuentes
 CREATE TABLE IF NOT EXISTS preguntas_frecuentes (
     id INT AUTO_INCREMENT PRIMARY KEY,

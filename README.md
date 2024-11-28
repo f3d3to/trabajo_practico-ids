@@ -66,19 +66,6 @@ deberá aparecer una vez cargada en el sitio web.
      - *Respuesta:* JSON con latitud y longitud de cada mascota perdida.
      - *Método:* GET
 
-   - *POST /api/transito*
-     - *Descripción:* Marcar una mascota como "en tránsito" en una casa temporal.
-     - *Datos de Entrada:* JSON con:
-       - id de la mascota, ubicacion_transito y informacion_contacto.
-     - *Respuesta:* Confirmación de actualización.
-     - *Método:* POST
-
-   - *GET /api/transito*
-     - *Descripción:* Obtener lista de mascotas en casas de tránsito.
-     - *Parámetros de Consulta:* Opcional zona para filtro geográfico.
-     - *Respuesta:* JSON con la lista de mascotas en estado de tránsito.
-     - *Método:* GET
-
    - *POST /api/reportar-encontrado*
      - *Descripción:* Reportar que una mascota perdida fue encontrada.
      - *Datos de Entrada:* JSON con:
