@@ -16,7 +16,7 @@ from kivy.metrics import dp
 from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from kivy.uix.boxlayout import BoxLayout
-
+from kivy.graphics import Color, Rectangle
 from logger import logger
 from solicitudes import obtener_mascotas_perdidas,buscar_mascota,obtener_imagen# Importa el endpoint
 
@@ -25,7 +25,7 @@ from solicitudes import obtener_mascotas_perdidas,buscar_mascota,obtener_imagen#
 # Componentes reutilizables
 # =========================
 
-def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+def create_step_title(text, font_style="H5", text_color= (0.42, 0.26, 0.12, 1)):
     """
     Crea un título estilizado para los pasos de la interfaz.
     """
@@ -53,7 +53,7 @@ def create_search_filters(filter_fields):
         ("Zona", "zona"),
         ("Barrio", "barrio"),
         ("Contacto", "informacion_contacto"),
-        ("Fecha de publicación (dd/mm/aaaa)", "fecha"),
+        ("Fecha de publicación", "fecha"),
     ]
 
     for hint, id_name in filters:
@@ -70,8 +70,8 @@ def create_search_button(filters, callback):
     """
     return MDRoundFlatButton(
         text="Buscar",
-        md_bg_color=(0.2, 0.8, 0.6, 1),
-        text_color=(1, 1, 1, 1),
+        md_bg_color=(0.42, 0.26, 0.12, 1),
+        text_color=(0.98, 0.94, 0.86, 1),
         size_hint=(None, None),
         size=(dp(200), dp(40)),
         pos_hint={"center_x": 0.5},
@@ -85,8 +85,8 @@ def create_clear_filters_button(callback):
     """
     return MDRoundFlatButton(
         text="Limpiar Filtros",
-        md_bg_color=(0.2, 0.8, 0.6, 1),
-        text_color=(1, 1, 1, 1),
+        md_bg_color=(0.42, 0.26, 0.12, 1),
+        text_color= (0.98, 0.94, 0.86, 1),
         size_hint=(None, None),
         size=(dp(200), dp(40)),
         pos_hint={"center_x": 0.5},
@@ -107,54 +107,72 @@ def create_interactive_map(lat=-34.6076, lon=-58.4188, zoom=10):
         double_tap_zoom=True,
     )
 
+def mostrar_popup_mascota(mascota, imagen=None):
+    """
+    Muestra un popup con la información de una mascota.
+    """
+    layout = BoxLayout(orientation="vertical")
+    layout.canvas.before.clear()  # Asegurarse de limpiar cualquier fondo anterior
+    with layout.canvas.before:
+        Color(0.98, 0.94, 0.86, 1)  # Color beige en formato RGBA
+        layout.rect = Rectangle(size=layout.size, pos=layout.pos)
+    def update_rect(instance, value):
+        layout.rect.pos = instance.pos
+        layout.rect.size = instance.size
+
+    layout.bind(pos=update_rect, size=update_rect)
+
+    if imagen:
+        layout.add_widget(imagen) # Asyncimagne ya procesado
+
+    info_label = Label(
+        text=_get_mascota_info(mascota),
+        size_hint=(0.8, 0.4),
+        halign='center',
+        valign='top',
+        color=(0.42, 0.26, 0.12, 1)  
+    )
+    info_label.bind(size=info_label.setter('text_size'))
+
+    layout.add_widget(info_label)
+
+    # Crear y mostrar el Popup
+    popup = Popup(
+        title=f"Buscamos a {mascota.get('nombre', 'Mascota desconocida')}",
+        content=layout,
+        size_hint=(1, 0.8),
+        title_color=(0.98, 0.94, 0.86, 1) ,
+        separator_color=[.9,.4,.2,1],
+        
+    )
+    
+    popup.bind(on_open=lambda instance: update_rect(layout, None))
+    popup.open()
+
+def _get_mascota_info(mascota):
+    """
+    Devuelve una cadena con la información de la mascota.
+    """
+    return "\n".join(
+        [
+            f"Nombre: {mascota.get('nombre', 'Desconocida')}",
+            f"Especie: {mascota.get('especie', 'Desconocida')}",
+            f"Raza: {mascota.get('raza', 'Desconocida')}",
+            f"Estado: {mascota.get('estado', 'Desconocida')}",
+            f"Color: {mascota.get('color', 'Desconocido')}",
+            f"Zona: {mascota.get('zona', 'Desconocida')}",
+            f"Barrio: {mascota.get('barrio', 'Desconocida')}",
+            f"Fecha: {mascota.get('fecha_publicacion', 'Desconocida')}",
+            f"Contacto: {mascota.get('informacion_contacto', 'No disponible')}",
+        ]
+    )
+
+
+
 
 # ==================
 # Clases Especificas
 # ==================
-
-class MascotaPopup(Popup):
-    """
-    Popup que muestra información detallada de una mascota.
-    """
-    def __init__(self, mascota,imagen=None, **kwargs):
-        super().__init__(**kwargs)
-        self.title = f"Buscamos a {mascota.get('nombre', 'Mascota desconocida')}"
-        self.size_hint = (1, 0.8)
-        self.content = Label(text=self.get_mascota_info(mascota))
-
-        layout = BoxLayout(orientation='vertical')
-
-        if imagen:
-            layout.add_widget(imagen)  # AsyncImage ya procesado
-
-        info_label = Label(
-            text=self.get_mascota_info(mascota),
-            size_hint=(0.8, 0.4),
-            halign='left', valign='top'
-        )
-        info_label.bind(size=info_label.setter('text_size'))  
-        layout.add_widget(info_label)
-
-        self.content = layout
-
-    def get_mascota_info(self, mascota):
-        """
-        Devuelve una cadena con la información de la mascota.
-        """
-        info = "\n".join(
-            [
-                f"Nombre: {mascota.get('nombre', 'Desconocida')}",
-                f"Especie: {mascota.get('especie', 'Desconocida')}",
-                f"Raza: {mascota.get('raza', 'Desconocida')}",
-                f"Estado: {mascota.get('estado', 'Desconocida')}",
-                f"Color: {mascota.get('color', 'Desconocido')}",
-                f"Zona: {mascota.get('zona', 'Desconocida')}",
-                f"Barrio: {mascota.get('barrio', 'Desconocida')}",
-                f"Fecha: {mascota.get('fecha_publicacion', 'Desconocida')}",
-                f"Contacto: {mascota.get('informacion_contacto', 'No disponible')}",
-            ]
-        )
-        return info
 
 
 class CustomMapMarker(MapMarker):
@@ -165,7 +183,7 @@ class CustomMapMarker(MapMarker):
         super().__init__(**kwargs)
         self.especie_mascota = especie_mascota
         self.source = f"assets/images/{especie_mascota}.png" if especie_mascota in ["perro", "gato"] else "assets/images/bird.png"
-        self.size = (25, 25)
+        self.size = (40, 40)
 
 
 class MobileBuscarMascotaView(MDScreen):
@@ -174,6 +192,7 @@ class MobileBuscarMascotaView(MDScreen):
     """
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         self.map_view = create_interactive_map()
         self.filter_fields = {}
         self.map_markers = []
@@ -235,8 +254,7 @@ class MobileBuscarMascotaView(MDScreen):
                 marker = CustomMapMarker(especie_mascota=especie, lat=lat, lon=lon)
                 def on_marker_touch(marker, mascota=mascota, url_foto=url_foto):
                     imagen = obtener_imagen(url_foto)
-                    popup = MascotaPopup(mascota=mascota, imagen=imagen)
-                    popup.open()
+                    mostrar_popup_mascota(mascota=mascota, imagen=imagen)
                 #  muestra la tarjeta al tocar el marcador
                 marker.bind(on_release=on_marker_touch)
                 self.map_view.add_widget(marker)

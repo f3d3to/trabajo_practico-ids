@@ -7,7 +7,7 @@ from solicitudes import obtener_preguntas_frecuentes  # Importar endpoint
 
 
 # Componente reutilizable: Crear título
-def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+def create_title(text, font_style="H5", text_color= (0.42, 0.26, 0.12, 1)):
     return MDLabel(
         text=text,
         halign="center",
@@ -75,7 +75,7 @@ class MobilePreguntasView(MDScreen):
         layout = MDBoxLayout(orientation="vertical", spacing=10, padding=20)
         layout.add_widget(create_title("Preguntas Frecuentes"))
         self.add_widget(layout)
-
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
@@ -85,9 +85,9 @@ class TabletPreguntasView(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = MDBoxLayout(orientation="vertical", spacing=20, padding=30)
-        layout.add_widget(create_title("Preguntas Frecuentes", font_style="H4", text_color=(0.1, 0.7, 0.5, 1)))
+        layout.add_widget(create_title("Preguntas Frecuentes"))
         self.add_widget(layout)
-
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
@@ -97,9 +97,9 @@ class DesktopPreguntasView(MDScreen):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         layout = MDBoxLayout(orientation="vertical", spacing=30, padding=50)
-        layout.add_widget(create_title("Preguntas Frecuentes", font_style="H3", text_color=(0.0, 0.6, 0.4, 1)))
+        layout.add_widget(create_title("Preguntas Frecuentes"))
         self.add_widget(layout)
-
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         # Cargar preguntas desde el backend
         fetch_questions_and_update(layout)
 
@@ -111,7 +111,7 @@ class ResponsivePreguntasView(MDResponsiveLayout, MDScreen):
         self.mobile_view = MobilePreguntasView()
         self.tablet_view = TabletPreguntasView()
         self.desktop_view = DesktopPreguntasView()
-
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
     def get_current_view(self, window_width=800):
         """
         Seleccionar la vista según el tamaño de la pantalla.

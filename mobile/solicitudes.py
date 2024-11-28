@@ -13,9 +13,8 @@ from dotenv import load_dotenv
 # Configuración de logging
 logging.basicConfig(level=logging.DEBUG)
 env_path_deploy = os.path.join(os.getcwd(),'..', 'deploy', '.env')
-load_dotenv(env_path_deploy)
+load_dotenv(env_path_deploy) 
 
-print(env_path_deploy)
 API_BASE_URL = os.getenv('BACK_URL_KIVY')
 API_SERVICIO_FOTO = f"{API_BASE_URL}/uploads/user_images"
 

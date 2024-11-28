@@ -13,7 +13,7 @@ from solicitudes import obtener_mascotas_perdidas,obtener_imagen
 # Componentes reutilizables
 # =========================
 
-def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1), padding=20):
+def create_title(text, font_style="H5", text_color= (0.42, 0.26, 0.12, 1), padding=20):
     """
     Crea un título con formato y color personalizado.
     """
@@ -67,7 +67,7 @@ class MobileInicioView(MDScreen):
         # Agregar carrusel (se actualiza dinámicamente)
         self.layout.add_widget(self.carousel)
         self.add_widget(self.layout)
-
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         # Cargar imágenes dinámicamente
         self.load_lost_pets()
 

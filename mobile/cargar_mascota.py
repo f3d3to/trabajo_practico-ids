@@ -1,4 +1,5 @@
 from kivy.uix.boxlayout import BoxLayout
+from kivy.app import App  
 from kivymd.uix.responsivelayout import MDResponsiveLayout
 from kivymd.uix.screen import MDScreen
 from kivymd.uix.label import MDLabel
@@ -12,7 +13,12 @@ from logger import logger
 from kivy.metrics import dp
 from kivy.core.window import Window
 from kivymd.uix.button import MDRaisedButton
+from kivy.uix.image import Image
+from kivymd.uix.snackbar import Snackbar
+from kivymd.uix.selectioncontrol import MDCheckbox 
+from kivy.uix.screenmanager import Screen
 from plyer import filechooser
+
 from kivy import platform
 
 if platform == "android":
@@ -29,7 +35,7 @@ from solicitudes import cargar_mascota  # Importa el endpoint
 # COMPONENTES REUTILIZABLES
 # =========================
 
-def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+def create_step_title(text, font_style="H5", text_color=(0.42, 0.26, 0.12, 1)):
     """
     Crea un título para cada paso del formulario.
     """
@@ -42,7 +48,6 @@ def create_step_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
         size_hint=(1, None),
         height="50dp",
     )
-
 def create_option_selector(options, callback):
     """
     Crea un selector de opciones representado por tarjetas con íconos.
@@ -55,8 +60,11 @@ def create_option_selector(options, callback):
         padding=[dp(20), dp(0), dp(20), dp(0)],
     )
 
+    # Diccionario para almacenar la tarjeta seleccionada
+    dicc_tarjeta = {}
+
     def adjust_layout_size(*args):
-    # Ajusta el num de columnas y la posición con base en el ancho de la ventana
+        """Ajusta el número de columnas y la posición con base en el ancho de la ventana."""
         if Window.width < dp(400):
             layout.cols = 1
         elif Window.width < dp(600):
@@ -67,45 +75,37 @@ def create_option_selector(options, callback):
         layout.width = layout.cols * dp(170)
         layout.pos_hint = {"center_x": 0.5}
 
-    # Enlaza la función de ajuste al evento de cambio de tamaño de ventana
     Window.bind(on_resize=adjust_layout_size)
 
-    # Añade las tarjetas al layout
     for label, icon in options:
         card = MDCard(
             orientation="vertical",
             size_hint=(None, None),
             size=(dp(150), dp(100)),
-            md_bg_color=(0.95, 0.95, 0.95, 1),
+            md_bg_color=(0.862745, 0.796078, 0.705882, 1),  # Color de fondo inicial
             ripple_behavior=True,
-            on_release=lambda x, lbl=label: callback(lbl),
         )
-        card_layout = BoxLayout(orientation="vertical", padding=10)
+
+        card_layout = BoxLayout(orientation="vertical", padding=5)
+
         card_layout.add_widget(MDLabel(text=label, halign="center"))
-        card_layout.add_widget(MDIconButton(icon=icon, pos_hint={"center_x": 0.5}))
+        img = Image(source=f"assets/images/{icon}.png", size_hint=(None, None), size=("80dp", "80dp"))
+        card_layout.add_widget(img)
         card.add_widget(card_layout)
+
+        def on_card_click(instance, label=label):
+            if dicc_tarjeta.get("selected"):
+                dicc_tarjeta["selected"].md_bg_color = (0.862745, 0.796078, 0.705882, 1)
+            instance.md_bg_color = (124 / 255, 88 / 255, 54 / 255, 1) 
+            dicc_tarjeta["selected"] = instance
+            callback(label)
+
+        card.bind(on_release=on_card_click)
         layout.add_widget(card)
 
     adjust_layout_size()
     return layout
 
-def create_form(fields):
-    """
-    Crea un formulario dinámico a partir de una lista de campos.
-    """
-    layout = MDGridLayout(
-        cols=2, spacing=10, size_hint=(1, None), adaptive_height=True
-    )
-    layout.pos_hint = {"center_x": 0.5}
-    for field in fields:
-        layout.add_widget(MDTextField(hint_text=f"Ejem: {field}"))
-    return layout
-
-def create_map(lat=-34.6037, lon=-58.3816, zoom=10):
-    """
-    Crea un mapa interactivo con un marcador inicial.
-    """
-    return MapView(lat=lat, lon=lon, zoom=zoom, size_hint=(1, 0.7))
 
 def create_navigation_buttons(previous_callback, next_callback):
     """
@@ -170,7 +170,10 @@ class MobileCargarMascotaView(MDScreen):
             "informacion_contacto": None,
         }# Almacena los datos de la mascota
         self.text_fields = {}  # Almacena los campos de texto
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
         self.build_step_1()
+
+
     def requerir_permisos(self):
         request_permissions([Permission.READ_EXTERNAL_STORAGE,Permission.WRITE_EXTERNAL_STORAGE])
 
@@ -183,9 +186,9 @@ class MobileCargarMascotaView(MDScreen):
         Construye el primer paso para seleccionar la especie de la mascota.
         """
         self.clear_screen()
-        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[1, 40, 1, 0])
         layout.add_widget(create_step_title("Selecciona la especie:"))
-        species_options = [("Perro", "dog"), ("Gato", "cat"), ("Otro", "bird")]
+        species_options = [("Perro", "perro2"), ("Gato", "gato2"), ("Otro", "pajaro")]
         layout.add_widget(create_option_selector(species_options, self.on_species_selected))
         layout.add_widget(create_navigation_buttons(None, self.build_step_2))
         self.add_widget(layout)
@@ -195,9 +198,9 @@ class MobileCargarMascotaView(MDScreen):
         Construye el segundo paso para seleccionar el género de la mascota.
         """
         self.clear_screen()
-        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 3, 20, 0])
         layout.add_widget(create_step_title("Selecciona el género:"))
-        gender_options = [("Macho", "assets/images/macho.png"), ("Hembra", "assets/images/hembra.png")]
+        gender_options = [("Macho", "macho"), ("Hembra", "hembra")]
         layout.add_widget(create_option_selector(gender_options, self.on_gender_selected))
         layout.add_widget(create_navigation_buttons(self.build_step_1, self.build_step_3))
         self.add_widget(layout)
@@ -208,10 +211,10 @@ class MobileCargarMascotaView(MDScreen):
         """
         self.clear_screen()
         fields = ["Nombre", "Raza", "Color"]
-        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout = MDBoxLayout(orientation="vertical", spacing=1, padding=dp(10),adaptive_height=True)
         layout.add_widget(create_step_title("Datos básicos de la mascota:"))
         
-        form_layout = MDGridLayout(cols=2, spacing=10, adaptive_height=True)
+        form_layout = MDGridLayout(cols=1, spacing=10, adaptive_height=True)
         for field in fields:
             hint = field.split("(")[0].strip()  # Mostrar solo el campo limpio en el hint
             key = field.split()[0].lower()  # Usar el campo base como clave en data
@@ -220,12 +223,24 @@ class MobileCargarMascotaView(MDScreen):
             form_layout.add_widget(text_field)
         layout.add_widget(form_layout)
 
+        button_layout = MDBoxLayout(orientation="vertical", size_hint=(1, None), height="50dp")
         load_image_button = MDRaisedButton(
-            text="Cargar Imagen", on_release=self.open_filechooser
+        text="Cargar Imagen",
+        on_release=self.open_filechooser,
+        size_hint=(None, None),
+        size=("200dp", "50dp"),  # Tamaño del botón
+        pos_hint={"center_x": 0.5}  # Centrado
         )
-        form_layout.add_widget(load_image_button)
-
-        layout.add_widget(create_navigation_buttons(self.build_step_2, self.build_step_4))
+        button_layout.add_widget(load_image_button)
+        layout.add_widget(button_layout)
+        self.image_status_label = MDLabel(
+        text="",
+        halign="center",
+        theme_text_color="Custom",
+        text_color= (0.42, 0.26, 0.12, 1),  
+        )
+        form_layout.add_widget(self.image_status_label)
+        layout.add_widget(create_navigation_buttons(self.build_step_2, self.next_step))
       
         self.add_widget(layout)
     
@@ -235,12 +250,12 @@ class MobileCargarMascotaView(MDScreen):
         Construye el cuarto paso para seleccionar la ubicación de la mascota en el mapa.
         """
         self.clear_screen()
-        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 35, 20, 0])
         layout.add_widget(create_step_title("Selecciona la ubicación en el mapa"))
         
         # Crear el mapa y marcador
         self.map_view = MapView(lat=-34.6037, lon=-58.3816, zoom=10, size_hint=(1, 0.7))
-        self.marker = MapMarker(lat=-34.6037, lon=-58.3816)
+        self.marker = MapMarker(lat=-0.1, lon=-0.1)
         self.map_view.add_marker(self.marker)
         self.map_view.bind(on_touch_up=self.update_location)
         layout.add_widget(self.map_view)
@@ -258,14 +273,14 @@ class MobileCargarMascotaView(MDScreen):
         Construye el quinto paso para ingresar la información de contacto.
         """
         self.clear_screen()
-        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 40, 20, 0])
+        layout = MDBoxLayout(orientation="vertical", spacing=20, padding=[20, 3, 20, 0])
         layout.add_widget(create_step_title("Ingresa información de contacto"))
         
         # Campo para información de contacto
         contact_field = MDTextField(hint_text="Ej: 1120405533 o email@ejemplo.com")
         self.text_fields["informacion_contacto"] = contact_field
         layout.add_widget(contact_field)
-
+        
         # Botón de navegación
         nav_buttons = create_navigation_buttons(self.build_step_4, None)
         layout.add_widget(nav_buttons)
@@ -274,11 +289,11 @@ class MobileCargarMascotaView(MDScreen):
         layout.add_widget(
             MDRoundFlatButton(
                 text="Guardar",
-                md_bg_color=(0.2, 0.8, 0.6, 1),
-                text_color=(1, 1, 1, 1),
+                md_bg_color= (0.42, 0.26, 0.12, 1),
+                text_color= (0.98, 0.94, 0.86, 1),
                 pos_hint={"center_x": 0.5},
                 size_hint=(None, None),
-                size=("200dp", "40dp"),
+                size=("250dp", "50dp"),
                 on_release=self.save_pet,
             )
         )
@@ -307,8 +322,10 @@ class MobileCargarMascotaView(MDScreen):
         if selection:
             print(f"Imagen seleccionada: {selection[0]}")
             self.data["foto_url"] = selection[0]  # Procesar el archivo
+            self.image_status_label.text = "¡Imagen cargada!"
+
         else:
-            print("No se seleccionó ninguna imagen.")
+            self.image_status_label.text = "No se seleccionó ninguna imagen."
 
     def update_location(self, instance, touch):
         """
@@ -330,18 +347,15 @@ class MobileCargarMascotaView(MDScreen):
         for key, field in self.text_fields.items():
             self.data[key] = field.text.strip()
 
-        # Validaciones antes de enviar los datos
-        if not self.data.get("latitud") or not self.data.get("longitud"):
-            logger.error("La ubicación no ha sido seleccionada.")
-            return
-
-        if not self.data.get("informacion_contacto"):
-            logger.error("La información de contacto está vacía.")
-            return
-
+        
         logger.info(f"Enviando datos: {self.data}")
         cargar_mascota(self.data, self.handle_response)
+        self.build_step_1()     
+        app = App.get_running_app()  # Nos redirije a busqueda de masquetas
+        app.screen_manager.current = 'buscar_mascota'  
+        
 
+        
     def handle_response(self, response):
         """
         Maneja la respuesta del servidor después de cargar la mascota.
@@ -372,7 +386,33 @@ class MobileCargarMascotaView(MDScreen):
         else:
             logger.warning("No se seleccionó ningún género.")
 
-    
+    def validate_form(self):
+        """
+        Valida si los campos de texto y la imagen están completos.
+        """
+        for field, text_field in self.text_fields.items():
+            if not text_field.text.strip():  
+                text_field.error = True 
+                Snackbar(text=f"El campo {field} es obligatorio").open()
+                return False
+            else:
+                text_field.error = False 
+        if not self.data["foto_url"]: 
+            Snackbar(text="Debe seleccionar una imagen antes de continuar").open()
+            return False
+
+        return True
+
+    def next_step(self):
+        """
+        Avanza al siguiente paso si el formulario es válido.
+        """
+        if self.validate_form():  # Si la validación es correcta
+            self.build_step_4()  # Avanza al siguiente paso
+        else:
+            # Aquí puedes agregar un mensaje indicando que falta completar algunos campos
+            logger.warning("Por favor complete todos los campos obligatorios.")
+        
 # ===========================
 # RESPONSIVE LAYOUT
 # ===========================

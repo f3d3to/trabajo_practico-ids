@@ -12,6 +12,7 @@ from kivy.core.window import Window
 from kivy.metrics import dp
 from kivymd.uix.boxlayout import MDBoxLayout
 
+
 # Importación de vistas
 from inicio import ResponsiveInicioView
 from cargar_mascota import ResponsiveCargarMascotaView
@@ -40,6 +41,7 @@ class MyApp(MDApp):
         self.theme_cls.primary_hue = "500"
         self.theme_cls.theme_style = "Light"
         self.title = "Huellas a Casa"
+        
         logger.info(f"Aplicación iniciada: {self.title}")
 
         # Crear el ScreenManager
@@ -59,17 +61,17 @@ class MyApp(MDApp):
 
         # Crear y agregar el TopBar
         top_bar = self.create_top_bar()
-        top_bar.size_hint_y = 0.5
+        top_bar.size_hint_y = 0.1
         root.add_widget(top_bar)
 
         # Agregar el ScreenManager al layout
-        self.screen_manager.size_hint_y = 4.1
+        self.screen_manager.size_hint_y = 0.70
         root.add_widget(self.screen_manager)
 
         # Crear y agregar el Footer
         footer = self.create_footer()
+        footer.size_hint_y = 0.1
         root.add_widget(footer)
-
         
         return root
    
@@ -78,7 +80,7 @@ class MyApp(MDApp):
         Crea el TopBar que contiene el logo y el botón de inicio de búsqueda.
         """
         top_bar = MDTopAppBar(
-            md_bg_color=(0.91, 0.64, 0.45, 1),  # Color de fondo
+            md_bg_color=(0.7725, 0.4745, 0.2706, 1),  
             specific_text_color=(1, 1, 1, 1),  # Color del texto
             elevation=0,
         )
@@ -106,8 +108,8 @@ class MyApp(MDApp):
         # Agregar botón a la derecha
         button = MDRoundFlatButton(
             text="Iniciá tu Búsqueda",
-            md_bg_color=(0.2, 0.8, 0.6, 1),  # Verde
-            text_color=(1, 1, 1, 1),  # Blanco
+            md_bg_color=(0.984, 0.941, 0.863, 1),  
+            text_color= (0.42, 0.26, 0.12, 1), 
             size_hint=(None, None),
             size=("180dp", "40dp"),
             pos_hint={"center_y": 0.5},  # Centra verticalmente el botón en el TopBar
@@ -117,18 +119,21 @@ class MyApp(MDApp):
 
         # Agregar el contenedor de contenido al TopBar
         top_bar.add_widget(top_bar_content)
-
+   
         return top_bar
 
     def create_footer(self):
         """
         Crea el Footer con MDBottomNavigation para navegar entre las pantallas principales.
         """
+
         footer = MDBottomNavigation(
             selected_color_background="orange",
             text_color_active="lightgrey",
-            panel_color=(0.91, 0.64, 0.45, 1),
+            panel_color=(0.7725, 0.4745, 0.2706, 1),
+          
         )
+        
 
         footer.add_widget(MDBottomNavigationItem(
             name="inicio",
