@@ -2,10 +2,13 @@ from datetime import datetime
 from flask import Flask, render_template, request, redirect, url_for
 import requests, os, socket
 from werkzeug.utils import secure_filename
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
-BACKEND_URL = os.getenv("BACKEND_URL")
+# BACKEND_URL = os.getenv("BACKEND_URL")
+BACKEND_URL= "https://fresh-kitten-open.ngrok-free.app/"
 USER_IMAGES_API = os.getenv("USER_IMAGES_API")
 
 def resolve_backend_url(url):

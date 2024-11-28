@@ -115,7 +115,7 @@
                 <div class="text-center mt-4">
                     <a href="#" class="btn-custom" id="mascota-id">Ver Detalle</a>
                     <a href="#" class="btn-custom" id="actualizar-mascota">Actualizar</a>
-                   
+
                 </div>
             </div>
         </div>
@@ -131,7 +131,8 @@
     const mascotas = {{ mascotas|tojson }}; // Esto es necesario para que JavaScript "acepte" la variable "mascotas"
     mascotas.forEach(mascota => {
         if (mascota.foto_url) {
-            mascota.foto_url = `{{image_url_backend}}${mascota.foto_url}`;
+            const backend = "https://fresh-kitten-open.ngrok-free.app/"
+            mascota.foto_url = `${backend}uploads/user_images${mascota.foto_url}`;
         }
     });
 </script>

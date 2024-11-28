@@ -4,5 +4,5 @@ flask_sqlalchemy
 mysql-connector-python
 python-dotenv
 werkzeug
-
+flask-cors
 # buildozer
