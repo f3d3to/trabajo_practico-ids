@@ -5,3 +5,6 @@ kivy-garden
 mapview
 werkzeug
 requests
+markupsafe
+plyer
+python-dotenv

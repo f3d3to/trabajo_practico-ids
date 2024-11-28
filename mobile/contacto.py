@@ -16,7 +16,7 @@ from solicitudes import contacto  # Importar el endpoint
 # Componentes reutilizables
 # =========================
 
-def create_title(text, font_style="H5", text_color=(0.2, 0.8, 0.6, 1)):
+def create_title(text, font_style="H5", text_color=(0.42, 0.26, 0.12, 1)):
     """
     Crea un título con estilo y color personalizados.
     """
@@ -36,7 +36,7 @@ def create_contact_form():
     Crea el formulario de contacto con los campos necesarios.
     """
     form_layout = MDGridLayout(
-        cols=2, adaptive_height=True, padding=dp(10), spacing=dp(10)
+        cols=1, adaptive_height=True, padding=dp(10), spacing=dp(10)
     )
 
     form_fields = {
@@ -73,6 +73,12 @@ class MobileContactoView(MDScreen):
         """
         super().__init__(**kwargs)
         self.contact_form, self.form_fields = create_contact_form()
+        self.md_bg_color = (0.8745, 0.8118, 0.7216, 1)
+
+
+
+
+
 
         # Crear el layout principal
         scroll = ScrollView()
@@ -81,16 +87,16 @@ class MobileContactoView(MDScreen):
             spacing=dp(20),
             padding=[dp(20), dp(20), dp(20), dp(10)],
             size_hint_y=None,
+            
         )
         layout.bind(minimum_height=layout.setter("height"))
 
         # Agregar el título y la información de contacto
         layout.add_widget(create_title("Contactar"))
         contact_info = MDBoxLayout(orientation="vertical", spacing=dp(10), size_hint=(1, None))
-        contact_info.add_widget(MDLabel(text="Correo electrónico: huellas@fi.uba.ar", halign="left"))
-        contact_info.add_widget(MDLabel(text="WhatsApp: +54 222 111 333", halign="left"))
-        layout.add_widget(contact_info)
-
+        contact_info.add_widget(MDLabel(text="Correo electrónico: huellas@fi.uba.ar", halign="center"))
+        contact_info.add_widget(MDLabel(text="WhatsApp: +54 222 111 333", halign="center"))
+        
         # Agregar el formulario y el botón
         layout.add_widget(self.contact_form)
         layout.add_widget(
@@ -98,13 +104,16 @@ class MobileContactoView(MDScreen):
                 text="Enviar mensaje",
                 size_hint=(None, None),
                 size=(dp(200), dp(40)),
-                md_bg_color=(0.91, 0.64, 0.45, 1),
+                md_bg_color=(0.42, 0.26, 0.12, 1),
+                text_color= (0.98, 0.94, 0.86, 1),
                 pos_hint={"center_x": 0.5},
                 on_release=self.submit_contact_form,
             )
         )
 
         scroll.add_widget(layout)
+        layout.add_widget(contact_info)
+
         self.add_widget(scroll)
 
     def submit_contact_form(self, *args):
